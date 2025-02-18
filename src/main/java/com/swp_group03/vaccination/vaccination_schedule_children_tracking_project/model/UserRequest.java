@@ -11,7 +11,7 @@ public class UserRequest {
 
     private String Username;
 
-    private String Password;
+    private String password;
 
     private String first_Name;
 
