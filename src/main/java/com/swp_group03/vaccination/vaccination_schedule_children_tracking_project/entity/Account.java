@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;*/
+import jakarta.validation.constraints.NotBlank;
 import org.hibernate.annotations.Nationalized;
 
 @Entity
@@ -18,27 +19,34 @@ public class Account {
     @Column(name = "username", length = 30,unique=true)
     private String Username;
 
-    @Column(name = "password", length = 50)
+    @Column(name = "password", length = 50, nullable = false)
+    @NotBlank(message = "Vui lòng không để trống Password !!")
     private String Password;
 
-    @Column(name = "first_Name", length = 100)
+    @Column(name = "first_Name", length = 100, nullable = false)
     @Nationalized
+    @NotBlank(message = "Vui lòng không để trống Tên !!")
     private String First_Name;
 
-    @Column(name = "last_Name", length = 100)
+    @Column(name = "last_Name", length = 100, nullable = false)
+    @NotBlank(message = "Vui lòng không để trống Tên !!")
     private String Last_Name;
 
-    @Column(name = "email", length = 50)
+    @Column(name = "email", length = 50, nullable = false)
+    @NotBlank(message = "Vui lòng không để trống Password !!")
     private String Email;
 
-    @Column(name = "phoneNumber", length = 10)
-    private int Phone_number;
+    @Column(name = "phoneNumber", length = 10,nullable = false)
+    @NotBlank(message = "Vui lòng không để trống số điện thoại !!")
+    private String Phone_number;
 
-    @Column(name = "address", length = 100)
+    @Column(name = "address", length = 100,nullable = false)
     @Nationalized
+    @NotBlank(message = "Vui lòng không để trống Địa chỉ !!")
     private String Address;
 
-    @Column(name = "gender", length = 6)
+    @Column(name = "gender", length = 6, nullable = false)
+    @NotBlank(message = "Vui lòng không để trống Giới tính !!")
     private String Gender;
 
     @Column(name = "status")
@@ -55,7 +63,9 @@ public class Account {
 
     }
 
-    public Account(String username, String password, String first_Name, String last_Name, String email, int phone_number, String address, String gender, boolean status, String url_image, Account_Role role) {
+    public Account(String username, String password, String first_Name, String last_Name, String email,
+                   String phone_number, String address, String gender, boolean status, String url_image,
+                   Account_Role role) {
         Username = username;
         Password = password;
         First_Name = first_Name;
@@ -113,11 +123,11 @@ public class Account {
         Email = email;
     }
 
-    public int getPhone_number() {
+    public String getPhone_number() {
         return Phone_number;
     }
 
-    public void setPhone_number(int phone_number) {
+    public void setPhone_number(String phone_number) {
         Phone_number = phone_number;
     }
 

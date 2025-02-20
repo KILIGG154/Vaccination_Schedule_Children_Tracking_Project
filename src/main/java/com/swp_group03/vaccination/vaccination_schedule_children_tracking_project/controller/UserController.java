@@ -4,6 +4,7 @@ package com.swp_group03.vaccination.vaccination_schedule_children_tracking_proje
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Account;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.UserRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,11 +22,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-
-
     @PostMapping("/register")
-    public Account registerUser(@RequestBody UserRequest request){
-       return userService.createAccount(request);
+    public ResponseEntity registerUser(@Valid @RequestBody UserRequest request){
+       return ResponseEntity.ok(userService.createAccount(request));
     }
 
 

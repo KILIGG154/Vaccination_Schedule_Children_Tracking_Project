@@ -17,7 +17,7 @@ public class UserRequest {
     private String Email;
 
 
-    private int Phone_number;
+    private String Phone_number;
 
     private String Address;
 
@@ -30,7 +30,8 @@ public class UserRequest {
     public UserRequest() {
     }
 
-    public UserRequest(String username, String password, String first_Name, String last_Name, String email, int phone_number, String address, String gender, boolean status, String url_image) {
+    public UserRequest(String username, String password, String first_Name, String last_Name, String email,
+                       String phone_number, String address, String gender, boolean status, String url_image) {
         Username = username;
         Password = password;
         this.first_Name = first_Name;
@@ -83,11 +84,11 @@ public class UserRequest {
         Email = email;
     }
 
-    public int getPhone_number() {
+    public String getPhone_number() {
         return Phone_number;
     }
 
-    public void setPhone_number(int phone_number) {
+    public void setPhone_number(String phone_number) {
         Phone_number = phone_number;
     }
 
