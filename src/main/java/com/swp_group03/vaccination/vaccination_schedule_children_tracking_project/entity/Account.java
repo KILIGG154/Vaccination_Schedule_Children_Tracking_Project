@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;*/
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import org.hibernate.annotations.Nationalized;
 
 @Entity
@@ -21,6 +22,8 @@ public class Account {
 
     @Column(name = "password", length = 50, nullable = false)
     @NotBlank(message = "Vui lòng không để trống Password !!")
+    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[\\W]).{8,20}$", message = "Mật Khẩu nên có ít nhất 1 ký tự đặc biệt và 1 chữ" +
+            " in hoa")
     private String Password;
 
     @Column(name = "first_Name", length = 100, nullable = false)
@@ -34,10 +37,13 @@ public class Account {
 
     @Column(name = "email", length = 50, nullable = false)
     @NotBlank(message = "Vui lòng không để trống Password !!")
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$", message = "Please enter right email")
     private String Email;
 
     @Column(name = "phoneNumber", length = 10,nullable = false)
     @NotBlank(message = "Vui lòng không để trống số điện thoại !!")
+    @Pattern(regexp = "^0[0-9]{9}$", message = "Enter correct " +
+            "Phone number")
     private String Phone_number;
 
     @Column(name = "address", length = 100,nullable = false)

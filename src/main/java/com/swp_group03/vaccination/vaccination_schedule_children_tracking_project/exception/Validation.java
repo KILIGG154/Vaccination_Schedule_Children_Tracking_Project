@@ -1,6 +1,9 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception;
 
 
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Account;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -19,6 +22,6 @@ public class Validation {
             message += fieldError.getDefaultMessage();
 
         }
-        return ResponseEntity.badRequest().body(message);
+        return new ResponseEntity(message, HttpStatus.BAD_REQUEST);
     }
 }
