@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;*/
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.Nationalized;
 
 @Entity
@@ -18,26 +19,32 @@ public class Account {
     private String Account_ID;
 
     @Column(name = "username", length = 30,unique=true)
+    @Size(min = 6, max = 30, message = "Tên đăng nhập phải có ít nhất 6 ký tự và nhiều nhất 30 ký tự !!")
     private String Username;
 
     @Column(name = "password", length = 50, nullable = false)
-    @NotBlank(message = "Vui lòng không để trống Password !!")
+    @Size(min = 8, max = 20, message = "Mật khẩu phải có ít nhất 8 ký tự và nhiều nhất 20 ký tự !!")
+    @NotBlank(message = "Vui lòng không để trống Password !! ")
     @Pattern(regexp = "^(?=.*[A-Z])(?=.*[\\W]).{8,20}$", message = "Mật Khẩu nên có ít nhất 1 ký tự đặc biệt và 1 chữ" +
-            " in hoa")
+            " in hoa !!")
     private String Password;
 
     @Column(name = "first_Name", length = 100, nullable = false)
     @Nationalized
-    @NotBlank(message = "Vui lòng không để trống Tên !!")
+    @NotBlank(message = "Vui lòng không để trống first_Name !!")
+    @Size(max = 100, message = "first_Name không được vượt quá 100 ký tự !!")
     private String First_Name;
 
     @Column(name = "last_Name", length = 100, nullable = false)
-    @NotBlank(message = "Vui lòng không để trống Tên !!")
+    @Nationalized
+    @NotBlank(message = "Vui lòng không để trống last_Name !!")
+    @Size(max = 100, message = "last_Name không được vượt quá 100 ký tự !!")
     private String Last_Name;
 
     @Column(name = "email", length = 50, nullable = false)
-    @NotBlank(message = "Vui lòng không để trống Password !!")
+    @NotBlank(message = "Vui lòng không để trống Email !!")
     @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$", message = "Please enter right email")
+    @Size(max = 50, message = "Email không được vượt quá 50 ký tự !!")
     private String Email;
 
     @Column(name = "phoneNumber", length = 10,nullable = false)
@@ -49,17 +56,19 @@ public class Account {
     @Column(name = "address", length = 100,nullable = false)
     @Nationalized
     @NotBlank(message = "Vui lòng không để trống Địa chỉ !!")
+    @Size(max = 100, message = "Địa chỉ không được vượt quá 100 ký tự !!")
     private String Address;
 
     @Column(name = "gender", length = 6, nullable = false)
     @NotBlank(message = "Vui lòng không để trống Giới tính !!")
+    @Size(max = 6, message = "Giới tính không được vượt quá 6 ký tự !!")
     private String Gender;
 
     @Column(name = "status")
     private boolean Status;
 
     @Column(name = "URL_image")
-    private String url_image;
+    private String urlIimage;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Role_ID")
@@ -81,7 +90,7 @@ public class Account {
         Address = address;
         Gender = gender;
         Status = status;
-        this.url_image = url_image;
+        this.urlIimage = url_image;
         this.role = role;
     }
 
@@ -109,7 +118,7 @@ public class Account {
         return First_Name;
     }
 
-    public void setFirst_Name(String first_Name) {
+    public void setFirstName(String first_Name) {
         First_Name = first_Name;
     }
 
@@ -117,7 +126,7 @@ public class Account {
         return Last_Name;
     }
 
-    public void setLast_Name(String last_Name) {
+    public void setLastName(String last_Name) {
         Last_Name = last_Name;
     }
 
@@ -162,11 +171,11 @@ public class Account {
     }
 
     public String getUrl_image() {
-        return url_image;
+        return urlIimage;
     }
 
-    public void setUrl_image(String url_image) {
-        this.url_image = url_image;
+    public void setUrlimage(String urlImage) {
+        this.urlIimage = urlImage;
     }
 
     public Account_Role getRole() {

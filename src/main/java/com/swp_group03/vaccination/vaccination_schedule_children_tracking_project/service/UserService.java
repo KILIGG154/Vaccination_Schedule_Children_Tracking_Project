@@ -16,15 +16,27 @@ public class UserService {
         Account account = new Account();
         account.setUsername(request.getUsername());
         account.setPassword(request.getPassword());
-        account.setFirst_Name(request.getFirst_Name());
-        account.setLast_Name(request.getLast_Name());
+        account.setFirstName(request.getFirst_Name());
+        account.setLastName(request.getLast_Name());
         account.setEmail(request.getEmail());
         account.setPhone_number(request.getPhone_number());
         account.setAddress(request.getAddress());
         account.setGender(request.getGender());
-        account.setUrl_image(request.getUrl_image());
+        account.setUrlimage(request.getUrl_image());
         account.setStatus(true);
         return userRepo.save(account);
+//        Account account = new Account();
+//        account.setUsername(request.getUsername());
+//        account.setPassword(request.getPassword());
+//        account.setFirst_Name(request.getFirst_Name());
+//        account.setLast_Name(request.getLast_Name());
+//        account.setEmail(request.getEmail());
+//        account.setPhone_number(request.getPhone_number());
+//        account.setAddress(request.getAddress());
+//        account.setGender(request.getGender());
+//        account.setUrl_image(request.getUrl_image());
+//        account.setStatus(true);
+//        return userRepo.save(account);
     }
 
 }
