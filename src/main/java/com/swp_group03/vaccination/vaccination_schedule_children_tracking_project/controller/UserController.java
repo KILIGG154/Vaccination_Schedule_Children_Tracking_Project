@@ -4,6 +4,7 @@ package com.swp_group03.vaccination.vaccination_schedule_children_tracking_proje
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Account;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.UserRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.UserUpdate;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,9 +24,13 @@ public class UserController {
 
     @PostMapping("/register")
     @Operation(summary = "Register a new user")
-    public ResponseEntity registerUser(@Valid @RequestBody UserRequest request){
-        Account newUser = userService.createAccount(request);
-       return ResponseEntity.ok(newUser);
+    public ApiResponse<Account> registerUser(@Valid @RequestBody UserRequest request){
+        ApiResponse<Account> apiResponse = new ApiResponse<>();
+
+        apiResponse.setResult(userService.createAccount(request));
+        apiResponse.setCode(100);
+        apiResponse.setMessage("Registered Successfully");
+       return apiResponse;
     }
 
     @PatchMapping("{account_id}")
@@ -33,6 +38,9 @@ public class UserController {
         return ResponseEntity.ok(userService.updateAccount(request,account_id));
     }
 
-
+    @GetMapping
+    public ResponseEntity getAllAccount(){
+        return ResponseEntity.ok(userService.getAllAccount());
+    }
 
 }

@@ -1,11 +1,15 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service;
 
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Account;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.AppException;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.ErrorCode;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.UserRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.UserUpdate;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.UserRepo;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,9 +21,17 @@ public class UserService {
     private UserRepo userRepo;
 
     public Account createAccount(UserRequest request){
+
+        if(userRepo.existsByUsername(request.getUsername())){
+            throw new AppException(ErrorCode.USER_ALREADY_EXIST);
+        }
+
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+
         Account account = new Account();
         account.setUsername(request.getUsername());
-        account.setPassword(request.getPassword());
+        account.setPassword(passwordEncoder.encode(request.getPassword()));
+//        account.setPassword(request.getPassword());
         account.setFirstName(request.getFirst_Name());
         account.setLastName(request.getLast_Name());
         account.setEmail(request.getEmail());
@@ -44,7 +56,9 @@ public class UserService {
     }
 
     public  Account updateAccount(UserUpdate account, String account_id){
-        Account accountID =  userRepo.findById(account_id).orElseThrow(() -> new EntityNotFoundException("Account not found"));
+        Account accountID =  userRepo.findById(account_id).orElseThrow(() -> new AppException(
+                ErrorCode.USER_NOT_FOUND
+        ));
 
         return userRepo.save(toUser(account, accountID));
     }

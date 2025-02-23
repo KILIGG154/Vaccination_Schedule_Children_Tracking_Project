@@ -11,12 +11,12 @@ public class UserRequest {
 
     @Size(min = 6, max = 30, message = "Tên đăng nhập phải có ít nhất 6 ký tự và nhiều nhất 30 ký tự !!")
     @NotBlank(message = "Vui lòng không để trống Username !! ")
-    private String Username;
+    private String username;
 
     @NotBlank(message = "Vui lòng không để trống Password !! ")
     @Pattern(regexp = "^(?=.*[A-Z])(?=.*[\\W]).{8,20}$", message = "Mật Khẩu nên có ít nhất 1 ký tự đặc biệt và 1 chữ in hoa !! ")
     @Size(min = 8, max = 20, message = "Mật khẩu phải có ít nhất 8 ký tự và nhiều nhất 20 ký tự !!")
-    private String Password;
+    private String password;
 
     @NotBlank(message = "Vui lòng không để trống first_Name !!")
     @Size(max = 100, message = "first_Name không được vượt quá 100 ký tự !!")

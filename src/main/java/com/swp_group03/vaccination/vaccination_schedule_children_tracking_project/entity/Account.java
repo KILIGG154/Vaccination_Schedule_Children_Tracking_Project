@@ -20,13 +20,13 @@ public class Account {
 
     @Column(name = "username", length = 30,unique=true)
     @Size(min = 6, max = 30, message = "Tên đăng nhập phải có ít nhất 6 ký tự và nhiều nhất 30 ký tự !!")
-    private String Username;
+    private String username;
 
     @Column(name = "password", length = 50)
-    @Size(min = 8, max = 20, message = "Mật khẩu phải có ít nhất 8 ký tự và nhiều nhất 20 ký tự !!")
-    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[\\W]).{8,20}$", message = "Mật Khẩu nên có ít nhất 1 ký tự đặc biệt và 1 chữ" +
-            " in hoa !!")
-    private String Password;
+//    @Size(min = 8, max = 20, message = "Mật khẩu phải có ít nhất 8 ký tự và nhiều nhất 20 ký tự !!")
+//    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[\\W]).{8,20}$", message = "Mật Khẩu nên có ít nhất 1 ký tự đặc biệt và 1 chữ" +
+//            " in hoa !!")
+    private String password;
 
     @Column(name = "first_Name", length = 100)
     @Nationalized
@@ -74,8 +74,8 @@ public class Account {
     public Account(String username, String password, String first_Name, String last_Name, String email,
                    String phone_number, String address, String gender, boolean status, String url_image,
                    Account_Role role) {
-        Username = username;
-        Password = password;
+        this.username = username;
+        this.password = password;
         First_Name = first_Name;
         Last_Name = last_Name;
         Email = email;
@@ -92,19 +92,19 @@ public class Account {
     }
 
     public String getUsername() {
-        return Username;
+        return username;
     }
 
     public void setUsername(String username) {
-        Username = username;
+        this.username = username;
     }
 
     public String getPassword() {
-        return Password;
+        return password;
     }
 
     public void setPassword(String password) {
-        Password = password;
+        this.password = password;
     }
 
     public String getFirst_Name() {
