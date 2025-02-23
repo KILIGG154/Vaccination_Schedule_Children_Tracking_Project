@@ -16,7 +16,8 @@ public enum ErrorCode {
     //Check     -Input
     INVALID_KEY (2000, "Invalid message key"),
     USERNAME_INVALID(2001, "Username must be between 3 and 16 characters"),
-    PASSWORD_INVALID(2002, "Password must be between 3 and 16 characters");
+    PASSWORD_INVALID(2002, "Password must be between 3 and 16 characters"),
+    WRONG_PASSWORD(2003, "Password is wrong");
 
     private final int code;
     private final String message;

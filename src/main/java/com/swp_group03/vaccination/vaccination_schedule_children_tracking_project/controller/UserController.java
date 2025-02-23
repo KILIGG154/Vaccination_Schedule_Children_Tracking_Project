@@ -2,8 +2,8 @@ package com.swp_group03.vaccination.vaccination_schedule_children_tracking_proje
 
 
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Account;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.accrequest.UserRequest;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.accrequest.UserUpdate;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.account.UserRequest;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.account.UserUpdate;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.AccountResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.UserService;
@@ -46,6 +46,13 @@ public class UserController {
     public ApiResponse<List<AccountResponse>> getAllAccount(){
         ApiResponse<List<AccountResponse>> apiResponse = new ApiResponse<>();
         apiResponse.setResult(userService.getAllAccount());
+        if(apiResponse.getResult().isEmpty()){
+            apiResponse.setCode(98);
+            apiResponse.setMessage("No Account found");
+            apiResponse.setResult(null);
+            return apiResponse;
+        }
+
         apiResponse.setCode(101);
         apiResponse.setMessage("All Account retrieved");
         return apiResponse;
