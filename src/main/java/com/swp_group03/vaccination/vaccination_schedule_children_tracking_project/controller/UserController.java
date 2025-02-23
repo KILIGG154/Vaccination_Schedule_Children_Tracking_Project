@@ -30,6 +30,7 @@ public class UserController {
         apiResponse.setResult(userService.createAccount(request));
         apiResponse.setCode(100);
         apiResponse.setMessage("Registered Successfully");
+
        return apiResponse;
     }
 

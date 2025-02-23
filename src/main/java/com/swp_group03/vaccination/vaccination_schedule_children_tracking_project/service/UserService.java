@@ -3,10 +3,10 @@ package com.swp_group03.vaccination.vaccination_schedule_children_tracking_proje
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Account;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.AppException;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.ErrorCode;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.mapper.UserMapper;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.UserRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.UserUpdate;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.UserRepo;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +20,9 @@ public class UserService {
     @Autowired
     private UserRepo userRepo;
 
+    @Autowired
+    private UserMapper userMapper;
+
     public Account createAccount(UserRequest request){
 
         if(userRepo.existsByUsername(request.getUsername())){
@@ -28,17 +31,18 @@ public class UserService {
 
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
 
-        Account account = new Account();
-        account.setUsername(request.getUsername());
+//        Account account = new Account();
+        Account account = userMapper.toUser(request);
+//        account.setUsername(request.getUsername());
         account.setPassword(passwordEncoder.encode(request.getPassword()));
 //        account.setPassword(request.getPassword());
-        account.setFirstName(request.getFirst_Name());
-        account.setLastName(request.getLast_Name());
-        account.setEmail(request.getEmail());
-        account.setPhone_number(request.getPhone_number());
-        account.setAddress(request.getAddress());
-        account.setGender(request.getGender());
-        account.setUrlimage(request.getUrl_image());
+//        account.setFirstName(request.getFirst_Name());
+//        account.setLastName(request.getLast_Name());
+//        account.setEmail(request.getEmail());
+//        account.setPhone_number(request.getPhone_number());
+//        account.setAddress(request.getAddress());
+//        account.setGender(request.getGender());
+//        account.setUrlimage(request.getUrl_image());
         account.setStatus(true);
         return userRepo.save(account);
 //        Account account = new Account();
@@ -85,7 +89,7 @@ public class UserService {
                 accountID.setEmail(account.getEmail());
             }
             if (account.getPhone_number() != null) {
-                accountID.setPhone_number(account.getPhone_number());
+                accountID.setPhoneNumber(account.getPhone_number());
             }
             if (account.getAddress() != null) {
                 accountID.setAddress(account.getAddress());
@@ -94,7 +98,7 @@ public class UserService {
                 accountID.setGender(account.getGender());
             }
             if (account.getUrl_image() != null) {
-                accountID.setUrlimage(account.getUrl_image());
+                accountID.setUrlImage(account.getUrl_image());
             }
 
             accountID.setStatus(account.isStatus());
