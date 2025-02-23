@@ -25,11 +25,11 @@ public class ChildService {
 
     public Child updateChildren(ChildrenRequest child, String id){
         Child chilren = childRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Child not found"));
-        chilren.setChild_name(child.getChild_name());
-        chilren.setDob(child.getDob());
-        chilren.setHeight(child.getHeight());
-        chilren.setWeight(child.getWeight());
-        chilren.setGender(child.getGender());
+        if(child.getChild_name() != null) chilren.setChild_name(child.getChild_name());
+        if(child.getDob() != null) chilren.setDob(child.getDob());
+        if(child.getHeight() != null) chilren.setHeight(child.getHeight());
+        if(child.getWeight() != null) chilren.setWeight(child.getWeight());
+        if(child.getGender() != null) chilren.setGender(child.getGender());
         return childRepo.save(chilren);
     }
 }

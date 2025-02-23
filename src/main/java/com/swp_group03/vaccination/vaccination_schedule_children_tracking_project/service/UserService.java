@@ -88,4 +88,11 @@ public class UserService {
             return accountID;
 
     }
+
+//    public Account deactiveAccount(String id,  UserUpdate account){
+//        Account accountID =  userRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Account not found"));
+//
+//        return userRepo.save(toUser(account, accountID));
+//
+//    }
 }
