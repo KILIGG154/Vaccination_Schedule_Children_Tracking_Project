@@ -2,8 +2,9 @@ package com.swp_group03.vaccination.vaccination_schedule_children_tracking_proje
 
 
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Account;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.UserRequest;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.UserUpdate;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.accrequest.UserRequest;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.accrequest.UserUpdate;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.AccountResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -40,8 +43,12 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity getAllAccount(){
-        return ResponseEntity.ok(userService.getAllAccount());
+    public ApiResponse<List<AccountResponse>> getAllAccount(){
+        ApiResponse<List<AccountResponse>> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(userService.getAllAccount());
+        apiResponse.setCode(101);
+        apiResponse.setMessage("All Account retrieved");
+        return apiResponse;
     }
 
 }

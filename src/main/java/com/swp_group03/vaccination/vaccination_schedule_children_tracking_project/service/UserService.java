@@ -4,8 +4,9 @@ import com.swp_group03.vaccination.vaccination_schedule_children_tracking_projec
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.AppException;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.ErrorCode;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.mapper.UserMapper;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.UserRequest;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.UserUpdate;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.accrequest.UserRequest;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.accrequest.UserUpdate;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.AccountResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -32,7 +33,7 @@ public class UserService {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
 
 //        Account account = new Account();
-        Account account = userMapper.toUser(request);
+        Account account = userMapper.toCreateUser(request);
 //        account.setUsername(request.getUsername());
         account.setPassword(passwordEncoder.encode(request.getPassword()));
 //        account.setPassword(request.getPassword());
@@ -64,48 +65,55 @@ public class UserService {
                 ErrorCode.USER_NOT_FOUND
         ));
 
-        return userRepo.save(toUser(account, accountID));
+         accountID = userMapper.toUpdateUser(account);
+
+        return userRepo.save(accountID);
     }
 
-    public List<Account> getAllAccount(){
-        return userRepo.findAll();
+    public List<AccountResponse> getAllAccount(){
+        List<AccountResponse> accounts = userMapper.toAllAccountResponse(userRepo.findAll());
+          if (accounts !=null){
+              return userMapper.toAllAccountResponse(userRepo.findAll());
+            }else {
+              throw new AppException(ErrorCode.EMPTY_USER);
+          }
     }
 
 
-    private Account toUser(UserUpdate account, Account accountID){
-            // Update password only if provided and not empty
-            if (account.getPassword() != null && !account.getPassword().isEmpty()) {
-                accountID.setPassword(account.getPassword());
-            }
-
-            // Update other fields only if they are not null
-            if (account.getFirst_Name() != null) {
-                accountID.setFirstName(account.getFirst_Name());
-            }
-            if (account.getLast_Name() != null) {
-                accountID.setLastName(account.getLast_Name());
-            }
-            if (account.getEmail() != null) {
-                accountID.setEmail(account.getEmail());
-            }
-            if (account.getPhone_number() != null) {
-                accountID.setPhoneNumber(account.getPhone_number());
-            }
-            if (account.getAddress() != null) {
-                accountID.setAddress(account.getAddress());
-            }
-            if (account.getGender() != null) {
-                accountID.setGender(account.getGender());
-            }
-            if (account.getUrl_image() != null) {
-                accountID.setUrlImage(account.getUrl_image());
-            }
-
-            accountID.setStatus(account.isStatus());
-
-            return accountID;
-
-    }
+//    private Account toUser(UserUpdate account, Account accountID){
+//            // Update password only if provided and not empty
+//            if (account.getPassword() != null && !account.getPassword().isEmpty()) {
+//                accountID.setPassword(account.getPassword());
+//            }
+//
+//            // Update other fields only if they are not null
+//            if (account.getFirst_Name() != null) {
+//                accountID.setFirstName(account.getFirst_Name());
+//            }
+//            if (account.getLast_Name() != null) {
+//                accountID.setLastName(account.getLast_Name());
+//            }
+//            if (account.getEmail() != null) {
+//                accountID.setEmail(account.getEmail());
+//            }
+//            if (account.getPhone_number() != null) {
+//                accountID.setPhoneNumber(account.getPhone_number());
+//            }
+//            if (account.getAddress() != null) {
+//                accountID.setAddress(account.getAddress());
+//            }
+//            if (account.getGender() != null) {
+//                accountID.setGender(account.getGender());
+//            }
+//            if (account.getUrl_image() != null) {
+//                accountID.setUrlImage(account.getUrl_image());
+//            }
+//
+//            accountID.setStatus(account.isStatus());
+//
+//            return accountID;
+//
+//    }
 
 //    public Account deactiveAccount(String id,  UserUpdate account){
 //        Account accountID =  userRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Account not found"));

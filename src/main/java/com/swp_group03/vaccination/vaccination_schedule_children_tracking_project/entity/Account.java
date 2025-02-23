@@ -53,9 +53,9 @@ public class Account {
     @Size(max = 100, message = "Địa chỉ không được vượt quá 100 ký tự !!")
     private String address;
 
+    @Enumerated(EnumType.STRING) // Use STRING to store the enum as a string in the database
     @Column(name = "gender", length = 6)
-    @Size(max = 6, message = "Giới tính không được vượt quá 6 ký tự !!")
-    private String gender;
+    private Gender gender; // Change from String to Gender enum
 
     @Column(name = "status")
     private boolean status;
@@ -69,7 +69,7 @@ public class Account {
 
     public Account() {}
 
-    public Account(String username, String password, String firstName, String lastName, String email, String phoneNumber, String address, String gender, boolean status, String urlImage, Account_Role role) {
+    public Account(String username, String password, String firstName, String lastName, String email, String phoneNumber, String address, Gender gender, boolean status, String urlImage, Account_Role role) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
@@ -143,11 +143,11 @@ public class Account {
         this.address = address;
     }
 
-    public String getGender() {
+    public Gender getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(Gender gender) {
         this.gender = gender;
     }
 

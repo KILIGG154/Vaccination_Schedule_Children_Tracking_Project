@@ -4,11 +4,13 @@ public enum ErrorCode {
     //NƠI TA DEFIND CÁC LOẠI ERROR_CODE DỰA THEO CÁC ERROR_MESSAGE ĐỂ TRẢ VỀ CLIENT RÕ RÀNG VỀ LOẠI LỖI MUỐN TRẢ
 
     UNCATEGORIZED_EXCEPTION(9999, "Uncategorized exception"),
+    INVALID_DATA_ACCESS_RESOURCE_USAGE(9998, "Invalid data access resource usage (SQL syntax, table not exist, etc)"),
 
     //Check-Output
     USER_NOT_FOUND(1001, "User not found"),
     USER_ALREADY_EXIST(1002, "User already exist"),
     USER_NOT_EXIST(1003, "User not exist"),
+    EMPTY_USER(1004, "Empty user"),
 
 
     //Check     -Input
