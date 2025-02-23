@@ -1,7 +1,7 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service;
 
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Child;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.ChildrenRequest;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.ChildrenRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.ChildRepo;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
