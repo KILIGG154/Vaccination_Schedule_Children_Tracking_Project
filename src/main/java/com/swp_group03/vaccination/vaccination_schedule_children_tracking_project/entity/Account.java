@@ -22,45 +22,38 @@ public class Account {
     @Size(min = 6, max = 30, message = "Tên đăng nhập phải có ít nhất 6 ký tự và nhiều nhất 30 ký tự !!")
     private String Username;
 
-    @Column(name = "password", length = 50, nullable = false)
+    @Column(name = "password", length = 50)
     @Size(min = 8, max = 20, message = "Mật khẩu phải có ít nhất 8 ký tự và nhiều nhất 20 ký tự !!")
-    @NotBlank(message = "Vui lòng không để trống Password !! ")
     @Pattern(regexp = "^(?=.*[A-Z])(?=.*[\\W]).{8,20}$", message = "Mật Khẩu nên có ít nhất 1 ký tự đặc biệt và 1 chữ" +
             " in hoa !!")
     private String Password;
 
-    @Column(name = "first_Name", length = 100, nullable = false)
+    @Column(name = "first_Name", length = 100)
     @Nationalized
-    @NotBlank(message = "Vui lòng không để trống first_Name !!")
     @Size(max = 100, message = "first_Name không được vượt quá 100 ký tự !!")
     private String First_Name;
 
-    @Column(name = "last_Name", length = 100, nullable = false)
+    @Column(name = "last_Name", length = 100)
     @Nationalized
-    @NotBlank(message = "Vui lòng không để trống last_Name !!")
     @Size(max = 100, message = "last_Name không được vượt quá 100 ký tự !!")
     private String Last_Name;
 
-    @Column(name = "email", length = 50, nullable = false)
-    @NotBlank(message = "Vui lòng không để trống Email !!")
+    @Column(name = "email", length = 50)
     @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$", message = "Please enter right email")
     @Size(max = 50, message = "Email không được vượt quá 50 ký tự !!")
     private String Email;
 
-    @Column(name = "phoneNumber", length = 10,nullable = false)
-    @NotBlank(message = "Vui lòng không để trống số điện thoại !!")
+    @Column(name = "phoneNumber", length = 10)
     @Pattern(regexp = "^0[0-9]{9}$", message = "Enter correct " +
             "Phone number")
     private String Phone_number;
 
-    @Column(name = "address", length = 100,nullable = false)
+    @Column(name = "address", length = 100)
     @Nationalized
-    @NotBlank(message = "Vui lòng không để trống Địa chỉ !!")
     @Size(max = 100, message = "Địa chỉ không được vượt quá 100 ký tự !!")
     private String Address;
 
-    @Column(name = "gender", length = 6, nullable = false)
-    @NotBlank(message = "Vui lòng không để trống Giới tính !!")
+    @Column(name = "gender", length = 6)
     @Size(max = 6, message = "Giới tính không được vượt quá 6 ký tự !!")
     private String Gender;
 

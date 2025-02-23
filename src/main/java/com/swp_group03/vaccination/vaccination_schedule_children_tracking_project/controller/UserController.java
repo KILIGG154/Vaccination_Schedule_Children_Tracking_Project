@@ -8,6 +8,7 @@ import com.swp_group03.vaccination.vaccination_schedule_children_tracking_projec
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -26,8 +27,8 @@ public class UserController {
        return ResponseEntity.ok(newUser);
     }
 
-    @PutMapping("{account_id}")
-    public ResponseEntity updateUser(@PathVariable String account_id, @Valid @RequestBody UserUpdate request){
+    @PatchMapping("{account_id}")
+    public ResponseEntity updateUser(@PathVariable String account_id, @Validated @RequestBody UserUpdate request){
         return ResponseEntity.ok(userService.updateAccount(request,account_id));
     }
 
