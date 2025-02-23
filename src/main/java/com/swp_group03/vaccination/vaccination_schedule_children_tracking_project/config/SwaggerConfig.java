@@ -6,9 +6,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class SpringFoxConfig {
+public class SwaggerConfig {
+
     @Bean
-    public OpenAPI customOpenApi(){
-        return new OpenAPI().info(new Info().title("Vaccination Schedule Children Tracking Project").version("1.0").description("Vaccination Schedule Children Tracking Project"));
+    public OpenAPI customOpenAPI() {
+        return new OpenAPI()
+                .info(new Info()
+                        .title("User Management API")
+                        .version("1.0")
+                        .description("User Management API"));
     }
 }

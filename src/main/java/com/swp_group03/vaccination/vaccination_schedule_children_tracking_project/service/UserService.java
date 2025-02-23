@@ -8,6 +8,8 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -43,16 +45,47 @@ public class UserService {
 
     public  Account updateAccount(UserUpdate account, String account_id){
         Account accountID =  userRepo.findById(account_id).orElseThrow(() -> new EntityNotFoundException("Account not found"));
-        accountID.setPassword(account.getPassword());
-        accountID.setFirstName(account.getFirst_Name());
-        accountID.setLastName(account.getLast_Name());
-        accountID.setEmail(account.getEmail());
-        accountID.setPhone_number(account.getPhone_number());
-        accountID.setAddress(account.getAddress());
-        accountID.setGender(account.getGender());
-        accountID.setUrlimage(account.getUrl_image());
-        return userRepo.save(accountID);
+
+        return userRepo.save(toUser(account, accountID));
+    }
+
+    public List<Account> getAllAccount(){
+        return userRepo.findAll();
     }
 
 
+    private Account toUser(UserUpdate account, Account accountID){
+            // Update password only if provided and not empty
+            if (account.getPassword() != null && !account.getPassword().isEmpty()) {
+                accountID.setPassword(account.getPassword());
+            }
+
+            // Update other fields only if they are not null
+            if (account.getFirst_Name() != null) {
+                accountID.setFirstName(account.getFirst_Name());
+            }
+            if (account.getLast_Name() != null) {
+                accountID.setLastName(account.getLast_Name());
+            }
+            if (account.getEmail() != null) {
+                accountID.setEmail(account.getEmail());
+            }
+            if (account.getPhone_number() != null) {
+                accountID.setPhone_number(account.getPhone_number());
+            }
+            if (account.getAddress() != null) {
+                accountID.setAddress(account.getAddress());
+            }
+            if (account.getGender() != null) {
+                accountID.setGender(account.getGender());
+            }
+            if (account.getUrl_image() != null) {
+                accountID.setUrlimage(account.getUrl_image());
+            }
+
+            accountID.setStatus(account.isStatus());
+
+            return accountID;
+
+    }
 }

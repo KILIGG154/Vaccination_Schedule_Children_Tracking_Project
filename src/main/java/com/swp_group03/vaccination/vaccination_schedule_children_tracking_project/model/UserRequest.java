@@ -30,7 +30,7 @@ public class UserRequest {
     private String last_Name;
 
     @NotBlank(message = "Vui lòng không để trống Email !!")
-    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$", message = "Please enter right email")
+    @Pattern(regexp = "^(?=.{6,100}$)[a-zA-Z0-9]+(?:[._%+-][a-zA-Z0-9]+)*@gmail\\.com$", message = "Please enter right email")
     @Size(max = 50, message = "Email không được vượt quá 50 ký tự !!\n")
     private String Email;
 
