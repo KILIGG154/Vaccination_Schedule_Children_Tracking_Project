@@ -28,7 +28,7 @@ public class AuthenticationController {
 
         boolean isAuthen = authenticationService.authenticate(request);
         if(isAuthen) {
-            apiResponse.setCode(99);
+            apiResponse.setCode(100);
             apiResponse.setMessage("Login successfully: " +isAuthen);
         } else {
             throw new AppException(ErrorCode.WRONG_PASSWORD);

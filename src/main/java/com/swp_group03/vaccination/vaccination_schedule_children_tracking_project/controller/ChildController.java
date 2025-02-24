@@ -6,7 +6,11 @@ import com.swp_group03.vaccination.vaccination_schedule_children_tracking_projec
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/children")
@@ -21,8 +25,13 @@ public class ChildController {
         return ResponseEntity.ok(newChild);
     }
 
-    @PutMapping("/{child_id}")
-    public ResponseEntity updateChild(@Valid @RequestBody ChildrenRequest child,  @PathVariable("child_id") String id) {
+    @PatchMapping("/{child_id}")
+    public ResponseEntity updateChild(@Validated @RequestBody ChildrenRequest child, @PathVariable String id) {
         return ResponseEntity.ok(childService.updateChildren(child,id));
+    }
+
+    @GetMapping()
+    public List<Child>  getChildren(){
+        return childService.getChildren();
     }
 }
