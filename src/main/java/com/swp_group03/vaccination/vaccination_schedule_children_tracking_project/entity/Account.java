@@ -10,6 +10,9 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.Nationalized;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "Account")
 
@@ -63,13 +66,19 @@ public class Account {
     @Column(name = "URL_image")
     private String urlImage;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Role_ID")
-    private Account_Role role;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "Account_Role",
+            joinColumns = @JoinColumn(name = "Account_ID"),
+            inverseJoinColumns = @JoinColumn(name = "Role_ID"))
+    private Set<Role> roles = new HashSet<>();
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "Role_ID")
+//    private Account_Role role;
 
     public Account() {}
 
-    public Account(String username, String password, String firstName, String lastName, String email, String phoneNumber, String address, Gender gender, boolean status, String urlImage, Account_Role role) {
+    public Account(String accountId, String username, String password, String firstName, String lastName, String email, String phoneNumber, String address, Gender gender, boolean status, String urlImage, Set<Role> roles) {
+        this.accountId = accountId;
         this.username = username;
         this.password = password;
         this.firstName = firstName;
@@ -80,7 +89,7 @@ public class Account {
         this.gender = gender;
         this.status = status;
         this.urlImage = urlImage;
-        this.role = role;
+        this.roles = roles;
     }
 
     public String getAccountId() {
@@ -167,13 +176,7 @@ public class Account {
         this.urlImage = urlImage;
     }
 
-    public Account_Role getRole() {
-        return role;
-    }
 
-    public void setRole(Account_Role role) {
-        this.role = role;
-    }
 
     //
 //    public Account(String username, String password, String first_Name, String last_Name, String email,
