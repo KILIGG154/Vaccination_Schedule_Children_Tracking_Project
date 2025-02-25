@@ -23,18 +23,21 @@ public class AuthenticationController {
     AuthenticationService authenticationService;
 
     @PostMapping("/login")
-    public ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
-        ApiResponse<AuthenticationResponse> apiResponse = new ApiResponse<>();
+    ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
 
-        boolean isAuthen = authenticationService.authenticate(request);
-        if(isAuthen) {
-            apiResponse.setCode(100);
-            apiResponse.setMessage("Login successfully: " +isAuthen);
-        } else {
-            throw new AppException(ErrorCode.WRONG_PASSWORD);
-        }
-        return apiResponse;
+        var isAuthen = authenticationService.authenticate(request);
+
+        return  ApiResponse.<AuthenticationResponse>builder()
+                .code(100)
+                .message("Login successfully: ")
+                .result(isAuthen)
+                .build();
     }
-
-
 }
+
+//        if(isAuthen) {
+//            apiResponse.setCode(100);
+//            apiResponse.setMessage("Login successfully: " +isAuthen);
+//        } else {
+//            throw new AppException(ErrorCode.WRONG_PASSWORD);
+//        }

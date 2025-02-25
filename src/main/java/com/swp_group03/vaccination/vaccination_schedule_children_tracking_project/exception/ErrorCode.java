@@ -9,7 +9,7 @@ public enum ErrorCode {
     //Check-Output
     USER_NOT_FOUND(1001, "User not found"),
     USER_ALREADY_EXIST(1002, "User already exist"),
-    USER_NOT_EXIST(1003, "User not exist"),
+    USERNAME_NOT_EXIT(1003, "UserName not exist"),
     EMPTY_USER(1004, "Empty user"),
 
 
@@ -17,7 +17,7 @@ public enum ErrorCode {
     INVALID_KEY (2000, "Invalid message key"),
     USERNAME_INVALID(2001, "Username must be between 3 and 16 characters"),
     PASSWORD_INVALID(2002, "Password must be between 3 and 16 characters"),
-    WRONG_PASSWORD(2003, "Password is wrong");
+    UNAUTHENTICATED(2003, "Invalid Username or Password"),;
 
     private final int code;
     private final String message;
