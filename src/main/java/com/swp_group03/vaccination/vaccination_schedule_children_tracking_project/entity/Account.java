@@ -14,7 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "Account")
+@Table(name = "Accounts")
 
 public class Account {
     @Id
@@ -176,7 +176,13 @@ public class Account {
         this.urlImage = urlImage;
     }
 
+    public Set<Role> getRoles() {
+        return roles;
+    }
 
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
 
     //
 //    public Account(String username, String password, String first_Name, String last_Name, String email,

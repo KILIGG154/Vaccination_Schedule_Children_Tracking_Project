@@ -11,7 +11,7 @@ public class Permission {
     @Id
     @Column(name = "Permission_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String Permission_ID;
+    private Integer Permission_ID;
     @Column(name = "Permission_Name")
     private String Permission_Name;
 
@@ -22,17 +22,16 @@ public class Permission {
 
     }
 
-    public Permission(String permission_ID, String permission_Name, List<Role> roled) {
-        Permission_ID = permission_ID;
+    public Permission(int permission_ID, String permission_Name, List<Role> role) {
         Permission_Name = permission_Name;
-        this.role = roled;
+        this.role = role;
     }
 
     public Permission(String permission_Name) {
 
     }
 
-    public String getPermission_ID() {
+    public int getPermission_ID() {
         return Permission_ID;
     }
 

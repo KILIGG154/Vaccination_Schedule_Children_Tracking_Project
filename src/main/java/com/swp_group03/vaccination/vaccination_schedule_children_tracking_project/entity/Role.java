@@ -3,20 +3,22 @@ package com.swp_group03.vaccination.vaccination_schedule_children_tracking_proje
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
-@Table(name = "Role")
+@Table(name = "Roles")
 public class Role {
     @Id
     @Column(name = "Role_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String Role_ID;
+    private Integer Role_ID;
     @Column(name = "Role_Name")
     private String Role_Name;
 
     @ManyToMany(mappedBy = "roles")
-    private List<Account> accountList = new ArrayList<>();
+    private List<Account> accounts = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
@@ -24,16 +26,15 @@ public class Role {
             joinColumns = @JoinColumn(name = "Role_ID"),
             inverseJoinColumns = @JoinColumn(name = "Permission_ID")
     )
-    private List<Permission> permissions = new ArrayList<>();
+    private Set<Permission> permissions = new HashSet<>();
 
     public Role() {
 
     }
 
-    public Role(String role_ID, String role_Name, List<Account> accountList, List<Permission> permissions) {
-        Role_ID = role_ID;
+    public Role(String role_Name, List<Account> accounts, Set<Permission> permissions) {
         Role_Name = role_Name;
-        this.accountList = accountList;
+        this.accounts = accounts;
         this.permissions = permissions;
     }
 
@@ -41,7 +42,7 @@ public class Role {
 
     }
 
-    public String getRole_ID() {
+    public int getRole_ID() {
         return Role_ID;
     }
 
@@ -51,5 +52,13 @@ public class Role {
 
     public void setRole_Name(String role_Name) {
         Role_Name = role_Name;
+    }
+
+    public Set<Permission> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(Set<Permission> permissions) {
+        this.permissions = permissions;
     }
 }
