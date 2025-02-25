@@ -12,9 +12,11 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
+@Table(name = "Vaccine")
 public class Vaccine {
     @Id
     @Column(name = "VaccineID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Size(max = 255)
