@@ -1,10 +1,13 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.controller;
 
+import com.nimbusds.jose.JOSEException;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.AppException;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.ErrorCode;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.account.AuthenticationRequest;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.account.IntrospectRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.AuthenticationResponse;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.IntrospectResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.AuthenticationService;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -13,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.text.ParseException;
 
 @RestController
 @RequestMapping("/auth")
@@ -33,7 +38,21 @@ public class AuthenticationController {
                 .result(isAuthen)
                 .build();
     }
+
+@PostMapping("/introspect")
+    ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectRequest request) throws JOSEException, ParseException {
+
+        var isValid = authenticationService.introspect(request);
+        return  ApiResponse.<IntrospectResponse>builder()
+                .code(100)
+                .message("Introspect successfully: ")
+                .result(isValid)
+                .build();
+    }
 }
+
+
+
 
 //        if(isAuthen) {
 //            apiResponse.setCode(100);
