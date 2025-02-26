@@ -23,6 +23,8 @@ public class SecurityConfig {
 
     private final String[] PUBLIC_ENPOINTS = {"/users/register", "/auth/login", "/auth/introspect" };
 
+    private final String[] SWAGGER_ENDPOINTS = {"/v2/api-docs", "/swagger-resources/**", "/swagger-ui/**", "/webjars/**"};
+
     @Value("${jwt.secretKey}")
     private String signerKey;
 
@@ -30,7 +32,11 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
-                .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, PUBLIC_ENPOINTS).permitAll().anyRequest().authenticated());
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .authorizeHttpRequests(request -> request
+                        .requestMatchers(HttpMethod.POST, PUBLIC_ENPOINTS).permitAll()
+                        .requestMatchers(SWAGGER_ENDPOINTS).permitAll() // Cho phép truy cập Swagger UI
+                        .anyRequest().authenticated());
 
 
         //Dùng decoder để giải mã token ở Bearer token

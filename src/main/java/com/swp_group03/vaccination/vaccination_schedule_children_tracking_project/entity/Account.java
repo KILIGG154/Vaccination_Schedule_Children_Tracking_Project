@@ -71,9 +71,7 @@ public class Account {
             joinColumns = @JoinColumn(name = "Account_ID"),
             inverseJoinColumns = @JoinColumn(name = "Role_ID"))
     private Set<Role> roles = new HashSet<>();
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "Role_ID")
-//    private Account_Role role;
+
 
     public Account() {}
 
