@@ -20,7 +20,7 @@ public class Role {
     @ManyToMany(mappedBy = "roles")
     private List<Account> accounts = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinTable(
             name = "Role_Permission",
             joinColumns = @JoinColumn(name = "Role_ID"),
@@ -28,37 +28,54 @@ public class Role {
     )
     private Set<Permission> permissions = new HashSet<>();
 
-    public Role() {
+    public Role() {}
 
-    }
-
-    public Role(String role_Name, List<Account> accounts, Set<Permission> permissions) {
-        role_Name = role_Name;
+    public Role(String roleName, List<Account> accounts, Set<Permission> permissions) {
+        this.roleName = roleName;
         this.accounts = accounts;
         this.permissions = permissions;
     }
 
     public Role(String Role_Name) {
-
+      this.roleName = Role_Name;
     }
 
-    public int getRole_ID() {
-        return roleId;
+    public int getRoleID() {
+        return this.roleId;
     }
 
-    public String getRole_Name() {
-        return roleName;
+    public String getRoleName() {
+        return this.roleName;
     }
 
-    public void setRole_Name(String role_Name) {
-        role_Name = role_Name;
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 
     public Set<Permission> getPermissions() {
-        return permissions;
+        return this.permissions;
     }
 
     public void setPermissions(Set<Permission> permissions) {
         this.permissions = permissions;
+    }
+
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
+    }
+
+    public void addAccount(Account account) {
+        this.accounts.add(account);
+        account.getRoles().add(this); // Cập nhật mối quan hệ hai chiều
+    }
+
+    // Phương thức để xóa một Account
+    public void removeAccount(Account account) {
+        this.accounts.remove(account);
+        account.getRoles().remove(this); // Cập nhật mối quan hệ hai chiều
     }
 }

@@ -8,6 +8,7 @@ import lombok.Setter;*/
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 import org.hibernate.annotations.Nationalized;
 
 import java.util.HashSet;
@@ -15,7 +16,6 @@ import java.util.Set;
 
 @Entity
 @Table(name = "Accounts")
-
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -66,7 +66,7 @@ public class Account {
     @Column(name = "URL_image")
     private String urlImage;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinTable(name = "Account_Role",
             joinColumns = @JoinColumn(name = "Account_ID"),
             inverseJoinColumns = @JoinColumn(name = "Role_ID"))
@@ -74,6 +74,10 @@ public class Account {
 
 
     public Account() {}
+
+    public Account(String username) {
+        this.username = username;
+    }
 
     public Account(String accountId, String username, String password, String firstName, String lastName, String email, String phoneNumber, String address, Gender gender, boolean status, String urlImage, Set<Role> roles) {
         this.accountId = accountId;
@@ -180,6 +184,18 @@ public class Account {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    // Phương thức để thêm một Role
+    public void addRole(Role role) {
+        this.roles.add(role);
+        role.getAccounts().add(this); // Cập nhật mối quan hệ hai chiều
+    }
+
+    // Phương thức để xóa một Role
+    public void removeRole(Role role) {
+        this.roles.remove(role);
+        role.getAccounts().remove(this); // Cập nhật mối quan hệ hai chiều
     }
 
     //

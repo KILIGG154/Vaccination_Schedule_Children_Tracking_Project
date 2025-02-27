@@ -14,7 +14,7 @@ import lombok.experimental.FieldDefaults;
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserRequest {
+public class UserCeation {
 
     @Size(min = 3, max = 50, message = "USERNAME_INVALID")
     String username;
@@ -33,7 +33,6 @@ public class UserRequest {
 
     @Size(max = 100, message = "Địa chỉ không được vượt quá 100 ký tự !!")
     String address;    // Changed from Address
-
 
     Gender gender;     // Changed from Gender
     String urlImage;   // Changed from url_image

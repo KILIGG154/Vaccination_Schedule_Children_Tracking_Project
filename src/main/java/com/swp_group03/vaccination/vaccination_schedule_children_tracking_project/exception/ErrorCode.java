@@ -5,12 +5,19 @@ public enum ErrorCode {
 
     UNCATEGORIZED_EXCEPTION(9999, "Uncategorized exception"),
     INVALID_DATA_ACCESS_RESOURCE_USAGE(9998, "Invalid data access resource usage (SQL syntax, table not exist, etc)"),
+    // Mã lỗi cho ngoại lệ TransientObjectException
+    TRANSIENT_OBJECT_EXCEPTION(9997, "A transient object was referenced. (Object save in RAM but not in database)"),
+
+
 
     //Check-Output
     USER_NOT_FOUND(1001, "User not found"),
     USER_ALREADY_EXIST(1002, "User already exist"),
     USERNAME_NOT_EXIT(1003, "UserName not exist"),
     EMPTY_USER(1004, "Empty user"),
+    ROLE_NOT_FOUND(1005, "Role not found"),
+
+
 
 
     //Check     -Input

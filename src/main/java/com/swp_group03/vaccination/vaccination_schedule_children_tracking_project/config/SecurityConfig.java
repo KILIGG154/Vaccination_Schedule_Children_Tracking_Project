@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
@@ -23,7 +25,7 @@ public class SecurityConfig {
 
     private final String[] PUBLIC_ENPOINTS = {"/users/register", "/auth/login", "/auth/introspect" };
 
-    private final String[] SWAGGER_ENDPOINTS = {"/v2/api-docs", "/swagger-resources/**", "/swagger-ui/**", "/webjars/**"};
+    private final String[] SWAGGER_ENDPOINTS = {"/v3/api-docs", "/swagger-resources/**", "/swagger-ui/**", "/webjars/**"};
 
     @Value("${jwt.secretKey}")
     private String signerKey;
@@ -34,7 +36,7 @@ public class SecurityConfig {
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers(HttpMethod.POST, PUBLIC_ENPOINTS).permitAll()
+                        .requestMatchers(HttpMethod.POST, PUBLIC_ENPOINTS ).permitAll()
                         .requestMatchers(SWAGGER_ENDPOINTS).permitAll() // Cho phép truy cập Swagger UI
                         .anyRequest().authenticated());
 
@@ -73,6 +75,11 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
+    }
+
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(10);
     }
 
 }

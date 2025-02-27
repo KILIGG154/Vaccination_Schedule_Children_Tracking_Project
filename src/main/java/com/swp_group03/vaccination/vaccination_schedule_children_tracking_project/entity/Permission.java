@@ -3,7 +3,9 @@ package com.swp_group03.vaccination.vaccination_schedule_children_tracking_proje
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "Permission")
@@ -11,35 +13,41 @@ public class Permission {
     @Id
     @Column(name = "Permission_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer Permission_ID;
+    private Integer permissionId;
     @Column(name = "Permission_Name")
-    private String Permission_Name;
+    private String permissionName;
 
     @ManyToMany(mappedBy = "permissions")
-    private List<Role> role= new ArrayList<>();
+    private Set<Role> role= new HashSet<>();
 
-    public Permission() {
+    public Permission(){}
 
-    }
-
-    public Permission(int permission_ID, String permission_Name, List<Role> role) {
-        Permission_Name = permission_Name;
+    public Permission(String permissionName, Set<Role> role) {
+        this.permissionName = permissionName;
         this.role = role;
     }
 
-    public Permission(String permission_Name) {
-
+    public Permission(String permissionName) {
+        this.permissionName = permissionName;
     }
 
-    public int getPermission_ID() {
-        return Permission_ID;
+    public String getPermissionName() {
+        return permissionName;
     }
 
-    public String getPermission_Name() {
-        return Permission_Name;
+    public Set<Role> getRole() {
+        return role;
     }
 
-    public void setPermission_Name(String permission_Name) {
-        Permission_Name = permission_Name;
+    public void setRole(Set<Role> role) {
+        this.role = role;
+    }
+
+    public Integer getPermissionId() {
+        return permissionId;
+    }
+
+    public void setPermissionId(Integer permissionId) {
+        this.permissionId = permissionId;
     }
 }
