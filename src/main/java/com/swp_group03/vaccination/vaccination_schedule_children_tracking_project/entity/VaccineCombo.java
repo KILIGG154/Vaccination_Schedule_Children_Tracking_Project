@@ -34,6 +34,10 @@ public class VaccineCombo {
     @OneToMany(mappedBy = "combo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<VaccineComboDetail> vaccineComboDetails;
 
-
+    public VaccineCombo(String comboName, String description, boolean status) {
+        this.comboName = comboName;
+        this.description = description;
+        this.status = status;
+    }
 
 }

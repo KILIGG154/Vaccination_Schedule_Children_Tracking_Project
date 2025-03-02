@@ -28,7 +28,7 @@ import java.util.List;
 @Configuration
 public class SecurityConfig {
 
-    private final String[] PUBLIC_ENPOINTS = {"/users/register", "/auth/login", "/auth/introspect", "/vaccine/addVaccine", "/vaccine/get", "/users/{accountID}", "/vaccine/combo/add", "/vaccine/combo/detail/1/1" };
+    private final String[] PUBLIC_ENPOINTS = {"/users/register", "/auth/login", "/auth/introspect", "/vaccine/addVaccine", "/vaccine/get", "/users/{accountID}", "/vaccine/combo/add", "/vaccine/combo/detail/{vaccineId}/{comboId}" };
 
     private final String[] PRIVATE_ENPOINTS = {"/users", "/vaccine/addVaccine", "/vaccine/get" };
 
