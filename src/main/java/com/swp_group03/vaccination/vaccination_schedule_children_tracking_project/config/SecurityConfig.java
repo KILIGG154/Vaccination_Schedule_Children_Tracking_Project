@@ -28,7 +28,7 @@ import java.util.List;
 @Configuration
 public class SecurityConfig {
 
-    private final String[] PUBLIC_ENPOINTS = {"/users/register", "/auth/login", "/auth/introspect" };
+    private final String[] PUBLIC_ENPOINTS = {"/users/register", "/auth/login", "/auth/introspect", "/vaccine/addVaccine", "/vaccine/get", "/users/{accountID}", "/vaccine/combo/add", "/vaccine/combo/detail/1/1" };
 
     private final String[] PRIVATE_ENPOINTS = {"/users", "/vaccine/addVaccine", "/vaccine/get" };
 
@@ -46,7 +46,10 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(HttpMethod.POST, PUBLIC_ENPOINTS ).permitAll() // Cho phép truy cập các API public
+
+                        .requestMatchers(HttpMethod.GET, PUBLIC_ENPOINTS ).permitAll() // Cho phép truy cập các API public
 //
+
 //                        .requestMatchers(HttpMethod.GET, PRIVATE_ENPOINTS)
 ////                        .hasAuthority("ROLE_ADMIN") // Chỉ cho phép truy cập các API private với quyền ADMIN
 //                        .hasRole("ADMIN")
