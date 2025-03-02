@@ -41,10 +41,7 @@ public class VaccineComboDetailId implements Serializable {
 //        return Objects.hash(vaccineId, comboId);
 //    }
 
-    @Column(name = "comboId")
     private int vaccineId;
-
-    @Column(name = "vaccineId")
     private int comboId;
 
         @Override

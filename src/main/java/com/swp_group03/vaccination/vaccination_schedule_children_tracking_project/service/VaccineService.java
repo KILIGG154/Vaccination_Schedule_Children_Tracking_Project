@@ -6,12 +6,14 @@ import com.swp_group03.vaccination.vaccination_schedule_children_tracking_projec
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.Vaccine.VaccineComboRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.Vaccine.VaccineRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class VaccineService {
 
@@ -65,10 +67,13 @@ public class VaccineService {
 
     @Transactional
     public VaccineComboDetail addVaccineComboDetail(VaccineCombeDetailRequest request, int vaccineId, int comboId){
+
         Vaccine vaccine = vaccineRepo.findById(vaccineId).orElseThrow(() -> new RuntimeException("Vaccine not found"));
+
         VaccineCombo vaccineCombo = vaccineCombos.findById(comboId).orElseThrow(() -> new RuntimeException("Vaccine Combo not found"));
 
         VaccineComboDetailId key = new VaccineComboDetailId(vaccineId, comboId);
+
         VaccineComboDetail vaccineComboDetail1 = new VaccineComboDetail();
         vaccineComboDetail1.setId(key);
         vaccineComboDetail1.setVaccine(vaccine);
@@ -76,6 +81,7 @@ public class VaccineService {
         vaccineComboDetail1.setDose(request.getDose());
         vaccineComboDetail1.setAgeGroup(request.getAgeGroup());
         vaccineComboDetail1.setSaleOff(request.getSaleOff());
+
         return vaccineComboDetail.save(vaccineComboDetail1);
     }
 

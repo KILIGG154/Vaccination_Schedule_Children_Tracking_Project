@@ -1,64 +1,77 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity;
 
 import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "Roles")
 public class Role {
     @Id
-    @Column(name = "Role_ID")
+    @Column(name = "RoleId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer Role_ID;
-    @Column(name = "Role_Name")
-    private String Role_Name;
+    private int roleId;
+    @Column(name = "RoleName")
+    private String roleName;
 
-    @ManyToMany(mappedBy = "roles")
-    private List<Account> accounts = new ArrayList<>();
+    @ManyToMany(mappedBy = "roles", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    private Set<Account> accounts = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(
-            name = "Role_Permission",
-            joinColumns = @JoinColumn(name = "Role_ID"),
-            inverseJoinColumns = @JoinColumn(name = "Permission_ID")
-    )
-    private Set<Permission> permissions = new HashSet<>();
+    @Enumerated(EnumType.STRING)
+    private Set<Permission> permissions;
 
-    public Role() {
+    public Role() {}
 
-    }
-
-    public Role(String role_Name, List<Account> accounts, Set<Permission> permissions) {
-        Role_Name = role_Name;
+    public Role(String roleName, Set<Account> accounts, Set<Permission> permissions) {
+        this.roleName = roleName;
         this.accounts = accounts;
         this.permissions = permissions;
     }
 
-    public Role(String Role_Name) {
-
+    public Role(String roleName) {
+        this.roleName = roleName;
+        this.accounts = new HashSet<>();
     }
 
-    public int getRole_ID() {
-        return Role_ID;
+    public int getRoleID() {
+        return this.roleId;
     }
 
-    public String getRole_Name() {
-        return Role_Name;
+    public String getRoleName() {
+        return this.roleName;
     }
 
-    public void setRole_Name(String role_Name) {
-        Role_Name = role_Name;
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 
     public Set<Permission> getPermissions() {
-        return permissions;
+        return this.permissions;
     }
 
     public void setPermissions(Set<Permission> permissions) {
         this.permissions = permissions;
     }
+
+    public Set<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(Set<Account> accounts) {
+        this.accounts = accounts;
+    }
+
+    public void addAccount(Account account) {
+        this.accounts.add(account);
+        account.getRoles().add(this); // Cập nhật mối quan hệ hai chiều
+    }
+
+    // Phương thức để xóa một Account
+    public void removeAccount(Account account) {
+        this.accounts.remove(account);
+        account.getRoles().remove(this); // Cập nhật mối quan hệ hai chiều
+    }
+
 }

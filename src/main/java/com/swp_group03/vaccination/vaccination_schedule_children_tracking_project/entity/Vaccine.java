@@ -22,7 +22,7 @@ public class Vaccine {
 
     @Size(max = 255)
     @NotNull
-    @Column(name = "Name", nullable = false)
+    @Column(name = "Name")
     private String name;
 
     @Lob
@@ -32,10 +32,6 @@ public class Vaccine {
     @Size(max = 255)
     @Column(name = "Manufacturer")
     private String manufacturer;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CategoryID")
-    private VacineCategory categoryID;
 
     @Size(max = 255)
     @Column(name = "Dosage")
@@ -90,8 +86,13 @@ public class Vaccine {
     @Column(name = "Status", length = 50)
     private String status;
 
-    @OneToMany(mappedBy = "vaccine", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "vaccine", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<VaccineComboDetail> vaccineComboDetails;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CategoryID")
+    private VacineCategory categoryID;
 
 
 }

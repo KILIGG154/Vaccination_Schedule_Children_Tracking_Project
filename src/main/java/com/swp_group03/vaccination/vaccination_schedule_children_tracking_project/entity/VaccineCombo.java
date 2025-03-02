@@ -31,7 +31,7 @@ public class VaccineCombo {
     @Column(name = "Status")
     private boolean status;
 
-    @OneToMany(mappedBy = "combo", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "combo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<VaccineComboDetail> vaccineComboDetails;
 
 
