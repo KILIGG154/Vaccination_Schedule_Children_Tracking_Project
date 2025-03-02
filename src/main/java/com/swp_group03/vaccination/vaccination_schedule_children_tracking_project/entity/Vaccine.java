@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -15,9 +16,9 @@ import java.time.LocalDate;
 @Table(name = "Vaccine")
 public class Vaccine {
     @Id
-    @Column(name = "VaccineID", nullable = false)
+    @Column(name = "VaccineID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private int id;
 
     @Size(max = 255)
     @NotNull
@@ -88,6 +89,9 @@ public class Vaccine {
     @Size(max = 50)
     @Column(name = "Status", length = 50)
     private String status;
+
+    @OneToMany(mappedBy = "vaccine", fetch = FetchType.LAZY)
+    private Set<VaccineComboDetail> vaccineComboDetails;
 
 
 }
