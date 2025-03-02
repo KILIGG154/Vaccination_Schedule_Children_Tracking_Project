@@ -14,11 +14,12 @@ import java.util.Set;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
-public class AccountResponse {
-     String username;
-     String firstName;
-     String lastName;
-     String email;
-     String phoneNumber;
-     Set<Role> roles;
+public class CreateAccResponse {
+    String username;
+    String password;
+    String firstName;
+    String lastName;
+    String email;
+    String phoneNumber;
+    Set<String> roles;
 }

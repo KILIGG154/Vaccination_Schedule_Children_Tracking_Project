@@ -13,9 +13,9 @@ public class Role {
     @Id
     @Column(name = "Role_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer roleId;
+    private Integer Role_ID;
     @Column(name = "Role_Name")
-    private String roleName;
+    private String Role_Name;
 
     @ManyToMany(mappedBy = "roles")
     private List<Account> accounts = new ArrayList<>();
@@ -32,30 +32,26 @@ public class Role {
 
     }
 
-    public Role(String roleName, List<Account> accounts, Set<Permission> permissions) {
-        this.roleName = roleName;
+    public Role(String role_Name, List<Account> accounts, Set<Permission> permissions) {
+        Role_Name = role_Name;
         this.accounts = accounts;
         this.permissions = permissions;
     }
 
-    public Integer getRoleId() {
-        return roleId;
+    public Role(String Role_Name) {
+
     }
 
-    public String getRoleName() {
-        return roleName;
+    public int getRole_ID() {
+        return Role_ID;
     }
 
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
+    public String getRole_Name() {
+        return Role_Name;
     }
 
-    public List<Account> getAccounts() {
-        return accounts;
-    }
-
-    public void setAccounts(List<Account> accounts) {
-        this.accounts = accounts;
+    public void setRole_Name(String role_Name) {
+        Role_Name = role_Name;
     }
 
     public Set<Permission> getPermissions() {

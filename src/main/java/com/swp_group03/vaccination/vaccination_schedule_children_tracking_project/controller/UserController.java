@@ -2,7 +2,7 @@ package com.swp_group03.vaccination.vaccination_schedule_children_tracking_proje
 
 
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Account;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.account.UserRequest;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.account.UserCeation;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.account.UserUpdate;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.AccountResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
@@ -27,7 +27,7 @@ public class UserController {
 
     @PostMapping("/register")
     @Operation(summary = "Register a new user")
-    public ApiResponse<Account> registerUser(@Valid @RequestBody UserRequest request){
+    public ApiResponse<Account> registerUser(@Valid @RequestBody UserCeation request){
         ApiResponse<Account> apiResponse = new ApiResponse<>();
 
         apiResponse.setResult(userService.createAccount(request));
