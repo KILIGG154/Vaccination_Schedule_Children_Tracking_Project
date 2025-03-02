@@ -1,4 +1,4 @@
-package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service;
+package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.user_auth;
 
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Account;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Role;
@@ -10,10 +10,11 @@ import com.swp_group03.vaccination.vaccination_schedule_children_tracking_projec
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.AccountResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.RoleRepo;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.UserRepo;
-import jakarta.transaction.Transactional;
-import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class UserService {
 
     @Autowired
@@ -63,7 +65,10 @@ public class UserService {
 
     }
 
+
+    @PreAuthorize("hasRole('USER')")
     public  Account updateAccount(UserUpdate account, String account_id){
+        log.info("Update account with id: {}", account_id);
         Account accountID =  userRepo.findById(account_id).orElseThrow(() -> new AppException(
                 ErrorCode.USER_NOT_FOUND
         ));
@@ -73,6 +78,7 @@ public class UserService {
         return userRepo.save(accountID);
     }
 
+    @PostAuthorize("returnObject.name == authentication.name")
     public List<AccountResponse> getAllAccount(){
         List<AccountResponse> accounts = userMapper.toAllAccountResponse(userRepo.findAll());
           if (accounts !=null){
@@ -80,6 +86,21 @@ public class UserService {
             }else {
               throw new AppException(ErrorCode.EMPTY_USER);
           }
+    }
+
+    public AccountResponse getAccountById(String id){
+        Account account = userRepo.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        return userMapper.toAccountResponse(userRepo.findById(id));
+    }
+
+
+    public AccountResponse getMyInfo() {
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+
+        Account account = userRepo.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        return userMapper.toAccountResponse(Optional.of(account));
     }
 
 

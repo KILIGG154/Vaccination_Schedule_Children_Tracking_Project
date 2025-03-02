@@ -1,15 +1,10 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity;
 
 import jakarta.persistence.*;
-/*import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;*/
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.Builder;
 import org.hibernate.annotations.Nationalized;
+import jakarta.persistence.CascadeType;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -18,58 +13,56 @@ import java.util.Set;
 @Table(name = "Accounts")
 public class Account {
     @Id
+    @Column(name = "AccountId")
     @GeneratedValue(strategy = GenerationType.UUID)
     private String accountId;
 
-    @Column(name = "username", length = 30,unique=true)
-    @Size(min = 6, max = 30, message = "Tên đăng nhập phải có ít nhất 6 ký tự và nhiều nhất 30 ký tự !!")
+    @Column(name = "Username", length = 30,unique=true)
+    @Size(min = 2, max = 30, message = "Tên đăng nhập phải có ít nhất 6 ký tự và nhiều nhất 30 ký tự !!")
     private String username;
 
-    @Column(name = "password")
+    @Column(name = "Password")
 //    @Size(min = 8, max = 20, message = "Mật khẩu phải có ít nhất 8 ký tự và nhiều nhất 20 ký tự !!")
 //    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[\\W]).{8,20}$", message = "Mật Khẩu nên có ít nhất 1 ký tự đặc biệt và 1 chữ" +
 //            " in hoa !!")
     private String password;
 
-    @Column(name = "first_Name", length = 100)
+    @Column(name = "FirstName", length = 100)
     @Nationalized
     @Size(max = 100, message = "first_Name không được vượt quá 100 ký tự !!")
     private String firstName;
 
-    @Column(name = "last_Name", length = 100)
+    @Column(name = "LastName", length = 100)
     @Nationalized
     @Size(max = 100, message = "last_Name không được vượt quá 100 ký tự !!")
     private String lastName;
 
-    @Column(name = "email", length = 50)
+    @Column(name = "Email", length = 50)
     @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$", message = "Please enter right email")
     @Size(max = 50, message = "Email không được vượt quá 50 ký tự !!")
     private String email;
 
-    @Column(name = "phoneNumber", length = 10)
+    @Column(name = "PhoneNumber", length = 10)
     @Pattern(regexp = "^0[0-9]{9}$", message = "Enter correct " +
             "Phone number")
     private String phoneNumber;
 
-    @Column(name = "address", length = 100)
+    @Column(name = "Address", length = 100)
     @Nationalized
     @Size(max = 100, message = "Địa chỉ không được vượt quá 100 ký tự !!")
     private String address;
 
     @Enumerated(EnumType.STRING) // Use STRING to store the enum as a string in the database
-    @Column(name = "gender", length = 6)
+    @Column(name = "Gender", length = 6)
     private Gender gender; // Change from String to Gender enum
 
-    @Column(name = "status")
+    @Column(name = "Status")
     private boolean status;
 
-    @Column(name = "URL_image")
-    private String urlImage;
-
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @JoinTable(name = "Account_Role",
-            joinColumns = @JoinColumn(name = "Account_ID"),
-            inverseJoinColumns = @JoinColumn(name = "Role_ID"))
+            joinColumns = @JoinColumn(name = "AccountId"),
+            inverseJoinColumns = @JoinColumn(name = "RoleId"))
     private Set<Role> roles = new HashSet<>();
 
 
@@ -90,7 +83,6 @@ public class Account {
         this.address = address;
         this.gender = gender;
         this.status = status;
-        this.urlImage = urlImage;
         this.roles = roles;
     }
 
@@ -168,14 +160,6 @@ public class Account {
 
     public void setStatus(boolean status) {
         this.status = status;
-    }
-
-    public String getUrlImage() {
-        return urlImage;
-    }
-
-    public void setUrlImage(String urlImage) {
-        this.urlImage = urlImage;
     }
 
     public Set<Role> getRoles() {

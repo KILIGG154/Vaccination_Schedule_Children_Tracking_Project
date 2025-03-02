@@ -1,18 +1,14 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.controller;
 
 import com.nimbusds.jose.JOSEException;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.AppException;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.ErrorCode;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.account.AuthenticationRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.account.IntrospectRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.AuthenticationResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.IntrospectResponse;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.AuthenticationService;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.user_auth.AuthenticationService;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
