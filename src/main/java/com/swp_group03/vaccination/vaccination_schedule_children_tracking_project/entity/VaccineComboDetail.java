@@ -30,14 +30,14 @@ public class VaccineComboDetail {
     private VaccineCombo combo;
 
     @Column(name = "Dose")
-    private Integer dose;
+    private int dose;
 
     @Size(max = 100)
     @Column(name = "Age_Group", length = 100)
     private String ageGroup;
 
     @Column(name = "SaleOff")
-    private Double saleOff;
+    private double saleOff;
 
 
     public VaccineComboDetail() {

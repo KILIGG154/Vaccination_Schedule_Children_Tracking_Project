@@ -2,9 +2,12 @@ package com.swp_group03.vaccination.vaccination_schedule_children_tracking_proje
 
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Vaccine;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.*;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.mapper.VaccicneMapper;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.Vaccine.VaccineCombeDetailRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.Vaccine.VaccineComboRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.Vaccine.VaccineRequest;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Vaccine.ResponseVaccine;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,9 @@ public class VaccineService {
 
     @Autowired
     private VaccineComboDetailRepo vaccineComboDetail;
+
+    @Autowired
+    private VaccicneMapper vaccicneMapper;
 
     @Transactional
     public Vaccine addVaccine(VaccineRequest request){
@@ -50,8 +56,9 @@ public class VaccineService {
         return vaccineRepo.save(vaccine);
     }
 
-    public List<Vaccine> getVaccines(){
-        return vaccineRepo.findAll();
+    public List<ResponseVaccine> getVaccines(){
+        List<ResponseVaccine> vaccines =  vaccicneMapper.toResponseVaccine(vaccineRepo.findAll());
+        return vaccines;
     }
 
     public List<Vaccine> searchByName(String vaccineName){
