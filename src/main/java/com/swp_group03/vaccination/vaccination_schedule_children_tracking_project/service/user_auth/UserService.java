@@ -7,7 +7,7 @@ import com.swp_group03.vaccination.vaccination_schedule_children_tracking_projec
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.mapper.UserMapper;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.account.UserCeation;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.account.UserUpdate;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.AccountResponse;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Account.AccountResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.RoleRepo;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.UserRepo;
 import lombok.extern.slf4j.Slf4j;
@@ -66,7 +66,7 @@ public class UserService {
     }
 
 
-    @PreAuthorize("hasRole('USER')")
+//    @PreAuthorize("hasRole('USER')")
     public  Account updateAccount(UserUpdate account, String account_id){
         log.info("Update account with id: {}", account_id);
         Account accountID =  userRepo.findById(account_id).orElseThrow(() -> new AppException(
@@ -78,9 +78,12 @@ public class UserService {
         return userRepo.save(accountID);
     }
 
-    @PostAuthorize("returnObject.name == authentication.name")
+//    @PostAuthorize("returnObject.name == authentication.name")
     public List<AccountResponse> getAllAccount(){
+
         List<AccountResponse> accounts = userMapper.toAllAccountResponse(userRepo.findAll());
+
+
           if (accounts !=null){
               return userMapper.toAllAccountResponse(userRepo.findAll());
             }else {
@@ -90,7 +93,8 @@ public class UserService {
 
     public AccountResponse getAccountById(String id){
         Account account = userRepo.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-        return userMapper.toAccountResponse(userRepo.findById(id));
+//        return userMapper.toAccountResponse(userRepo.findById(id));
+        return userMapper.toAccountResponsee(userRepo.findByAccountId(id));
     }
 
 

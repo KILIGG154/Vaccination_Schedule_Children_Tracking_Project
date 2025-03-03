@@ -1,4 +1,4 @@
-package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response;
+package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Account;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Role;
@@ -15,10 +15,12 @@ import java.util.Set;
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class AccountResponse {
+     String accountId;
      String username;
      String firstName;
      String lastName;
      String email;
      String phoneNumber;
-     Set<Role> roles;
+     String roleName;
+
 }

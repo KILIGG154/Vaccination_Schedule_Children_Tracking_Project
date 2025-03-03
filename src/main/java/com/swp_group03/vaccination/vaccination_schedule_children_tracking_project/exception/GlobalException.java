@@ -3,7 +3,9 @@ package com.swp_group03.vaccination.vaccination_schedule_children_tracking_proje
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.TransientObjectException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.dao.InvalidDataAccessResourceUsageException;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +14,8 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class GlobalException {
 
-    @ExceptionHandler(AppException.class)
+
+    @ExceptionHandler(value = AppException.class)
     public ResponseEntity<ApiResponse> handlingAppException(AppException e){
         ApiResponse apiResponse = new ApiResponse();
 
@@ -21,10 +24,24 @@ public class GlobalException {
         apiResponse.setCode(errorCode.getCode());
         apiResponse.setMessage(errorCode.getMessage());
 
-        return ResponseEntity.badRequest().body(apiResponse);
+        return ResponseEntity
+                .status(errorCode.getCode())
+                .body(apiResponse);
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ExceptionHandler(value = AccessDeniedException.class)
+    public ResponseEntity<ApiResponse> handlingAccessDeniedException(AccessDeniedException e){
+        ErrorCode errorCode = ErrorCode.UNAUTHENTICATED;
+
+        return ResponseEntity.status(errorCode.getStatusCode()).body(ApiResponse.builder()
+                .code(errorCode.getCode())
+                .message(errorCode.getMessage())
+                .build()
+        );
+    }
+
+
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse> handlingMethodArgNotValidExcept(MethodArgumentNotValidException e){
         String enumkey = e.getFieldError().getDefaultMessage();
         log.error("Exception occurred: {}", e.getMessage(), e);
@@ -40,21 +57,24 @@ public class GlobalException {
             apiResponse.setCode(errorCode.getCode());
             apiResponse.setMessage(errorCode.getMessage());
 
-            return ResponseEntity.badRequest().body(apiResponse);
+        return ResponseEntity
+                .status(errorCode.getCode())
+                .body(apiResponse);
     }
 
-    @ExceptionHandler(InvalidDataAccessResourceUsageException.class)
+    @ExceptionHandler(value = InvalidDataAccessResourceUsageException.class)
     public ResponseEntity<ApiResponse> handlingInvalidDataAccessResourceUsageException(InvalidDataAccessResourceUsageException e){
         ApiResponse apiResponse = new ApiResponse();
 
         log.error("Exception occurred: {}", e.getMessage(), e);
+
         apiResponse.setCode(ErrorCode.INVALID_DATA_ACCESS_RESOURCE_USAGE.getCode());
         apiResponse.setMessage(ErrorCode.INVALID_DATA_ACCESS_RESOURCE_USAGE.getMessage());
 
         return ResponseEntity.badRequest().body(apiResponse);
     }
 
-    @ExceptionHandler(TransientObjectException.class)
+    @ExceptionHandler(value = TransientObjectException.class)
     public ResponseEntity<ApiResponse> handlingTransientObjectException(TransientObjectException e) {
         log.error("TransientObjectException occurred: {}", e.getMessage(), e);
 
@@ -68,9 +88,7 @@ public class GlobalException {
 
 
 
-
-
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(value = Exception.class)
     public ResponseEntity<ApiResponse> handlingOtherException(Exception e){
         ApiResponse apiResponse = new ApiResponse();
 

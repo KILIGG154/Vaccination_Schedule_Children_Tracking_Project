@@ -4,7 +4,7 @@ package com.swp_group03.vaccination.vaccination_schedule_children_tracking_proje
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Account;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.account.UserCeation;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.account.UserUpdate;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.AccountResponse;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Account.AccountResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.user_auth.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,12 +40,12 @@ public class UserController {
        return apiResponse;
     }
 
-    @PatchMapping("/{account_id}")
-    public ResponseEntity updateUser(@PathVariable String account_id, @Validated @RequestBody UserUpdate request){
-        return ResponseEntity.ok(userService.updateAccount(request,account_id));
+    @PatchMapping("/{accountId}")
+    public ResponseEntity updateUser(@PathVariable String accountId, @Validated @RequestBody UserUpdate request){
+        return ResponseEntity.ok(userService.updateAccount(request,accountId));
     }
 
-    @GetMapping
+    @GetMapping("/getAllUser")
     public ApiResponse<List<AccountResponse>> getAllAccount(){
 
         var authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -67,16 +67,17 @@ public class UserController {
         return apiResponse;
     }
 
-    @GetMapping("/{account_id}")
-    public ApiResponse<AccountResponse> getAccountById(@PathVariable String id){
+    @GetMapping("/{accountId}")
+    public ApiResponse<AccountResponse> getAccountById(@PathVariable String accountId){
 
         ApiResponse<AccountResponse> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(userService.getAccountById(id));
+        apiResponse.setResult(userService.getAccountById(accountId));
         apiResponse.setCode(1);
         apiResponse.setMessage("Success");
         return apiResponse;
     }
 
+    //Đợi Role trong JWT
     @GetMapping("/myInfo")
     public ApiResponse<AccountResponse> getMyInfo(){
         ApiResponse<AccountResponse> apiResponse = new ApiResponse<>();

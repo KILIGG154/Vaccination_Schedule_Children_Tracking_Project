@@ -19,15 +19,12 @@ public class Role {
     @ManyToMany(mappedBy = "roles", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private Set<Account> accounts = new HashSet<>();
 
-    @Enumerated(EnumType.STRING)
-    private Set<Permission> permissions;
 
     public Role() {}
 
     public Role(String roleName, Set<Account> accounts, Set<Permission> permissions) {
         this.roleName = roleName;
         this.accounts = accounts;
-        this.permissions = permissions;
     }
 
     public Role(String roleName) {
@@ -47,13 +44,6 @@ public class Role {
         this.roleName = roleName;
     }
 
-    public Set<Permission> getPermissions() {
-        return this.permissions;
-    }
-
-    public void setPermissions(Set<Permission> permissions) {
-        this.permissions = permissions;
-    }
 
     public Set<Account> getAccounts() {
         return accounts;
