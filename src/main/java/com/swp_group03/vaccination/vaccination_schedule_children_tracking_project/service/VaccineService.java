@@ -9,6 +9,7 @@ import com.swp_group03.vaccination.vaccination_schedule_children_tracking_projec
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Vaccine.ResponseVaccine;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Vaccine.ResponseVaccineCombo;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Vaccine.ResponseVaccineDetails;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -62,8 +64,9 @@ public class VaccineService {
         return vaccines;
     }
 
-    public List<Vaccine> searchByName(String vaccineName){
-        return vaccineRepo.findByNameContainingIgnoreCase(vaccineName);
+    public List<ResponseVaccine> searchByName(String vaccineName){
+        List<Vaccine> vaccine = vaccineRepo.findByNameContainingIgnoreCase(vaccineName);
+        return vaccicneMapper.togetVaccine(vaccine);
     }
 
     @Transactional
@@ -132,6 +135,10 @@ public class VaccineService {
 
     public List<ResponseVaccineCombo> getVaccineCombos(){
         return vaccicneMapper.toResponseVaccineCombo(vaccineCombos.findAll());
+    }
+
+    public List<ResponseVaccineDetails> getVaccineCombosDetails(){
+        return vaccicneMapper.toResponseVaccineComboDetails(vaccineComboDetail.findAll());
     }
 
 

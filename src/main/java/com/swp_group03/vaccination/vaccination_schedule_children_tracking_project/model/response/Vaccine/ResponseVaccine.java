@@ -63,7 +63,8 @@ public class ResponseVaccine {
     LocalDate expirationDate;
 
 
-    BigDecimal price;
+    float price;
+
     String status;
 
 }

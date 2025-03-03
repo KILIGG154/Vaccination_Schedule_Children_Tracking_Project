@@ -8,6 +8,7 @@ import com.swp_group03.vaccination.vaccination_schedule_children_tracking_projec
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Vaccine.ResponseVaccine;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Vaccine.ResponseVaccineCombo;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Vaccine.ResponseVaccineDetails;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.VaccineService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/vaccine")
@@ -47,9 +49,21 @@ public class VaccineController {
          return vaccinesCombo;
     }
 
+    @GetMapping("/get/comboDetail")
+    public ApiResponse<List<ResponseVaccineDetails>> getVaccinesComboDetails(){
+       ApiResponse<List<ResponseVaccineDetails>> vaccinesComboDetails = new ApiResponse<>();
+       vaccinesComboDetails.setCode(403);
+       vaccinesComboDetails.setResult(vaccineService.getVaccineCombosDetails());
+         return vaccinesComboDetails;
+    }
+
     @GetMapping("/{vaccineName}")
-    public List<Vaccine> searchByName(@PathVariable String vaccineName){
-        return vaccineService.searchByName(vaccineName);
+    public ApiResponse<List<ResponseVaccine>> searchByName(@PathVariable String vaccineName){
+        ApiResponse<List<ResponseVaccine>> response = new ApiResponse<>();
+        response.setCode(3000);
+        response.setResult(vaccineService.searchByName(vaccineName));
+        return response;
+       // return vaccineService.searchByName(vaccineName);
     }
 
     @PostMapping("/combo/add")
