@@ -71,6 +71,7 @@ public class Vaccine {
     private String compatibility;
 
     @Size(max = 255)
+    @Lob
     @Column(name = "Imagine_URL")
     private String imagineUrl;
 

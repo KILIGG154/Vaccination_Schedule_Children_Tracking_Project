@@ -54,7 +54,7 @@ public class SecurityConfig {
 ////                        .hasAuthority("ROLE_ADMIN") // Chỉ cho phép truy cập các API private với quyền ADMIN
 //                        .hasRole("ADMIN")
 
-                        .requestMatchers(SWAGGER_ENDPOINTS).permitAll() // Cho phép truy cập Swagger UI
+//                        .requestMatchers(SWAGGER_ENDPOINTS).permitAll() // Cho phép truy cập Swagger UI
                         .anyRequest().authenticated());
 
 
@@ -67,25 +67,41 @@ public class SecurityConfig {
         //jwkSetUri = "https://www.googleapis.com/oauth2/v3/certs". Dùng để cấu hình cho bên thứ 3 login!
 
         //Tắt CSRF để tránh lỗi khi gửi request từ Postman và Swagger UI (vì nó không hỗ trợ CSRF) (Cross-Site Request Forgery) (Tấn công giả mạo yêu cầu giữa các trang)
-        http.csrf(AbstractHttpConfigurer::disable);
+        http.csrf(csrf -> csrf.disable());
+
         return http.build();
     }
 
 
     //Cấu hình Cors để không chặng truy cập từ FE (xung đột policy giữa BE và FE)
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173 ")); // Cho phép FE truy cập
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Thêm OPTIONS
-        configuration.setAllowedHeaders(List.of("*"));
-        configuration.setAllowCredentials(true);
-        configuration.setMaxAge(3600L);
+//    @Bean
+//    public CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.setAllowedOriginPatterns(List.of("http://localhost:5173 ")); // Cho phép FE truy cập
+//        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Thêm OPTIONS
+//        configuration.setAllowedHeaders(List.of("*"));
+////        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type")); // List of allowed headers
+//        configuration.setAllowCredentials(true);
+//        configuration.setMaxAge(3600L);
+//
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//        return source;
+//    }
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+@Bean
+public CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration configuration = new CorsConfiguration();
+    configuration.setAllowedOriginPatterns(List.of("*")); // Chấp nhận tất cả origin
+    configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Cho phép các phương thức HTTP
+    configuration.setAllowedHeaders(List.of("*")); // Cho phép tất cả headers
+    configuration.setAllowCredentials(true);
+    configuration.setMaxAge(3600L);
+
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration);
+    return source;
+}
 
 }
 

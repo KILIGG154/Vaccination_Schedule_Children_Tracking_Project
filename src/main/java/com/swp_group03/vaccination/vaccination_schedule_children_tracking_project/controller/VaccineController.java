@@ -55,7 +55,7 @@ public class VaccineController {
     //     return ResponseEntity.ok(vaccineService.addVaccineComboDetail(request));
     // }
 
-    @PostMapping("/combo/detail/{vaccineId}/{comboId}")
+    @PostMapping("/combo/detail/{comboId}/{vaccineId}")
 public ResponseEntity addVaccineComboDetail(@RequestBody VaccineCombeDetailRequest request, 
                                            @PathVariable int vaccineId, 
                                            @PathVariable int comboId) {
