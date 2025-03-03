@@ -7,6 +7,7 @@ import com.swp_group03.vaccination.vaccination_schedule_children_tracking_projec
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.Vaccine.VaccineRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Vaccine.ResponseVaccine;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Vaccine.ResponseVaccineCombo;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.VaccineService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +37,14 @@ public class VaccineController {
        vaccines.setCode(404);
        vaccines.setResult(vaccineService.getVaccines());
          return vaccines;
+    }
+
+    @GetMapping("/get/combo")
+    public ApiResponse<List<ResponseVaccineCombo>> getVaccinesCombo(){
+       ApiResponse<List<ResponseVaccineCombo>> vaccinesCombo = new ApiResponse<>();
+       vaccinesCombo.setCode(403);
+       vaccinesCombo.setResult(vaccineService.getVaccineCombos());
+         return vaccinesCombo;
     }
 
     @GetMapping("/{vaccineName}")

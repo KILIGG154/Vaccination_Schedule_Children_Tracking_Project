@@ -8,6 +8,7 @@ import com.swp_group03.vaccination.vaccination_schedule_children_tracking_projec
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.Vaccine.VaccineRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Vaccine.ResponseVaccine;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Vaccine.ResponseVaccineCombo;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,5 +129,10 @@ public class VaccineService {
 // //        vaccineCombos.save(vaccineCombo);
 //         return vaccineComboDetail.saveAndFlush(detail);
 //     }
+
+    public List<ResponseVaccineCombo> getVaccineCombos(){
+        return vaccicneMapper.toResponseVaccineCombo(vaccineCombos.findAll());
+    }
+
 
 }

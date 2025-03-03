@@ -21,6 +21,8 @@ import java.time.LocalDate;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class ResponseVaccine {
+
+    int id;
     String name;
 
     String description;
