@@ -10,20 +10,24 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "Vaccine_Combo_Detail")
+@IdClass(VaccineComboDetailId.class) // Thêm annotation này
 public class VaccineComboDetail {
 
-    @EmbeddedId
-    private VaccineComboDetailId id;
+    @Id // Thay thế @EmbeddedId bằng @Id cho từng trường
+    @Column(name = "vaccineId")
+    private int vaccineId;
+    
+    @Id // Thêm @Id cho trường thứ hai
+    @Column(name = "comboId")
+    private int comboId;
 
-    @MapsId("comboId")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "comboId")
-    private VaccineCombo combo;
-
-    @MapsId("vaccineId")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "vaccineId")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "vaccineId", insertable = false, updatable = false) // Thêm insertable=false, updatable=false
     private Vaccine vaccine;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "comboId", insertable = false, updatable = false) // Thêm insertable=false, updatable=false
+    private VaccineCombo combo;
 
     @Column(name = "Dose")
     private Integer dose;
@@ -39,8 +43,7 @@ public class VaccineComboDetail {
     public VaccineComboDetail() {
     }
 
-    public VaccineComboDetail(VaccineComboDetailId id, VaccineCombo combo, Vaccine vaccine, Integer dose, String ageGroup, Double saleOff) {
-        this.id = id;
+    public VaccineComboDetail(VaccineCombo combo, Vaccine vaccine, Integer dose, String ageGroup, Double saleOff) {
         this.combo = combo;
         this.vaccine = vaccine;
         this.dose = dose;
@@ -48,12 +51,21 @@ public class VaccineComboDetail {
         this.saleOff = saleOff;
     }
 
-    public VaccineComboDetailId getId() {
-        return id;
+   
+    public int getVaccineId() {
+        return vaccineId;
     }
 
-    public void setId(VaccineComboDetailId id) {
-        this.id = id;
+    public void setVaccineId(int vaccineId) {
+        this.vaccineId = vaccineId;
+    }
+
+    public int getComboId() {
+        return comboId;
+    }
+
+    public void setComboId(int comboId) {
+        this.comboId = comboId;
     }
 
     public VaccineCombo getCombo() {
@@ -95,4 +107,5 @@ public class VaccineComboDetail {
     public void setSaleOff(Double saleOff) {
         this.saleOff = saleOff;
     }
+
 }

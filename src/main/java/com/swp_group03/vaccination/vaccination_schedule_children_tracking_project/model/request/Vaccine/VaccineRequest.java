@@ -73,6 +73,8 @@ public class VaccineRequest {
     @Size(max = 50)
      String status;
 
+
+
 //    public VaccineRequest() {
 //    }
 //

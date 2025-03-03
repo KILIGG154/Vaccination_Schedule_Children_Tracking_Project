@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class VaccineCombeDetailRequest {
+    private int vaccineId;
+    private int comboId;
     private int dose;
     private String ageGroup;
     private double saleOff;

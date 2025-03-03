@@ -13,49 +13,45 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Embeddable
+@Setter 
 public class VaccineComboDetailId implements Serializable {
-    private static final long serialVersionUID = -4753617762828333422L;
-//    @NotNull
-//    @Column(name = "ComboId", nullable = false)
-//    private Integer comboId;
-//
-//    @NotNull
-//    @Column(name = "VaccineId", nullable = false)
-//    private Integer vaccineId;
-//
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-//        VaccineComboDetailId entity = (VaccineComboDetailId) o;
-//        return Objects.equals(this.vaccineId, entity.vaccineId) &&
-//                Objects.equals(this.comboId, entity.comboId);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(vaccineId, comboId);
-//    }
-
-    private int vaccineId;
     private int comboId;
+    private int vaccineId;
 
-        @Override
+    public VaccineComboDetailId() {}
+
+    public VaccineComboDetailId(int comboId, int vaccineId) {
+        this.comboId = comboId;
+        this.vaccineId = vaccineId;
+    }
+
+    public int getComboId() {
+        return comboId;
+    }
+
+    public void setComboId(int comboId) {
+        this.comboId = comboId;
+    }
+
+    public int getVaccineId() {
+        return vaccineId;
+    }
+
+    public void setVaccineId(int vaccineId) {
+        this.vaccineId = vaccineId;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        VaccineComboDetailId entity = (VaccineComboDetailId) o;
-        return Objects.equals(this.vaccineId, entity.vaccineId) &&
-                Objects.equals(this.comboId, entity.comboId);
+        if (o == null || getClass() != o.getClass()) return false;
+        VaccineComboDetailId that = (VaccineComboDetailId) o;
+        return Objects.equals(comboId, that.comboId) &&
+                Objects.equals(vaccineId, that.vaccineId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(vaccineId, comboId);
+        return Objects.hash(comboId, vaccineId);
     }
-
 }

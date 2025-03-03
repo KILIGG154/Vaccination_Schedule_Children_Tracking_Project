@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -32,7 +33,7 @@ public class VaccineCombo {
     private boolean status;
 
     @OneToMany(mappedBy = "combo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<VaccineComboDetail> vaccineComboDetails;
+    private Set<VaccineComboDetail> vaccineComboDetails = new HashSet<>();
 
     public VaccineCombo(String comboName, String description, boolean status) {
         this.comboName = comboName;

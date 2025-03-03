@@ -45,6 +45,8 @@ public class VaccineService {
         vaccine.setExpirationDate(request.getExpirationDate());
         vaccine.setImagineUrl(request.getImagineUrl());
         vaccine.setStatus("true");
+
+
         return vaccineRepo.save(vaccine);
     }
 
@@ -67,23 +69,57 @@ public class VaccineService {
 
     @Transactional
     public VaccineComboDetail addVaccineComboDetail(VaccineCombeDetailRequest request, int vaccineId, int comboId){
+        // Log để debug
+        log.info("Adding VaccineComboDetail for vaccineId={}, comboId={}");
+        
+        // Tìm Vaccine và VaccineCombo theo ID
+        Vaccine vaccine = vaccineRepo.findById(vaccineId)
+                .orElseThrow(() -> new RuntimeException("Vaccine not found with id: " ));
 
-        Vaccine vaccine = vaccineRepo.findById(vaccineId).orElseThrow(() -> new RuntimeException("Vaccine not found"));
+        VaccineCombo vaccineCombo = vaccineCombos.findById(comboId)
+                .orElseThrow(() -> new RuntimeException("Vaccine Combo not found with id: "));
 
-        VaccineCombo vaccineCombo = vaccineCombos.findById(comboId).orElseThrow(() -> new RuntimeException("Vaccine Combo not found"));
+        // Tạo ID cho VaccineComboDetail
+        VaccineComboDetailId key = new VaccineComboDetailId();
+        key.setVaccineId(request.getVaccineId());
+        key.setComboId(request.getComboId());
+        
+        log.info("Created composite key: vaccineId={}, comboId={}", key.getVaccineId(), key.getComboId());
 
-        VaccineComboDetailId key = new VaccineComboDetailId(vaccineId, comboId);
 
-        VaccineComboDetail vaccineComboDetail1 = new VaccineComboDetail();
-        vaccineComboDetail1.setId(key);
-        vaccineComboDetail1.setVaccine(vaccine);
-        vaccineComboDetail1.setCombo(vaccineCombo);
-        vaccineComboDetail1.setDose(request.getDose());
-        vaccineComboDetail1.setAgeGroup(request.getAgeGroup());
-        vaccineComboDetail1.setSaleOff(request.getSaleOff());
+         // Tạo và cấu hình VaccineComboDetail - THAY ĐỔI Ở ĐÂY
+    VaccineComboDetail detail = new VaccineComboDetail();
+    detail.setVaccineId(vaccineId);  // Đặt ID trực tiếp thay vì thông qua đối tượng key
+    detail.setComboId(comboId);      // Đặt ID trực tiếp thay vì thông qua đối tượng key
+    detail.setVaccine(vaccine);
+    detail.setCombo(vaccineCombo);
+    detail.setDose(request.getDose());
+    detail.setAgeGroup(request.getAgeGroup());
+    detail.setSaleOff(request.getSaleOff());
+    
+    log.info("Saving VaccineComboDetail with vaccineId={}, comboId={}", detail.getVaccineId(), detail.getComboId());
 
-        return vaccineComboDetail.save(vaccineComboDetail1);
-    }
+    // Lưu và trả về kết quả
+    return vaccineComboDetail.save(detail);
+}
+//         // Tạo và cấu hình VaccineComboDetail
+//         VaccineComboDetail detail = new VaccineComboDetail();
+//         detail.setId(key);
+//         detail.setVaccine(vaccine);
+//         detail.setCombo(vaccineCombo);
+//         detail.setDose(request.getDose());
+//         detail.setAgeGroup(request.getAgeGroup());
+//         detail.setSaleOff(request.getSaleOff());
 
+// //        vaccine.getVaccineComboDetails().add(detail);
+// //        vaccineCombo.getVaccineComboDetails().add(detail);
+// //        log.info("Added VaccineComboDetail to Vaccine and VaccineCombo", detail.getVaccine(), detail.getCombo());
+
+
+//         // Lưu và trả về kết quả
+// //        vaccineRepo.save(vaccine);
+// //        vaccineCombos.save(vaccineCombo);
+//         return vaccineComboDetail.saveAndFlush(detail);
+//     }
 
 }

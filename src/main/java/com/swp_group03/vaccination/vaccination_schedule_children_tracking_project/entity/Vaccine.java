@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -87,12 +88,13 @@ public class Vaccine {
     private String status;
 
     @OneToMany(mappedBy = "vaccine", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<VaccineComboDetail> vaccineComboDetails;
+    private Set<VaccineComboDetail> vaccineComboDetails = new HashSet<>();
 
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CategoryID")
     private VacineCategory categoryID;
+
 
 
 }
