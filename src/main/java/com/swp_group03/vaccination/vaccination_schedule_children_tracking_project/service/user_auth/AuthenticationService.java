@@ -80,21 +80,21 @@ public class AuthenticationService {
     }
 
 
-    private String generateToken(Account account){
+    private String generateToken(Account account) {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
 
-        //Data trong body (Payload của JWT gọi là Claim, tập hợp 1 chuỗi thành 1 Set)
+        // Data trong body (Payload của JWT gọi là Claim)
         JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
-                .subject(account.getUsername() + account.getAccountId())
+                .subject(String.valueOf(account.getAccountId())) // Chỉ để accountId làm subject
                 .issuer("swp_group3.com")
                 .issueTime(new Date())
                 .expirationTime(new Date(Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()))
+                .claim("username", account.getUsername()) // Thêm username vào claim riêng
                 .claim("scope", buildScope(account))
                 .build();
 
         Payload payload = new Payload(claimsSet.toJSONObject());
-
-        JWSObject jwsObject = new JWSObject(header,payload);
+        JWSObject jwsObject = new JWSObject(header, payload);
 
         try {
             jwsObject.sign(new MACSigner(jwtConfig.getSignerKey().getBytes()));
@@ -104,6 +104,7 @@ public class AuthenticationService {
             throw new RuntimeException(e);
         }
     }
+
 
     private String buildScope (Account account) {
         //Vì Scope là mỗi chuỗi dài những Role và Permission nên xài String Joiner
