@@ -2,11 +2,10 @@ package com.swp_group03.vaccination.vaccination_schedule_children_tracking_proje
 
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Vaccine;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.*;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.mapper.VaccicneMapper;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.mapper.VaccineMapper;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.Vaccine.VaccineCombeDetailRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.Vaccine.VaccineComboRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.Vaccine.VaccineRequest;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Vaccine.ResponseVaccine;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Vaccine.ResponseVaccineCombo;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Vaccine.ResponseVaccineDetails;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -33,7 +31,7 @@ public class VaccineService {
     private VaccineComboDetailRepo vaccineComboDetail;
 
     @Autowired
-    private VaccicneMapper vaccicneMapper;
+    private VaccineMapper vaccineMapper;
 
     @Transactional
     public Vaccine addVaccine(VaccineRequest request){
@@ -60,13 +58,13 @@ public class VaccineService {
     }
 
     public List<ResponseVaccine> getVaccines(){
-        List<ResponseVaccine> vaccines =  vaccicneMapper.toResponseVaccine(vaccineRepo.findAll());
+        List<ResponseVaccine> vaccines =  vaccineMapper.toResponseVaccine(vaccineRepo.findAll());
         return vaccines;
     }
 
     public List<ResponseVaccine> searchByName(String vaccineName){
         List<Vaccine> vaccine = vaccineRepo.findByNameContainingIgnoreCase(vaccineName);
-        return vaccicneMapper.togetVaccine(vaccine);
+        return vaccineMapper.toResponseVaccine(vaccine);
     }
 
     @Transactional
@@ -105,7 +103,7 @@ public class VaccineService {
     detail.setVaccine(vaccine);
     detail.setCombo(vaccineCombo);
     detail.setDose(request.getDose());
-    detail.setAgeGroup(request.getAgeGroup());
+    detail.setcomboCategory(request.getComboCategory());
     detail.setSaleOff(request.getSaleOff());
     
     log.info("Saving VaccineComboDetail with vaccineId={}, comboId={}", detail.getVaccineId(), detail.getComboId());
@@ -134,11 +132,11 @@ public class VaccineService {
 //     }
 
     public List<ResponseVaccineCombo> getVaccineCombos(){
-        return vaccicneMapper.toResponseVaccineCombo(vaccineCombos.findAll());
+        return vaccineMapper.toResponseVaccineCombo(vaccineCombos.findAll());
     }
 
     public List<ResponseVaccineDetails> getVaccineCombosDetails(){
-        return vaccicneMapper.toResponseVaccineComboDetails(vaccineComboDetail.findAll());
+        return vaccineMapper.toResponseVaccineDetails(vaccineComboDetail.findAll());
     }
 
 

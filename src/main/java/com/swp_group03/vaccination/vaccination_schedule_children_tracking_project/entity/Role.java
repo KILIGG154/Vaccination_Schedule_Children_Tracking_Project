@@ -22,7 +22,7 @@ public class Role {
 
     public Role() {}
 
-    public Role(String roleName, Set<Account> accounts, Set<Permission> permissions) {
+    public Role(String roleName, Set<Account> accounts) {
         this.roleName = roleName;
         this.accounts = accounts;
     }
@@ -52,6 +52,7 @@ public class Role {
     public void setAccounts(Set<Account> accounts) {
         this.accounts = accounts;
     }
+
 
     public void addAccount(Account account) {
         this.accounts.add(account);

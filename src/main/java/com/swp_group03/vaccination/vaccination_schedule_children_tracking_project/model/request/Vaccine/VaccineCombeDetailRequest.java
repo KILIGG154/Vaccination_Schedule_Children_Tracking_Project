@@ -11,6 +11,6 @@ public class VaccineCombeDetailRequest {
     private int vaccineId;
     private int comboId;
     private int dose;
-    private String ageGroup;
+    private String comboCategory;
     private double saleOff;
 }

@@ -2,8 +2,8 @@ package com.swp_group03.vaccination.vaccination_schedule_children_tracking_proje
 
 
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Account;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.account.UserCeation;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.account.UserUpdate;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.account.AccountCreate;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.account.AccountUpdate;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Account.AccountResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.user_auth.UserService;
@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +29,7 @@ public class UserController {
 
     @PostMapping("/register")
     @Operation(summary = "Register a new user")
-    public ApiResponse<Account> registerUser(@Valid @RequestBody UserCeation request){
+    public ApiResponse<Account> registerUser(@Valid @RequestBody AccountCreate request){
         ApiResponse<Account> apiResponse = new ApiResponse<>();
 
         apiResponse.setResult(userService.createAccount(request));
@@ -41,14 +40,18 @@ public class UserController {
     }
 
     @PatchMapping("/{accountId}")
-    public ResponseEntity updateUser(@PathVariable String accountId, @Validated @RequestBody UserUpdate request){
-        return ResponseEntity.ok(userService.updateAccount(request,accountId));
+    public ApiResponse<AccountResponse> updateUser(@PathVariable String accountId, @Validated @RequestBody AccountUpdate request){
+        return ApiResponse.<AccountResponse>builder()
+                .result(userService.updateAccount(request,accountId))
+                .build();
     }
 
     @GetMapping("/getAllUser")
     public ApiResponse<List<AccountResponse>> getAllAccount(){
 
         var authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        log.info("User Authorities: {}", authentication.getAuthorities());
 
         log.info("User: {}", authentication.getName());
         authentication.getAuthorities().forEach(grantedAuthority -> log.info("Granted Authority: {}", grantedAuthority.getAuthority()));

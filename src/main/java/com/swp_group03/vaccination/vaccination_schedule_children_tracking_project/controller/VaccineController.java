@@ -88,20 +88,7 @@ public ResponseEntity addVaccineComboDetail(@RequestBody VaccineCombeDetailReque
                                            @PathVariable int vaccineId, 
                                            @PathVariable int comboId) {
     log.info("Adding combo detail for vaccine {} and combo {}", vaccineId, comboId);
-    
-    // Kiểm tra dữ liệu đầu vào
-    if (vaccineId <= 0) {
-        return ResponseEntity.badRequest().body("Invalid vaccine ID");
-    }
-    
-    if (comboId <= 0) {
-        return ResponseEntity.badRequest().body("Invalid combo ID");
-    }
-    
-    if (request == null) {
-        return ResponseEntity.badRequest().body("Request body cannot be null");
-    }
-    
+
     try {
         VaccineComboDetail result = vaccineService.addVaccineComboDetail(request, vaccineId, comboId);
         return ResponseEntity.ok(result);

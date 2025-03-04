@@ -1,15 +1,17 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.user_auth;
 
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Account;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Gender;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Role;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.AppException;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.ErrorCode;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.mapper.UserMapper;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.account.UserCeation;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.account.UserUpdate;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.account.AccountCreate;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.account.AccountUpdate;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Account.AccountResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.RoleRepo;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.UserRepo;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -39,7 +41,7 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
 
-    public Account createAccount(UserCeation request){
+    public Account createAccount(AccountCreate request){
 
         if(userRepo.existsByUsername(request.getUsername())){
             throw new AppException(ErrorCode.USER_ALREADY_EXIST);
@@ -66,23 +68,24 @@ public class UserService {
     }
 
 
-//    @PreAuthorize("hasRole('USER')")
-    public  Account updateAccount(UserUpdate account, String account_id){
+    @PreAuthorize("hasRole('USER')")
+    public  AccountResponse updateAccount(AccountUpdate request, String account_id){
         log.info("Update account with id: {}", account_id);
-        Account accountID =  userRepo.findById(account_id).orElseThrow(() -> new AppException(
+        Account account =  userRepo.findById(account_id).orElseThrow(() -> new AppException(
                 ErrorCode.USER_NOT_FOUND
         ));
 
-         accountID = userMapper.toUpdateUser(account);
+         userMapper.toUpdateUser(request, account);
+//         account.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        return userRepo.save(accountID);
+
+        return userMapper.toAccountResponse(userRepo.save(account)) ;
     }
 
-//    @PostAuthorize("returnObject.name == authentication.name")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<AccountResponse> getAllAccount(){
 
         List<AccountResponse> accounts = userMapper.toAllAccountResponse(userRepo.findAll());
-
 
           if (accounts !=null){
               return userMapper.toAllAccountResponse(userRepo.findAll());
@@ -91,10 +94,11 @@ public class UserService {
           }
     }
 
+    @PostAuthorize("returnObject.name == authentication.name")
     public AccountResponse getAccountById(String id){
         Account account = userRepo.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 //        return userMapper.toAccountResponse(userRepo.findById(id));
-        return userMapper.toAccountResponsee(userRepo.findByAccountId(id));
+        return userMapper.toAccountResponse(userRepo.findByAccountId(id));
     }
 
 
@@ -107,61 +111,42 @@ public class UserService {
         return userMapper.toAccountResponse(Optional.of(account));
     }
 
+    @Transactional
+    public void createAdminAccountIfNotExists() {
+        if (!userRepo.existsByUsername("admin")) {
+            log.info("Admin account not found, creating default admin user...");
 
-//        Account account = new Account();
-//        account.setUsername(request.getUsername())
-//        Account account = new Account();
-//        account.setUsername(request.getUsername());
-//        account.setPassword(request.getPassword());
-//        account.setFirst_Name(request.getFirst_Name());
-//        account.setLast_Name(request.getLast_Name());
-//        account.setEmail(request.getEmail());
-//        account.setPhone_number(request.getPhone_number());
-//        account.setAddress(request.getAddress());
-//        account.setGender(request.getGender());
-//        account.setUrl_image(request.getUrl_image());
-//        account.setStatus(true);
-//        return userRepo.save(account);
-//===============================
-//    private Account toUser(UserUpdate account, Account accountID){
-//            // Update password only if provided and not empty
-//            if (account.getPassword() != null && !account.getPassword().isEmpty()) {
-//                accountID.setPassword(account.getPassword());
-//            }
-//
-//            // Update other fields only if they are not null
-//            if (account.getFirst_Name() != null) {
-//                accountID.setFirstName(account.getFirst_Name());
-//            }
-//            if (account.getLast_Name() != null) {
-//                accountID.setLastName(account.getLast_Name());
-//            }
-//            if (account.getEmail() != null) {
-//                accountID.setEmail(account.getEmail());
-//            }
-//            if (account.getPhone_number() != null) {
-//                accountID.setPhoneNumber(account.getPhone_number());
-//            }
-//            if (account.getAddress() != null) {
-//                accountID.setAddress(account.getAddress());
-//            }
-//            if (account.getGender() != null) {
-//                accountID.setGender(account.getGender());
-//            }
-//            if (account.getUrl_image() != null) {
-//                accountID.setUrlImage(account.getUrl_image());
-//            }
-//
-//            accountID.setStatus(account.isStatus());
-//
-//            return accountID;
-//
-//    }
+            // Ensure ADMIN role exists
+            Role adminRole = roleRepo.findByRoleName("ADMIN");
+            if (adminRole == null) {
+                adminRole = new Role();
+                adminRole.setRoleName("ADMIN");
+                adminRole = roleRepo.save(adminRole);
+            }
 
-//    public Account deactiveAccount(String id,  UserUpdate account){
-//        Account accountID =  userRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Account not found"));
-//
-//        return userRepo.save(toUser(account, accountID));
-//
-//    }
+            // Create Admin Account
+            Account admin = new Account();
+            admin.setUsername("admin");
+            admin.setPassword(passwordEncoder.encode("admin123"));
+            admin.setFirstName("Admin");
+            admin.setLastName("User");
+            admin.setEmail("admin@gmail.com");
+            admin.setPhoneNumber("0903731347");
+            admin.setAddress("HCM");
+            admin.setGender(Gender.OTHER);
+            admin.setStatus(true);
+
+            // Properly manage roles
+            admin.setRoles(new HashSet<>());
+            admin.getRoles().add(adminRole);
+
+            // Save Admin Account
+            userRepo.save(admin);
+            log.warn("Admin user has been created with default password 'admin'. Please change it immediately.");
+        } else {
+            log.info("Admin account already exists, skipping creation.");
+        }
+    }
+
+
 }

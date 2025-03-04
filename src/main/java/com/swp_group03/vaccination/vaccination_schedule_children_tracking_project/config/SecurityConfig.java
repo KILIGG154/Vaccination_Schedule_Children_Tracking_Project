@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,13 +23,17 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.crypto.spec.SecretKeySpec;
+import java.util.Arrays;
 import java.util.List;
 
 
 @Configuration
+@EnableMethodSecurity(prePostEnabled = true) // Bật kiểm tra quyền ở mức method
 public class SecurityConfig {
 
     private final String[] PUBLIC_ENPOINTS = {"/users/register", "/auth/login", "/auth/introspect", "/vaccine/addVaccine", "/vaccine/get", "/users/{accountID}", "/vaccine/combo/add", "/vaccine/combo/detail/{vaccineId}/{comboId}", "/vaccine/addVaccineComboDetail","/vaccine/get/combo" ,"/vaccine/get/comboDetail", "/vaccine/{vaccineName}"};
+
+//    private final String[] PUBLIC_ENPOINTS = {"/users/register", "/auth/login", "/auth/introspect"};
 
     private final String[] PRIVATE_ENPOINTS = {"/users", "/vaccine/addVaccine", "/vaccine/get" };
 
@@ -49,6 +54,8 @@ public class SecurityConfig {
 
                         .requestMatchers(HttpMethod.GET, PUBLIC_ENPOINTS ).permitAll() // Cho phép truy cập các API public
 //
+//                        .requestMatchers(HttpMethod.POST, "/users/register", "/auth/login").permitAll()
+
 
 //                        .requestMatchers(HttpMethod.GET, PRIVATE_ENPOINTS)
 ////                        .hasAuthority("ROLE_ADMIN") // Chỉ cho phép truy cập các API private với quyền ADMIN
@@ -62,12 +69,15 @@ public class SecurityConfig {
         http.oauth2ResourceServer(oath2 -> oath2.jwt(jwtConfigurer
                 -> jwtConfigurer.decoder(jwtConfig.jwtDecoder())
                 .jwtAuthenticationConverter(jwtConfig.jwtConverter()))
+                .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
 
         );
         //jwkSetUri = "https://www.googleapis.com/oauth2/v3/certs". Dùng để cấu hình cho bên thứ 3 login!
 
         //Tắt CSRF để tránh lỗi khi gửi request từ Postman và Swagger UI (vì nó không hỗ trợ CSRF) (Cross-Site Request Forgery) (Tấn công giả mạo yêu cầu giữa các trang)
         http.csrf(csrf -> csrf.disable());
+
+//        System.out.println("PUBLIC ENDPOINTS: " + Arrays.toString(PUBLIC_ENPOINTS));
 
         return http.build();
     }

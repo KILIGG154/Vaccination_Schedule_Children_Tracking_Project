@@ -33,8 +33,8 @@ public class VaccineComboDetail {
     private int dose;
 
     @Size(max = 100)
-    @Column(name = "Age_Group", length = 100)
-    private String ageGroup;
+    @Column(name = "ComboCategory", length = 100)
+    private String comboCategory;
 
     @Column(name = "SaleOff")
     private double saleOff;
@@ -43,11 +43,11 @@ public class VaccineComboDetail {
     public VaccineComboDetail() {
     }
 
-    public VaccineComboDetail(VaccineCombo combo, Vaccine vaccine, Integer dose, String ageGroup, Double saleOff) {
+    public VaccineComboDetail(VaccineCombo combo, Vaccine vaccine, Integer dose, String comboCategory, Double saleOff) {
         this.combo = combo;
         this.vaccine = vaccine;
         this.dose = dose;
-        this.ageGroup = ageGroup;
+        this.comboCategory = comboCategory;
         this.saleOff = saleOff;
     }
 
@@ -92,12 +92,12 @@ public class VaccineComboDetail {
         this.dose = dose;
     }
 
-    public String getAgeGroup() {
-        return ageGroup;
+    public String getcomboCategory() {
+        return comboCategory;
     }
 
-    public void setAgeGroup(String ageGroup) {
-        this.ageGroup = ageGroup;
+    public void setcomboCategory(String comboCategory) {
+        this.comboCategory = comboCategory;
     }
 
     public Double getSaleOff() {

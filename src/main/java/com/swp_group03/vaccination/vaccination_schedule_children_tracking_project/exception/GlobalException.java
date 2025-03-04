@@ -24,14 +24,16 @@ public class GlobalException {
         apiResponse.setCode(errorCode.getCode());
         apiResponse.setMessage(errorCode.getMessage());
 
-        return ResponseEntity
-                .status(errorCode.getCode())
-                .body(apiResponse);
+        return ResponseEntity.status(errorCode.getStatusCode()).body(ApiResponse.builder()
+                .code(errorCode.getCode())
+                .message(errorCode.getMessage())
+                .build()
+        );
     }
 
     @ExceptionHandler(value = AccessDeniedException.class)
     public ResponseEntity<ApiResponse> handlingAccessDeniedException(AccessDeniedException e){
-        ErrorCode errorCode = ErrorCode.UNAUTHENTICATED;
+        ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
 
         return ResponseEntity.status(errorCode.getStatusCode()).body(ApiResponse.builder()
                 .code(errorCode.getCode())
@@ -57,9 +59,11 @@ public class GlobalException {
             apiResponse.setCode(errorCode.getCode());
             apiResponse.setMessage(errorCode.getMessage());
 
-        return ResponseEntity
-                .status(errorCode.getCode())
-                .body(apiResponse);
+        return ResponseEntity.status(errorCode.getStatusCode()).body(ApiResponse.builder()
+                .code(errorCode.getCode())
+                .message(errorCode.getMessage())
+                .build()
+        );
     }
 
     @ExceptionHandler(value = InvalidDataAccessResourceUsageException.class)
@@ -68,10 +72,15 @@ public class GlobalException {
 
         log.error("Exception occurred: {}", e.getMessage(), e);
 
-        apiResponse.setCode(ErrorCode.INVALID_DATA_ACCESS_RESOURCE_USAGE.getCode());
-        apiResponse.setMessage(ErrorCode.INVALID_DATA_ACCESS_RESOURCE_USAGE.getMessage());
+        ErrorCode errorCode = ErrorCode.INVALID_DATA_ACCESS_RESOURCE_USAGE;
+        apiResponse.setCode(errorCode.getCode());
+        apiResponse.setMessage(errorCode.getMessage());
 
-        return ResponseEntity.badRequest().body(apiResponse);
+        return ResponseEntity.status(errorCode.getStatusCode()).body(ApiResponse.builder()
+                .code(errorCode.getCode())
+                .message(errorCode.getMessage())
+                .build()
+        );
     }
 
     @ExceptionHandler(value = TransientObjectException.class)
@@ -79,10 +88,16 @@ public class GlobalException {
         log.error("TransientObjectException occurred: {}", e.getMessage(), e);
 
         ApiResponse apiResponse = new ApiResponse();
-        apiResponse.setCode(ErrorCode.TRANSIENT_OBJECT_EXCEPTION.getCode());
-        apiResponse.setMessage(ErrorCode.TRANSIENT_OBJECT_EXCEPTION.getMessage());
 
-        return ResponseEntity.badRequest().body(apiResponse);
+        ErrorCode errorCode = ErrorCode.TRANSIENT_OBJECT_EXCEPTION;
+        apiResponse.setCode(errorCode.getCode());
+        apiResponse.setMessage(errorCode.getMessage());
+
+        return ResponseEntity.status(errorCode.getStatusCode()).body(ApiResponse.builder()
+                .code(errorCode.getCode())
+                .message(errorCode.getMessage())
+                .build()
+        );
     }
 
 
@@ -93,9 +108,15 @@ public class GlobalException {
         ApiResponse apiResponse = new ApiResponse();
 
         log.error("Exception occurred: {}", e.getMessage(), e);
-        apiResponse.setCode(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode());
-        apiResponse.setMessage(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage());
 
-        return ResponseEntity.badRequest().body(apiResponse);
+        ErrorCode errorCode = ErrorCode.UNCATEGORIZED_EXCEPTION;
+        apiResponse.setCode(errorCode.getCode());
+        apiResponse.setMessage(errorCode.getMessage());
+
+        return ResponseEntity.status(errorCode.getStatusCode()).body(ApiResponse.builder()
+                .code(errorCode.getCode())
+                .message(errorCode.getMessage())
+                .build()
+        );
     }
 }

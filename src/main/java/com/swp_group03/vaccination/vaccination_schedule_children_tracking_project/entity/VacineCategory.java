@@ -15,11 +15,11 @@ import java.util.Set;
 @Table(name = "Vacine_Category")
 public class VacineCategory {
     @Id
-    @Column(name = "Category_ID", nullable = false)
+    @Column(name = "CategoryId", nullable = false)
     private Integer categoryId;
 
     @Size(max = 100)
-    @Column(name = "Category_Name", length = 100)
+    @Column(name = "CategoryName", length = 100)
     private String categoryName;
 
     @Size(max = 255)

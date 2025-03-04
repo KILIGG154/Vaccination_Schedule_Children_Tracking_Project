@@ -21,11 +21,13 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.StringJoiner;
 
 @Service
 @RequiredArgsConstructor
@@ -44,7 +46,7 @@ public class AuthenticationService {
 
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        var account = userRepo.findByUsername(request.getUsername()).orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_EXIT));
+        var account = userRepo.findByUsername(request.getUsername()).orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_EXIST));
 
          boolean authenticated = jwtConfig.passwordEncoder().matches(request.getPassword(), account.getPassword());
 
@@ -83,11 +85,11 @@ public class AuthenticationService {
 
         //Data trong body (Payload của JWT gọi là Claim, tập hợp 1 chuỗi thành 1 Set)
         JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
-                .subject(account.getUsername())
+                .subject(account.getUsername() + account.getAccountId())
                 .issuer("swp_group3.com")
                 .issueTime(new Date())
                 .expirationTime(new Date(Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()))
-                .claim("customeClain", "Custom")
+                .claim("scope", buildScope(account))
                 .build();
 
         Payload payload = new Payload(claimsSet.toJSONObject());
@@ -103,14 +105,15 @@ public class AuthenticationService {
         }
     }
 
-//    private String buildScope (Account account) {
-//        //Vì Scope là mỗi chuỗi dài những Role và Permission nên xài String Joiner
-//        StringJoiner joiner = new StringJoiner(" "); //Dấu cách để phân biệt giữa các attribute có trong scope theo quy định của Oauth2
-//
-//        if(!CollectionUtils.isEmpty(account.getRoles()))
-//            Role role = account.getRoles();
-//            account.getRoles().g .forEach(joiner::add);
-//
-//    }
+    private String buildScope (Account account) {
+        //Vì Scope là mỗi chuỗi dài những Role và Permission nên xài String Joiner
+        StringJoiner joiner = new StringJoiner(" "); //Dấu cách để phân biệt giữa các attribute có trong scope theo quy định của Oauth2
+
+        if(!CollectionUtils.isEmpty(account.getRoles()))
+            account.getRoles().forEach(role ->{joiner.add(role.getRoleName());
+
+            });
+        return joiner.toString();
+    }
 
 }

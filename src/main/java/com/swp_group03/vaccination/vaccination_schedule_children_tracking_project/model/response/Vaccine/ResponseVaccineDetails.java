@@ -15,6 +15,9 @@ public class ResponseVaccineDetails {
     private int vaccineId;
     private int comboId;
     private int dose;
-    private String ageGroup;
+    private String comboCategory;
     private double saleOff;
+    private String vaccineName;
+    private String comboName;
+    private String description;
 }
