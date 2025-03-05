@@ -13,17 +13,20 @@ import java.util.Objects;
 
 @Getter
 @Setter
-@Embeddable
 public class WorkingScheduleId implements Serializable {
-    private static final long serialVersionUID = 2769469257151551151L;
-    @NotNull
-    @Column(name = "Schedule_ID", nullable = false)
-    private Integer scheduleId;
+ //   private static final long serialVersionUID = 2769469257151551151L;
 
-    @Size(max = 255)
-    @NotNull
-    @Column(name = "account_id", nullable = false)
+
+    private int dateId;
+
     private String accountId;
+
+    public WorkingScheduleId() {
+    }
+    public WorkingScheduleId(int dateId, String accountId) {
+        this.dateId = dateId;
+        this.accountId = accountId;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -31,12 +34,12 @@ public class WorkingScheduleId implements Serializable {
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         WorkingScheduleId entity = (WorkingScheduleId) o;
         return Objects.equals(this.accountId, entity.accountId) &&
-                Objects.equals(this.scheduleId, entity.scheduleId);
+                Objects.equals(this.dateId, entity.dateId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(accountId, scheduleId);
+        return Objects.hash(accountId, dateId);
     }
 
 }

@@ -8,21 +8,36 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "Working_Schedule")
+@IdClass(WorkingScheduleId.class)
 public class WorkingSchedule {
-    @EmbeddedId
-    private WorkingScheduleId id;
 
-    @MapsId("scheduleId")
+    @Id
+    @Column(name = "dateId")
+    private int dateId;
+
+    @Id
+    @Column(name = "accId")
+    private String accountId;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "Schedule_ID", nullable = false)
+    @JoinColumn(name = "scheduleId", nullable = false)
     private WorkDate schedule;
 
-    @MapsId("accountId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "account_id", nullable = false)
+    @JoinColumn(name = "accountId", nullable = false)
     private Account account;
 
     @Column(name = "status")
     private Boolean status;
 
+    public WorkingSchedule() {
+    }
+
+    public WorkingSchedule(int dateId, String accountId, WorkDate schedule, Account account, Boolean status) {
+        this.dateId = dateId;
+        this.accountId = accountId;
+        this.schedule = schedule;
+        this.account = account;
+        this.status = status;
+    }
 }

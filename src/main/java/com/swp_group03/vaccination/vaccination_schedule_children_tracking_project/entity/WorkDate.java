@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -15,19 +16,19 @@ import java.util.Set;
 @Table(name = "Work_Date")
 public class WorkDate {
     @Id
-    @Column(name = "Schedule_ID", nullable = false)
-    private Integer id;
+    @Column(name = "ScheduleId", nullable = false)
+    private int id;
 
     @Column(name = "Day_Work")
     private LocalDate dayWork;
 
     @Column(name = "Start_time")
-    private LocalTime startTime;
+    private String startTime;
 
     @Column(name = "End_time")
-    private LocalTime endTime;
+    private String endTime;
 
     @OneToMany(mappedBy = "schedule")
-    private Set<WorkingSchedule> workingSchedules = new LinkedHashSet<>();
+    private Set<WorkingSchedule> workingSchedules = new HashSet<>();
 
 }
