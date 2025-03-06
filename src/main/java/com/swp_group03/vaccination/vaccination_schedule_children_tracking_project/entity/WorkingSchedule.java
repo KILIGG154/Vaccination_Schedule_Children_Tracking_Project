@@ -16,15 +16,15 @@ public class WorkingSchedule {
     private int dateId;
 
     @Id
-    @Column(name = "accId")
+    @Column(name = "AccountId")
     private String accountId;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "scheduleId", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "dateId", insertable = false, updatable = false)
     private WorkDate schedule;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "accountId", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "AccountId", insertable = false, updatable = false)
     private Account account;
 
     @Column(name = "status")

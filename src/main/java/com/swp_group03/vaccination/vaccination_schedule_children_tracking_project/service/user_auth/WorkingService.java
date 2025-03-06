@@ -40,9 +40,9 @@ public class WorkingService {
         WorkDate workDate = workingDateRepo.findById(workDateId).orElseThrow(() -> new RuntimeException("WorkDate not found with id: " ));
         Account account = userRepo.findById(accountId).orElseThrow(() -> new RuntimeException("Account not found with id: " ));
 
-        WorkingScheduleId work = new WorkingScheduleId();
-        work.setDateId(request.getDateID());
-        work.setAccountId(request.getAccountID());
+//        WorkingScheduleId work = new WorkingScheduleId();
+//        work.setDateId(request.getDateID());
+//        work.setAccountId(request.getAccountID());
 
         WorkingSchedule workingSchedule = new WorkingSchedule();
         workingSchedule.setDateId(workDateId);
