@@ -31,7 +31,7 @@ import java.util.List;
 @EnableMethodSecurity(prePostEnabled = true) // Bật kiểm tra quyền ở mức method
 public class SecurityConfig {
 
-    private final String[] PUBLIC_ENPOINTS = {"/users/register", "/auth/login", "/auth/introspect", "/vaccine/addVaccine", "/vaccine/get", "/users/{accountID}", "/vaccine/combo/add", "/vaccine/combo/detail/{vaccineId}/{comboId}", "/vaccine/addVaccineComboDetail","/vaccine/get/combo" ,"/vaccine/get/comboDetail", "/vaccine/{vaccineName}"};
+    private final String[] PUBLIC_ENPOINTS = {"/users/register", "/auth/login","/auth/logout", "/auth/refresh", "/auth/introspect", "/vaccine/addVaccine", "/vaccine/get", "/users/{accountID}", "/vaccine/combo/add", "/vaccine/combo/detail/{vaccineId}/{comboId}", "/vaccine/addVaccineComboDetail","/vaccine/get/combo" ,"/vaccine/get/comboDetail", "/vaccine/{vaccineName}"};
 
 //    private final String[] PUBLIC_ENPOINTS = {"/users/register", "/auth/login", "/auth/introspect"};
 
@@ -42,6 +42,9 @@ public class SecurityConfig {
     //Mọi thứ liên quan đến JWT thì nên tìm và chỉnh thông qua 1 nơi duy nhất là JwtConfig
     @Autowired
     JwtConfig jwtConfig;
+
+    @Autowired
+    CustomJwtDecoder customJwtDecoder;
 
 
     @Bean
@@ -67,7 +70,7 @@ public class SecurityConfig {
 
         //Dùng decoder để giải mã token ở Bearer token
         http.oauth2ResourceServer(oath2 -> oath2.jwt(jwtConfigurer
-                -> jwtConfigurer.decoder(jwtConfig.jwtDecoder())
+                -> jwtConfigurer.decoder(customJwtDecoder)
                 .jwtAuthenticationConverter(jwtConfig.jwtConverter()))
                 .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
 

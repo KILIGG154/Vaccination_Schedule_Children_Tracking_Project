@@ -24,7 +24,8 @@ public enum ErrorCode {
 
     // Authorization errors
     UNAUTHENTICATED(4001, "Invalid Username or Password", HttpStatus .UNAUTHORIZED),
-    UNAUTHORIZED(4002, "You do not have permission", HttpStatus.FORBIDDEN);
+    UNAUTHORIZED(4002, "You do not have permission", HttpStatus.FORBIDDEN),
+    INVALID_TOKEN(4003, "Invalid token", HttpStatus.UNAUTHORIZED);
 
     private final int code;
     private final String message;

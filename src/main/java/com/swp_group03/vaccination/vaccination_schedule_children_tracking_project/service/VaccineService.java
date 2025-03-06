@@ -89,11 +89,11 @@ public class VaccineService {
                 .orElseThrow(() -> new RuntimeException("Vaccine Combo not found with id: "));
 
         // Tạo ID cho VaccineComboDetail
-        VaccineComboDetailId key = new VaccineComboDetailId();
-        key.setVaccineId(request.getVaccineId());
-        key.setComboId(request.getComboId());
-        
-        log.info("Created composite key: vaccineId={}, comboId={}", key.getVaccineId(), key.getComboId());
+//        VaccineComboDetailId key = new VaccineComboDetailId();
+//        key.setVaccineId(request.getVaccineId());
+//        key.setComboId(request.getComboId());
+//
+//        log.info("Created composite key: vaccineId={}, comboId={}", key.getVaccineId(), key.getComboId());
 
 
          // Tạo và cấu hình VaccineComboDetail - THAY ĐỔI Ở ĐÂY
@@ -111,7 +111,7 @@ public class VaccineService {
     // Lưu và trả về kết quả
     return vaccineComboDetail.save(detail);
 }
-//         // Tạo và cấu hình VaccineComboDetail
+//         // Tạo và  cấu hình VaccineComboDetail
 //         VaccineComboDetail detail = new VaccineComboDetail();
 //         detail.setId(key);
 //         detail.setVaccine(vaccine);

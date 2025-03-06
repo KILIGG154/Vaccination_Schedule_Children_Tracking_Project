@@ -26,14 +26,14 @@ public class JwtConfig {
 
     //Vì Decoder ở đây là một class Interface nên không thể tạo bean trực tiếp được vì thể ta phải tạo 1 bean method() rồi truyền vào nó!!!
 
-    @Bean
-    public JwtDecoder jwtDecoder() {
-        SecretKeySpec secretKeySpec = new SecretKeySpec(SIGNER_KEY.getBytes(), "HS512");
-        return NimbusJwtDecoder
-                .withSecretKey(secretKeySpec)
-                .macAlgorithm(MacAlgorithm.HS512)
-                .build();
-    }
+//    @Bean
+//    public JwtDecoder jwtDecoder() {
+//        SecretKeySpec secretKeySpec = new SecretKeySpec(SIGNER_KEY.getBytes(), "HS512");
+//        return NimbusJwtDecoder
+//                .withSecretKey(secretKeySpec)
+//                .macAlgorithm(MacAlgorithm.HS512)
+//                .build();
+//    }
 
     //Tương tự Decoder Converter cũng là Class Interface không tạo trực tiếp truyền biến được (ko có constructor để truyền vào)
     //Nên ta phải tạo 1 bean method() rồi truyền vào nó!!!

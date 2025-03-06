@@ -8,12 +8,16 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.config.JwtConfig;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Account;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Invalidatedtoken;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.AppException;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.ErrorCode;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.account.AuthenticationRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.account.IntrospectRequest;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.account.LogoutRequest;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.account.RefreshRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.AuthenticationResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.IntrospectResponse;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.InvalidatedTokenRepository;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.UserRepo;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -28,13 +32,16 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.StringJoiner;
+import java.util.UUID;
 
-@Service
+
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @Slf4j
+@Service
 public class AuthenticationService {
     UserRepo userRepo;
+    InvalidatedTokenRepository tokenRepository;
 
 //    @NonFinal
 //    @Value("${jwt.secretKey}")
@@ -43,6 +50,8 @@ public class AuthenticationService {
     //Mọi thứ liên quan đến JWT thì nên tìm và chỉnh thông qua 1 nơi duy nhất là JwtConfig
     @Autowired
     JwtConfig jwtConfig;
+    @Autowired
+    private InvalidatedTokenRepository invalidatedTokenRepository;
 
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -64,21 +73,75 @@ public class AuthenticationService {
 
     public IntrospectResponse introspect(IntrospectRequest request) throws JOSEException, ParseException {
         var token = request.getToken();
+        boolean invalid = true;
 
-        JWSVerifier verifier = new MACVerifier(jwtConfig.getSignerKey().getBytes());
-
-        SignedJWT signedJWT = SignedJWT.parse(request.getToken());
-
-        Date expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
-
-        var verifed = signedJWT.verify(verifier);
+        try {
+            verifyToken(token);
+        } catch (AppException e) {
+            invalid = false;
+        }
 
         return IntrospectResponse.builder()
-                .valid(verifed && expiryTime.after(new Date()))
+                .valid(invalid)
                 .build();
 
     }
 
+    public void logout(LogoutRequest request) throws ParseException, JOSEException {
+        var signToken = verifyToken(request.getToken());
+
+        String jit = signToken.getJWTClaimsSet().getJWTID();
+        Date expiryDate = signToken.getJWTClaimsSet().getExpirationTime();
+
+        Invalidatedtoken invalidatedtoken = Invalidatedtoken.builder()
+                .id(jit)
+                .expiryTime(expiryDate)
+                .build();
+
+        tokenRepository.save(invalidatedtoken);
+    }
+
+    private SignedJWT verifyToken(String token) throws JOSEException, ParseException {
+        JWSVerifier verifier = new MACVerifier(jwtConfig.getSignerKey().getBytes());
+
+        SignedJWT signedJWT = SignedJWT.parse(token);
+
+        Date expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
+
+        var verifed = signedJWT.verify(verifier);
+        if(!(verifed && expiryTime.after(new Date()))) {
+            throw new AppException(ErrorCode.INVALID_TOKEN);
+        }
+
+        return signedJWT;
+    }
+
+    public AuthenticationResponse refreshToken(RefreshRequest request) throws ParseException, JOSEException {
+        var signedJWT = verifyToken(request.getToken());
+
+        var jwt = signedJWT.getJWTClaimsSet().getJWTID();
+        var expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
+
+        Invalidatedtoken invalidatedtoken = Invalidatedtoken.builder()
+                .id(jwt)
+                .expiryTime(expiryTime)
+                .build();
+
+        tokenRepository.save(invalidatedtoken);
+
+
+        var username = signedJWT.getJWTClaimsSet().getStringClaim("username").toString();
+
+        var user = userRepo.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
+
+        var token = generateToken(user);
+
+        return AuthenticationResponse.builder()
+                .token(token)
+                .authenticated(true)
+                .build();
+
+    }
 
     private String generateToken(Account account) {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
@@ -89,6 +152,7 @@ public class AuthenticationService {
                 .issuer("swp_group3.com")
                 .issueTime(new Date())
                 .expirationTime(new Date(Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()))
+                .jwtID(UUID.randomUUID().toString())
                 .claim("username", account.getUsername()) // Thêm username vào claim riêng
                 .claim("scope", buildScope(account))
                 .build();

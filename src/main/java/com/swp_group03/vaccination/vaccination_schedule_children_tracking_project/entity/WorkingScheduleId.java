@@ -28,18 +28,27 @@ public class WorkingScheduleId implements Serializable {
         this.accountId = accountId;
     }
 
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+//        WorkingScheduleId entity = (WorkingScheduleId) o;
+//        return Objects.equals(this.accountId, entity.accountId) &&
+//                Objects.equals(this.dateId, entity.dateId);
+//    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        WorkingScheduleId entity = (WorkingScheduleId) o;
-        return Objects.equals(this.accountId, entity.accountId) &&
-                Objects.equals(this.dateId, entity.dateId);
+        if (o == null || getClass() != o.getClass()) return false;
+        WorkingScheduleId that = (WorkingScheduleId) o;
+        return Objects.equals(dateId, that.dateId) &&
+                Objects.equals(accountId, that.accountId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(accountId, dateId);
+        return Objects.hash(dateId, accountId);
     }
 
 }

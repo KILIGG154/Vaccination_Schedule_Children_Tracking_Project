@@ -17,17 +17,17 @@ import java.util.Set;
 @Table(name = "Work_Date")
 public class WorkDate {
     @Id
-    @Column(name = "ScheduleId", nullable = false)
+    @Column(name = "DateId", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "Day_Work")
+    @Column(name = "DayWork")
     private Date dayWork;
 
-    @Column(name = "Start_time")
+    @Column(name = "StartTime")
     private String startTime;
 
-    @Column(name = "End_time")
+    @Column(name = "EndTime")
     private String endTime;
 
     @OneToMany(mappedBy = "schedule")

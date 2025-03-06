@@ -3,6 +3,8 @@ package com.swp_group03.vaccination.vaccination_schedule_children_tracking_proje
 import com.nimbusds.jose.JOSEException;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.account.AuthenticationRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.account.IntrospectRequest;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.account.LogoutRequest;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.account.RefreshRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.AuthenticationResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.IntrospectResponse;
@@ -38,6 +40,30 @@ public class AuthenticationController {
 
         return apiResponse;
     }
+
+    @PostMapping("/logout")
+    ApiResponse<Void> logout(@RequestBody LogoutRequest request) throws ParseException, JOSEException {
+
+        authenticationService.logout(request);
+
+        return ApiResponse.<Void>builder()
+                .code(100)
+                .message("Logout successfully: ")
+                .build();
+    }
+
+    @PostMapping("/refresh")
+    ApiResponse<AuthenticationResponse> refreshToken(@RequestBody RefreshRequest request) throws ParseException, JOSEException {
+
+        var isAuthen = authenticationService.refreshToken(request);
+
+        return ApiResponse.<AuthenticationResponse>builder()
+                .code(100)
+                .message("Login successfully: ")
+                .result(isAuthen)
+                .build();
+    }
+
 
 @PostMapping("/introspect")
     ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectRequest request) throws JOSEException, ParseException {

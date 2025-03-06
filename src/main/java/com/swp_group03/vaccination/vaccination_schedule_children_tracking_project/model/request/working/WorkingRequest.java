@@ -14,8 +14,6 @@ import java.util.Date;
 public class WorkingRequest {
 
 
-    private int id;
-
     private Date dayWork;
 
     private String startTime;
@@ -27,18 +25,9 @@ public class WorkingRequest {
     }
 
     public WorkingRequest(int id, Date dayWork, String startTime, String endTime) {
-        this.id = id;
         this.dayWork = dayWork;
         this.startTime = startTime;
         this.endTime = endTime;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public Date getDayWork() {
