@@ -29,8 +29,11 @@ public class WorkingService {
     private WorkingScheduleRepo workingScheduleRepo;
 
     public WorkDate createWorkDate(WorkingRequest request){
-        WorkDate workDate = workingMapper.createWorkDate(request);
-        return workingDateRepo.save(workDate);
+       WorkDate workDate = new WorkDate();
+         workDate.setDayWork(request.getDayWork());
+         workDate.setStartTime(request.getStartTime());
+         workDate.setEndTime(request.getEndTime());
+         return workingDateRepo.save(workDate);
     }
 
     public WorkingSchedule createWorkingSchedule(WorkingDetailRequest request, int workDateId, String accountId){

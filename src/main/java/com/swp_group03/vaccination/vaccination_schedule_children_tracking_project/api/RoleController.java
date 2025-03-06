@@ -1,4 +1,4 @@
-package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.controller;
+package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.api;
 
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.account.RoleRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Account.RoleResponse;

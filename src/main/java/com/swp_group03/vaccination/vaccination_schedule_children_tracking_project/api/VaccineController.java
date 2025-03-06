@@ -1,4 +1,4 @@
-package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.controller;
+package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.api;
 
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Vaccine;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.VaccineComboDetail;
@@ -17,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/vaccine")
