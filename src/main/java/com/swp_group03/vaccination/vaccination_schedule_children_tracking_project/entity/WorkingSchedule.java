@@ -1,5 +1,6 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,10 +22,12 @@ public class WorkingSchedule {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dateId", insertable = false, updatable = false)
+    @JsonIgnore
     private WorkDate schedule;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "AccountId", insertable = false, updatable = false)
+    @JsonIgnore
     private Account account;
 
     @Column(name = "status")

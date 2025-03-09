@@ -1,6 +1,5 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -107,5 +106,23 @@ public class Vaccine {
     private VacineCategory categoryID;
 
 
-
+    public Vaccine(String name, String description, String manufacturer, String dosage, String contraindications, String precautions, String interactions, String adverseReactions, String storageConditions, String recommended, String preVaccination, String compatibility, String imagineUrl, Integer quantity, LocalDate expirationDate, BigDecimal price, String status) {
+        this.name = name;
+        this.description = description;
+        this.manufacturer = manufacturer;
+        this.dosage = dosage;
+        this.contraindications = contraindications;
+        this.precautions = precautions;
+        this.interactions = interactions;
+        this.adverseReactions = adverseReactions;
+        this.storageConditions = storageConditions;
+        this.recommended = recommended;
+        this.preVaccination = preVaccination;
+        this.compatibility = compatibility;
+        this.imagineUrl = imagineUrl;
+        this.quantity = quantity;
+        this.expirationDate = expirationDate;
+        this.price = price;
+        this.status = status;
+    }
 }

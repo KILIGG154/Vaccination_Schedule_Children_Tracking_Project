@@ -16,13 +16,13 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AccountUpdate {
 
-     String firstName; // Changed from First_Name
-     String lastName;  // Changed from Last_Name
-     String email;     // Changed from Email
-     String phoneNumber; // Changed from Phone_number
-     String address;    // Changed from Address
-     Gender gender;     // Changed from Gender
-     String urlImage;   // Changed from url_image
+     String firstName; 
+     String lastName;  
+     String email;    
+     String phoneNumber; 
+     String address;    
+     Gender gender;    
+     String urlImage;  
 
 }
 
