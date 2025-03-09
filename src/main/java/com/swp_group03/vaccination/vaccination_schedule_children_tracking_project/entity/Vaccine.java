@@ -1,5 +1,6 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -86,8 +87,6 @@ public class Vaccine {
     @Column(name = "ExpirationDate")
     private LocalDate expirationDate;
 
-    @Column(name = "Price", precision = 10, scale = 2)
-    private BigDecimal price;
     @Column(name = "Price")
     private double unitPrice;
 
@@ -106,5 +105,7 @@ public class Vaccine {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CategoryID")
     private VacineCategory categoryID;
+
+
 
 }
