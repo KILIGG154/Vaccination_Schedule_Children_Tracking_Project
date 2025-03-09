@@ -147,7 +147,16 @@ public class VaccineService {
 //    }
 
     public List<ResponseVaccineDetails> getVaccineCombosDetails(){
-        return vaccineMapper.toResponseVaccineDetails(vaccineComboDetail.findAll());
+//        return vaccineMapper.toResponseVaccineDetails(vaccineComboDetail.findAll());
+        List<ResponseVaccineDetails> details = vaccineMapper.toResponseVaccineDetails(vaccineComboDetail.findAll());
+
+        for(ResponseVaccineDetails detail : details){
+            double price = detail.getVaccine().getSalePrice();
+            int doseNumber = detail.getDose();
+            detail.setTotalCombo(price * doseNumber);
+        }
+        return details;
+
     }
 
     @Transactional
