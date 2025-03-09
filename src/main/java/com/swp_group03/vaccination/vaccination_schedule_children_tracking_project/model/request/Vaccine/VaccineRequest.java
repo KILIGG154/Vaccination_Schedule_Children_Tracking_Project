@@ -1,5 +1,6 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.Vaccine;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.VacineCategory;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -61,8 +62,12 @@ public class VaccineRequest {
 
      String imagineUrl;
 
+    private double unitPrice;
 
-     Integer quantity;
+    private double salePrice;
+
+
+    Integer quantity;
 
 
      LocalDate expirationDate;

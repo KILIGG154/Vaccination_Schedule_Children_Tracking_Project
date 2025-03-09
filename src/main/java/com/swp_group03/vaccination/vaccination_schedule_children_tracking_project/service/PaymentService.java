@@ -51,4 +51,15 @@ public class PaymentService {
         return paymentRepo.findAll();
     }
 
+    public Payment_Method getMethodByPayment(int id){
+        Payment payment = paymentRepo.findById(id).orElseThrow(() -> new RuntimeException("Payment not found with id: " + id));
+
+        return payment.getPaymentMethod();
+
+    }
+
+    public List<Payment> getPaymentByMethod(int id){
+        Payment_Method paymentMethod = paymentMethodRepo.findById(id).orElseThrow(() -> new RuntimeException("Payment Method not found with id: " + id));
+        return paymentRepo.findByPaymentMethod(paymentMethod);
+    }
 }

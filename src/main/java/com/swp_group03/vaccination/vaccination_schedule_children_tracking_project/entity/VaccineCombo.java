@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,6 +31,9 @@ public class VaccineCombo {
     @Column(name = "Description", length = 1000)
     private String description;
 
+    @Column(name = "Total")
+    private double total;
+
     @Column(name = "Status")
     private boolean status;
 
@@ -37,10 +41,15 @@ public class VaccineCombo {
     @JsonIgnore
     private Set<VaccineComboDetail> vaccineComboDetails = new HashSet<>();
 
+    @OneToOne
+    @JoinColumn(name = "VaccineOrderId", referencedColumnName = "VaccineOrderId")
+    private VaccineOrder vaccineOrder;
+
     public VaccineCombo(String comboName, String description, boolean status) {
         this.comboName = comboName;
         this.description = description;
         this.status = status;
     }
+
 
 }

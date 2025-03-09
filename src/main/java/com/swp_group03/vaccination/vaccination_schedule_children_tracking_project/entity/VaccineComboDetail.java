@@ -8,10 +8,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 
 @Entity
 @Table(name = "Vaccine_Combo_Detail")
 @IdClass(VaccineComboDetailId.class) // Thêm annotation này
+@Getter
+@Setter
 public class VaccineComboDetail {
 
     @Id // Thay thế @EmbeddedId bằng @Id cho từng trường
@@ -42,19 +46,24 @@ public class VaccineComboDetail {
     @Column(name = "SaleOff")
     private double saleOff;
 
+    @Column(name = "Total")
+    private double total;
+
 
     public VaccineComboDetail() {
     }
 
-    public VaccineComboDetail(VaccineCombo combo, Vaccine vaccine, Integer dose, String comboCategory, Double saleOff) {
-        this.combo = combo;
+    public VaccineComboDetail(int vaccineId, int comboId, Vaccine vaccine, VaccineCombo combo, int dose, String comboCategory, double saleOff, double total) {
+        this.vaccineId = vaccineId;
+        this.comboId = comboId;
         this.vaccine = vaccine;
+        this.combo = combo;
         this.dose = dose;
         this.comboCategory = comboCategory;
         this.saleOff = saleOff;
+        this.total = total;
     }
 
-   
     public int getVaccineId() {
         return vaccineId;
     }
@@ -71,14 +80,6 @@ public class VaccineComboDetail {
         this.comboId = comboId;
     }
 
-    public VaccineCombo getCombo() {
-        return combo;
-    }
-
-    public void setCombo(VaccineCombo combo) {
-        this.combo = combo;
-    }
-
     public Vaccine getVaccine() {
         return vaccine;
     }
@@ -87,28 +88,43 @@ public class VaccineComboDetail {
         this.vaccine = vaccine;
     }
 
-    public Integer getDose() {
+    public VaccineCombo getCombo() {
+        return combo;
+    }
+
+    public void setCombo(VaccineCombo combo) {
+        this.combo = combo;
+    }
+
+    public int getDose() {
         return dose;
     }
 
-    public void setDose(Integer dose) {
+    public void setDose(int dose) {
         this.dose = dose;
     }
 
-    public String getcomboCategory() {
+    public String getComboCategory() {
         return comboCategory;
     }
 
-    public void setcomboCategory(String comboCategory) {
+    public void setComboCategory(String comboCategory) {
         this.comboCategory = comboCategory;
     }
 
-    public Double getSaleOff() {
+    public double getSaleOff() {
         return saleOff;
     }
 
-    public void setSaleOff(Double saleOff) {
+    public void setSaleOff(double saleOff) {
         this.saleOff = saleOff;
     }
 
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
 }

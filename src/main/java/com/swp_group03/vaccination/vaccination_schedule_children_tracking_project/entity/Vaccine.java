@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
@@ -14,6 +16,8 @@ import java.util.Set;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "Vaccine")
 public class Vaccine {
@@ -82,8 +86,11 @@ public class Vaccine {
     @Column(name = "ExpirationDate")
     private LocalDate expirationDate;
 
-    @Column(name = "Price", precision = 10, scale = 2)
-    private BigDecimal price;
+    @Column(name = "Price")
+    private double unitPrice;
+
+    @Column(name = "SalePrice")
+    private double salePrice;
 
     @Size(max = 50)
     @Column(name = "Status", length = 50)
@@ -98,8 +105,6 @@ public class Vaccine {
     @JoinColumn(name = "CategoryID")
     private VacineCategory categoryID;
 
-    public Vaccine() {
-    }
 
     public Vaccine(String name, String description, String manufacturer, String dosage, String contraindications, String precautions, String interactions, String adverseReactions, String storageConditions, String recommended, String preVaccination, String compatibility, String imagineUrl, Integer quantity, LocalDate expirationDate, BigDecimal price, String status) {
         this.name = name;

@@ -7,11 +7,14 @@ import com.swp_group03.vaccination.vaccination_schedule_children_tracking_projec
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.mapper.WorkingMapper;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.working.WorkingDetailRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.working.WorkingRequest;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Working.WorkingResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.UserRepo;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.WorkingDateRepo;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.WorkingScheduleRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class WorkingService {
@@ -27,6 +30,8 @@ public class WorkingService {
 
     @Autowired
     private WorkingScheduleRepo workingScheduleRepo;
+
+
 
     public WorkDate createWorkDate(WorkingRequest request){
        WorkDate workDate = new WorkDate();
@@ -53,4 +58,18 @@ public class WorkingService {
 
         return workingScheduleRepo.save(workingSchedule);
     }
+
+    public List<WorkingResponse> getAllWorkingResponseList(String accountID , int dateID){
+
+    Account account = userRepo.findByAccountId(accountID);
+
+    WorkDate workDate = workingDateRepo.findById(dateID).orElseThrow(() -> new RuntimeException("WorkDate not found with id: " ));
+        List<WorkingResponse> workingSchedules = workingMapper.toGetAllWorking(workingScheduleRepo.findAll());
+
+        return workingSchedules;
+
+
+    }
+
+
 }
