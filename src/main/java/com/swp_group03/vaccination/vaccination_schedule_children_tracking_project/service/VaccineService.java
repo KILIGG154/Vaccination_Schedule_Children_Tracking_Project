@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Slf4j
@@ -49,6 +50,8 @@ public class VaccineService {
         vaccine.setPreVaccination(request.getPreVaccination());
         vaccine.setCompatibility(request.getCompatibility());
         vaccine.setQuantity(request.getQuantity());
+        vaccine.setUnitPrice(request.getUnitPrice());
+        vaccine.setSalePrice(request.getSalePrice());
         vaccine.setExpirationDate(request.getExpirationDate());
         vaccine.setImagineUrl(request.getImagineUrl());
         vaccine.setStatus("true");
@@ -103,9 +106,9 @@ public class VaccineService {
     detail.setVaccine(vaccine);
     detail.setCombo(vaccineCombo);
     detail.setDose(request.getDose());
-    detail.setcomboCategory(request.getComboCategory());
+    detail.setComboCategory(request.getComboCategory());
     detail.setSaleOff(request.getSaleOff());
-    
+
     log.info("Saving VaccineComboDetail with vaccineId={}, comboId={}", detail.getVaccineId(), detail.getComboId());
 
     // Lưu và trả về kết quả
@@ -131,13 +134,38 @@ public class VaccineService {
 //         return vaccineComboDetail.saveAndFlush(detail);
 //     }
 
-    public List<ResponseVaccineCombo> getVaccineCombos(){
-        return vaccineMapper.toResponseVaccineCombo(vaccineCombos.findAll());
+    public List<ResponseVaccineCombo> getVaccineCombos() {
+        List<VaccineCombo> combos = vaccineCombos.findAll();
+
+        // Kiểm tra giá trị total trước khi mapping
+        combos.forEach(combo -> System.out.println("Combo: " + combo.getId() + " | Total: " + combo.getTotal()));
+
+        return vaccineMapper.toResponseVaccineCombo(combos);
     }
+//    public List<ResponseVaccineCombo> getVaccineCombos(){
+//        return vaccineMapper.toResponseVaccineCombo(vaccineCombos.findAll());
+//    }
 
     public List<ResponseVaccineDetails> getVaccineCombosDetails(){
         return vaccineMapper.toResponseVaccineDetails(vaccineComboDetail.findAll());
     }
 
+    @Transactional
+    public double getTotalPriceCombo(int id){
+        VaccineCombo vaccineCombo = vaccineCombos.findById(id).orElseThrow(() -> new RuntimeException("Vaccine Combo not found with id: " ));
+
+        double tolalP = vaccineCombo.getVaccineComboDetails().stream().mapToDouble(detail -> {
+            Vaccine vaccine = detail.getVaccine(); // Lấy thông tin vaccine
+            double price = vaccine.getSalePrice();
+            int doseNumber = detail.getDose(); // Lấy số mũi từ bảng trung gian
+            return price * doseNumber; // Tính giá tiền
+
+        }).sum();
+
+        vaccineCombo.setTotal(tolalP);
+        vaccineCombos.save(vaccineCombo);
+
+        return tolalP;
+    }
 
 }

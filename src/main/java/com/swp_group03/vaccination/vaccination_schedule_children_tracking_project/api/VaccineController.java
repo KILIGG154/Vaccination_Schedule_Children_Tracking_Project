@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -95,6 +96,11 @@ public ResponseEntity addVaccineComboDetail(@RequestBody VaccineCombeDetailReque
         log.error("Error adding vaccine combo detail", e);
         return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
     }
-}
+    }
+
+    @GetMapping("/{comboId}/totalPrice")
+    public double getTotalPrice(@PathVariable int comboId){
+        return vaccineService.getTotalPriceCombo(comboId);
+    }
 }
 

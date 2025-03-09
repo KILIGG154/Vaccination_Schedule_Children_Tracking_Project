@@ -1,9 +1,13 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
@@ -13,6 +17,8 @@ import java.util.Set;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "Vaccine")
 public class Vaccine {
@@ -81,14 +87,18 @@ public class Vaccine {
     @Column(name = "ExpirationDate")
     private LocalDate expirationDate;
 
-    @Column(name = "Price", precision = 10, scale = 2)
-    private BigDecimal price;
+    @Column(name = "Price")
+    private double unitPrice;
+
+    @Column(name = "SalePrice")
+    private double salePrice;
 
     @Size(max = 50)
     @Column(name = "Status", length = 50)
     private String status;
 
     @OneToMany(mappedBy = "vaccine", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<VaccineComboDetail> vaccineComboDetails = new HashSet<>();
 
 

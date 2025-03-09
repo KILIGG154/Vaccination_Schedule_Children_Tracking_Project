@@ -20,6 +20,7 @@ public class ResponseVaccineCombo
 
     private String description;
 
+    private double total;
 
     private boolean status;
 }

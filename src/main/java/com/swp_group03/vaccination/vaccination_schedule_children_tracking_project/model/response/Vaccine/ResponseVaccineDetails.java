@@ -19,5 +19,6 @@ public class ResponseVaccineDetails {
     private double saleOff;
     private String vaccineName;
     private String comboName;
+    private double total;
     private String description;
 }
