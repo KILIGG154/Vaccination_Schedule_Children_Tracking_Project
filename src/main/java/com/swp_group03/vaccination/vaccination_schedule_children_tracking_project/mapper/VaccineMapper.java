@@ -24,12 +24,18 @@ public interface VaccineMapper {
     // Ánh xạ VaccineComboDetail -> ResponseVaccineDetails
     @Mapping(target = "comboName", source = "combo", qualifiedByName = "mapComboName")
     @Mapping(target = "description", source = "combo", qualifiedByName = "mapComboDescription")
+    @Mapping(target = "total", source = "combo", qualifiedByName = "mapComboTotal")  // Thêm mapping cho total
     @Mapping(target = "vaccineName", source = "vaccine", qualifiedByName = "mapVaccineName")
     ResponseVaccineDetails toResponseVaccineDetail(VaccineComboDetail vaccineComboDetail);
 
+
     // Chuyển đổi danh sách VaccineComboDetail thành danh sách ResponseVaccineDetails
     default List<ResponseVaccineDetails> toResponseVaccineDetails(List<VaccineComboDetail> vaccineComboDetails) {
+        if (vaccineComboDetails == null || vaccineComboDetails.isEmpty()) {
+            return List.of();
+        }
         return vaccineComboDetails.stream()
+                .filter(detail -> detail.getCombo() != null && detail.getVaccine() != null) // Kiểm tra null trước khi ánh xạ
                 .map(this::toResponseVaccineDetail)
                 .collect(Collectors.toList());
     }
@@ -49,10 +55,20 @@ public interface VaccineMapper {
                 .orElse("No Description");
     }
 
+
+    //Map Total Price của VaccineCombo trong Combo qua thằng ResponseVaccineComboDetail
+    @Named("mapComboTotal")
+    static double mapComboTotal(VaccineCombo combo) {
+        return Optional.ofNullable(combo)
+                .map(VaccineCombo::getTotal)
+                .orElse(0.0);
+    }
+
     @Named("mapVaccineName")
     static String mapVaccineName(Vaccine vaccine) {
         return Optional.ofNullable(vaccine)
                 .map(Vaccine::getName)
                 .orElse("Unknown Vaccine");
     }
+
 }

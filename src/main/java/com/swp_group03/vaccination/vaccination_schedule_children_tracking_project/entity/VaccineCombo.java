@@ -43,6 +43,7 @@ public class VaccineCombo {
 
     @OneToOne
     @JoinColumn(name = "VaccineOrderId", referencedColumnName = "VaccineOrderId")
+    @JsonIgnore
     private VaccineOrder vaccineOrder;
 
     public VaccineCombo(String comboName, String description, boolean status) {

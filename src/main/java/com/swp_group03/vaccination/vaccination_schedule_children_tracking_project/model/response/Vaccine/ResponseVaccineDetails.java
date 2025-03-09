@@ -17,12 +17,13 @@ public class ResponseVaccineDetails {
     private int vaccineId;
     private int comboId;
     private int dose;
-    private Vaccine vaccine;
-    private VaccineCombo vaccineCombo;
+//    private Vaccine vaccine;            Tính ra là xóa luôn r đấy chứ :>>
+//    private VaccineCombo vaccineCombo;  Tính ra là xóa luôn r đấy chứ :>>
     private String comboCategory;
     private double saleOff;
     private String vaccineName;
     private String comboName;
-    private double totalCombo;
+//    private double totalCombo;    Sai nên nên cmt lại
+    private double total;
     private String description;
 }

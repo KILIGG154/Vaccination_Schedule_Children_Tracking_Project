@@ -43,8 +43,8 @@ public class VaccineComboDetail {
     @Column(name = "SaleOff")
     private double saleOff;
 
-    @Column(name = "Total_Of_Combo")
-    private double totalCombo;
+//    @Column(name = "Total_Of_Combo")
+//    private double totalCombo;
 
 
     public VaccineComboDetail() {
@@ -58,7 +58,7 @@ public class VaccineComboDetail {
         this.dose = dose;
         this.comboCategory = comboCategory;
         this.saleOff = saleOff;
-        this.totalCombo = totalCombo;
+//        this.totalCombo = totalCombo;
     }
 
     public int getVaccineId() {
@@ -117,11 +117,11 @@ public class VaccineComboDetail {
         this.saleOff = saleOff;
     }
 
-    public double getTotal() {
-        return totalCombo;
-    }
-
-    public void setTotal(double totalCombo) {
-        this.totalCombo = totalCombo;
-    }
+//    public double getTotal() {
+//        return totalCombo;
+//    }
+//
+//    public void setTotal(double totalCombo) {
+//        this.totalCombo = totalCombo;
+//    }
 }

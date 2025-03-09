@@ -23,6 +23,7 @@ import java.time.LocalDate;
 public class ResponseVaccine {
 
     int id;
+
     String name;
 
     String description;
@@ -34,36 +35,31 @@ public class ResponseVaccine {
     String dosage;
 
     String contraindications;
-    String precautions;
 
+    String precautions;
 
     String interactions;
 
-
     String adverseReactions;
-
 
     String storageConditions;
 
-
     String recommended;
 
-
     String preVaccination;
-
 
     String compatibility;
 
     String imagineUrl;
 
-
     Integer quantity;
 
+//    LocalDate expirationDate;
 
-    LocalDate expirationDate;
+//    float price;
+    double unitPrice;
 
-
-    float price;
+    double salePrice;
 
     String status;
 

@@ -84,8 +84,8 @@ public class Vaccine {
     @Column(name = "Quantity")
     private Integer quantity;
 
-    @Column(name = "ExpirationDate")
-    private LocalDate expirationDate;
+//    @Column(name = "ExpirationDate")
+//    private LocalDate expirationDate;
 
     @Column(name = "Price")
     private double unitPrice;
