@@ -164,7 +164,7 @@ public class VaccineService {
 
         vaccineCombo.setTotal(tolalP);
         vaccineCombos.save(vaccineCombo);
-
+        System.out.println("Hello Woprld");
         return tolalP;
     }
 
