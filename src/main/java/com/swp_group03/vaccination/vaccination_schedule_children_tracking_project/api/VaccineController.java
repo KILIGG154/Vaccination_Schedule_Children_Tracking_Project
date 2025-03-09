@@ -35,26 +35,26 @@ public class VaccineController {
 
     @GetMapping("/get")
     public ApiResponse<List<ResponseVaccine>> getVaccines(){
-       ApiResponse<List<ResponseVaccine>> vaccines = new ApiResponse<>();
-       vaccines.setCode(404);
-       vaccines.setResult(vaccineService.getVaccines());
-         return vaccines;
+        ApiResponse<List<ResponseVaccine>> vaccines = new ApiResponse<>();
+        vaccines.setCode(404);
+        vaccines.setResult(vaccineService.getVaccines());
+        return vaccines;
     }
 
     @GetMapping("/get/combo")
     public ApiResponse<List<ResponseVaccineCombo>> getVaccinesCombo(){
-       ApiResponse<List<ResponseVaccineCombo>> vaccinesCombo = new ApiResponse<>();
-       vaccinesCombo.setCode(403);
-       vaccinesCombo.setResult(vaccineService.getVaccineCombos());
-         return vaccinesCombo;
+        ApiResponse<List<ResponseVaccineCombo>> vaccinesCombo = new ApiResponse<>();
+        vaccinesCombo.setCode(403);
+        vaccinesCombo.setResult(vaccineService.getVaccineCombos());
+        return vaccinesCombo;
     }
 
     @GetMapping("/get/comboDetail")
     public ApiResponse<List<ResponseVaccineDetails>> getVaccinesComboDetails(){
-       ApiResponse<List<ResponseVaccineDetails>> vaccinesComboDetails = new ApiResponse<>();
-       vaccinesComboDetails.setCode(403);
-       vaccinesComboDetails.setResult(vaccineService.getVaccineCombosDetails());
-         return vaccinesComboDetails;
+        ApiResponse<List<ResponseVaccineDetails>> vaccinesComboDetails = new ApiResponse<>();
+        vaccinesComboDetails.setCode(403);
+        vaccinesComboDetails.setResult(vaccineService.getVaccineCombosDetails());
+        return vaccinesComboDetails;
     }
 
     @GetMapping("/{vaccineName}")
@@ -63,7 +63,7 @@ public class VaccineController {
         response.setCode(3000);
         response.setResult(vaccineService.searchByName(vaccineName));
         return response;
-       // return vaccineService.searchByName(vaccineName);
+        // return vaccineService.searchByName(vaccineName);
     }
 
     @PostMapping("/combo/add")
@@ -84,18 +84,18 @@ public class VaccineController {
     // }
 
     @PostMapping("/combo/detail/{comboId}/{vaccineId}")
-public ResponseEntity addVaccineComboDetail(@RequestBody VaccineCombeDetailRequest request, 
-                                           @PathVariable int vaccineId, 
-                                           @PathVariable int comboId) {
-    log.info("Adding combo detail for vaccine {} and combo {}", vaccineId, comboId);
+    public ResponseEntity addVaccineComboDetail(@RequestBody VaccineCombeDetailRequest request,
+                                                @PathVariable int vaccineId,
+                                                @PathVariable int comboId) {
+        log.info("Adding combo detail for vaccine {} and combo {}", vaccineId, comboId);
 
-    try {
-        VaccineComboDetail result = vaccineService.addVaccineComboDetail(request, vaccineId, comboId);
-        return ResponseEntity.ok(result);
-    } catch (Exception e) {
-        log.error("Error adding vaccine combo detail", e);
-        return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
-    }
+        try {
+            VaccineComboDetail result = vaccineService.addVaccineComboDetail(request, vaccineId, comboId);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            log.error("Error adding vaccine combo detail", e);
+            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
+        }
     }
 
     @GetMapping("/{comboId}/totalPrice")
@@ -103,4 +103,3 @@ public ResponseEntity addVaccineComboDetail(@RequestBody VaccineCombeDetailReque
         return vaccineService.getTotalPriceCombo(comboId);
     }
 }
-

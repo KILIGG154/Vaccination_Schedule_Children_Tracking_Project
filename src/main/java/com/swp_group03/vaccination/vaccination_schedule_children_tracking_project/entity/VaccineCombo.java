@@ -51,5 +51,4 @@ public class VaccineCombo {
         this.status = status;
     }
 
-
 }

@@ -86,6 +86,8 @@ public class Vaccine {
     @Column(name = "ExpirationDate")
     private LocalDate expirationDate;
 
+    @Column(name = "Price", precision = 10, scale = 2)
+    private BigDecimal price;
     @Column(name = "Price")
     private double unitPrice;
 
@@ -105,24 +107,4 @@ public class Vaccine {
     @JoinColumn(name = "CategoryID")
     private VacineCategory categoryID;
 
-
-    public Vaccine(String name, String description, String manufacturer, String dosage, String contraindications, String precautions, String interactions, String adverseReactions, String storageConditions, String recommended, String preVaccination, String compatibility, String imagineUrl, Integer quantity, LocalDate expirationDate, BigDecimal price, String status) {
-        this.name = name;
-        this.description = description;
-        this.manufacturer = manufacturer;
-        this.dosage = dosage;
-        this.contraindications = contraindications;
-        this.precautions = precautions;
-        this.interactions = interactions;
-        this.adverseReactions = adverseReactions;
-        this.storageConditions = storageConditions;
-        this.recommended = recommended;
-        this.preVaccination = preVaccination;
-        this.compatibility = compatibility;
-        this.imagineUrl = imagineUrl;
-        this.quantity = quantity;
-        this.expirationDate = expirationDate;
-        this.price = price;
-        this.status = status;
-    }
 }

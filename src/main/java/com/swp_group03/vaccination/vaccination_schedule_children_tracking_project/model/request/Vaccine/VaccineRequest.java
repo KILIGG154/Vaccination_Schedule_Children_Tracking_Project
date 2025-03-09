@@ -23,44 +23,44 @@ public class VaccineRequest {
 
     @Size(max = 255)
     @NotNull
-     String name;
+    String name;
 
-     String description;
+    String description;
 
     @Size(max = 255)
-     String manufacturer;
+    String manufacturer;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CategoryID")
-     VacineCategory categoryID;
+    VacineCategory categoryID;
 
     @Size(max = 255)
-     String dosage;
+    String dosage;
 
-     String contraindications;
-
-
-     String precautions;
+    String contraindications;
 
 
-     String interactions;
+    String precautions;
 
 
-     String adverseReactions;
+    String interactions;
 
 
-     String storageConditions;
+    String adverseReactions;
 
 
-     String recommended;
+    String storageConditions;
 
 
-     String preVaccination;
+    String recommended;
 
 
-     String compatibility;
+    String preVaccination;
 
-     String imagineUrl;
+
+    String compatibility;
+
+    String imagineUrl;
 
     private double unitPrice;
 
@@ -70,13 +70,13 @@ public class VaccineRequest {
     Integer quantity;
 
 
-     LocalDate expirationDate;
+    LocalDate expirationDate;
 
 
-     BigDecimal price;
+    BigDecimal price;
 
     @Size(max = 50)
-     String status;
+    String status;
 
 
 

@@ -83,7 +83,7 @@ public class VaccineService {
     public VaccineComboDetail addVaccineComboDetail(VaccineCombeDetailRequest request, int vaccineId, int comboId){
         // Log để debug
         log.info("Adding VaccineComboDetail for vaccineId={}, comboId={}");
-        
+
         // Tìm Vaccine và VaccineCombo theo ID
         Vaccine vaccine = vaccineRepo.findById(vaccineId)
                 .orElseThrow(() -> new RuntimeException("Vaccine not found with id: " ));
@@ -99,21 +99,21 @@ public class VaccineService {
 //        log.info("Created composite key: vaccineId={}, comboId={}", key.getVaccineId(), key.getComboId());
 
 
-         // Tạo và cấu hình VaccineComboDetail - THAY ĐỔI Ở ĐÂY
-    VaccineComboDetail detail = new VaccineComboDetail();
-    detail.setVaccineId(vaccineId);  // Đặt ID trực tiếp thay vì thông qua đối tượng key
-    detail.setComboId(comboId);      // Đặt ID trực tiếp thay vì thông qua đối tượng key
-    detail.setVaccine(vaccine);
-    detail.setCombo(vaccineCombo);
-    detail.setDose(request.getDose());
-    detail.setComboCategory(request.getComboCategory());
-    detail.setSaleOff(request.getSaleOff());
+        // Tạo và cấu hình VaccineComboDetail - THAY ĐỔI Ở ĐÂY
+        VaccineComboDetail detail = new VaccineComboDetail();
+        detail.setVaccineId(vaccineId);  // Đặt ID trực tiếp thay vì thông qua đối tượng key
+        detail.setComboId(comboId);      // Đặt ID trực tiếp thay vì thông qua đối tượng key
+        detail.setVaccine(vaccine);
+        detail.setCombo(vaccineCombo);
+        detail.setDose(request.getDose());
+        detail.setComboCategory(request.getComboCategory());
+        detail.setSaleOff(request.getSaleOff());
 
-    log.info("Saving VaccineComboDetail with vaccineId={}, comboId={}", detail.getVaccineId(), detail.getComboId());
+        log.info("Saving VaccineComboDetail with vaccineId={}, comboId={}", detail.getVaccineId(), detail.getComboId());
 
-    // Lưu và trả về kết quả
-    return vaccineComboDetail.save(detail);
-}
+        // Lưu và trả về kết quả
+        return vaccineComboDetail.save(detail);
+    }
 //         // Tạo và  cấu hình VaccineComboDetail
 //         VaccineComboDetail detail = new VaccineComboDetail();
 //         detail.setId(key);
@@ -164,7 +164,7 @@ public class VaccineService {
 
         vaccineCombo.setTotal(tolalP);
         vaccineCombos.save(vaccineCombo);
-        System.out.println("Hello Woprld");
+
         return tolalP;
     }
 
