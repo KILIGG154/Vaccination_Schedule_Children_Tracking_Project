@@ -34,7 +34,7 @@ public interface VaccineMapper {
                 .collect(Collectors.toList());
     }
 
-    // ✅ Đảm bảo @Named nằm trong cùng file
+    // Đảm bảo @Named nằm trong cùng file
     @Named("mapComboName")
     static String mapComboName(VaccineCombo combo) {
         return Optional.ofNullable(combo)
