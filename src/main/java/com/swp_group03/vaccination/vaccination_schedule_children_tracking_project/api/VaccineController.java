@@ -1,9 +1,11 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.api;
 
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Vaccine;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.VaccineCategory;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.VaccineCombo;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.VaccineComboDetail;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.ErrorCode;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.Vaccine.VaccineCategoryRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.Vaccine.VaccineCombeDetailRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.Vaccine.VaccineComboRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.Vaccine.VaccineRequest;
@@ -29,65 +31,28 @@ public class VaccineController {
     @Autowired
     private VaccineService vaccineService;
 
-    @PostMapping("/addVaccine")
-    public ApiResponse<Vaccine> addVaccine(@RequestBody VaccineRequest request) {
+    @PostMapping("/addCategory")
+    public ApiResponse<VaccineCategory> addVaccineCategory(@RequestBody VaccineCategoryRequest request) {
+        return ApiResponse.<VaccineCategory>builder()
+                .code(200)
+                .message("Successfully adding new Vaccine Category!")
+                .result(vaccineService.addVaccineCategory(request))
+                .build();
+    }
+
+    @PostMapping("/addVaccine/{categoryId}")
+    public ApiResponse<Vaccine> addVaccine(@RequestBody VaccineRequest request, @PathVariable Long categoryId) {
 //        vaccineService.addVaccine(request);
 //        return ResponseEntity.ok("Vaccine added successfully: /n" + request);
+
+
         return  ApiResponse.<Vaccine>builder()
                 .code(200)
                 .message("Successfully adding new Vaccine!")
-                .result(vaccineService.addVaccine(request))
+                .result(vaccineService.addVaccine(request, categoryId))
                 .build();
     }
 
-    @GetMapping("/get")
-    public ApiResponse<List<ResponseVaccine>> getAllVaccines(){
-//        ApiResponse<List<ResponseVaccine>> vaccines = new ApiResponse<>();
-//        vaccines.setCode(404);
-//        vaccines.setResult(vaccineService.getVaccines());
-//        return vaccines;
-
-        return  ApiResponse.<List<ResponseVaccine>>builder()
-                .code(200)
-                .message("Successfully getting All Vaccines!")
-                .result(vaccineService.getAllVaccines())
-                .build();
-    }
-
-    @GetMapping("/get/combo")
-    public ApiResponse<List<ResponseVaccineCombo>> getVaccinesCombo(){
-        return  ApiResponse.<List<ResponseVaccineCombo>>builder()
-                .code(200)
-                .message("Successfully getting All Vaccine Combos!")
-                .result(vaccineService.getVaccineCombos())
-                .build();
-    }
-
-    @GetMapping("/get/comboDetail")
-    public ApiResponse<List<ResponseVaccineDetails>> getAllVaccinesComboDetails(){
-
-        return  ApiResponse.<List<ResponseVaccineDetails>>builder()
-                .code(200)
-                .message("Successfully getting All Vaccine Combo Details!")
-                .result(vaccineService.getAllVaccineCombosDetails())
-                .build();
-
-
-    }
-
-    @GetMapping("/{vaccineName}")
-    public ApiResponse<List<ResponseVaccine>> searchByName(@PathVariable String vaccineName){
-//        ApiResponse<List<ResponseVaccine>> response = new ApiResponse<>();
-//        response.setCode(3000);
-//        response.setResult(vaccineService.searchByName(vaccineName));
-//        return response;
-
-        return  ApiResponse.<List<ResponseVaccine>>builder()
-                .code(200)
-                .result(vaccineService.searchByName(vaccineName))
-                .build();
-        // return vaccineService.searchByName(vaccineName);
-    }
 
     @PostMapping("/combo/add")
     public ApiResponse<VaccineCombo> addVaccineCombo(@RequestBody VaccineComboRequest request){
@@ -139,4 +104,51 @@ public class VaccineController {
 //    public double getTotalPrice(@PathVariable int comboId){
 //        return vaccineService.getTotalPriceCombo(comboId);
 //    }
+
+    @GetMapping("/get")
+    public ApiResponse<List<ResponseVaccine>> getAllVaccines(){
+//        ApiResponse<List<ResponseVaccine>> vaccines = new ApiResponse<>();
+//        vaccines.setCode(404);
+//        vaccines.setResult(vaccineService.getVaccines());
+//        return vaccines;
+
+        return  ApiResponse.<List<ResponseVaccine>>builder()
+                .code(200)
+                .message("Successfully getting All Vaccines!")
+                .result(vaccineService.getAllVaccines())
+                .build();
+    }
+
+    @GetMapping("/get/combo")
+    public ApiResponse<List<ResponseVaccineCombo>> getVaccinesCombo(){
+        return  ApiResponse.<List<ResponseVaccineCombo>>builder()
+                .code(200)
+                .message("Successfully getting All Vaccine Combos!")
+                .result(vaccineService.getVaccineCombos())
+                .build();
+    }
+
+    @GetMapping("/get/comboDetail")
+    public ApiResponse<List<ResponseVaccineDetails>> getAllVaccinesComboDetails(){
+
+        return  ApiResponse.<List<ResponseVaccineDetails>>builder()
+                .code(200)
+                .message("Successfully getting All Vaccine Combo Details!")
+                .result(vaccineService.getAllVaccineCombosDetails())
+                .build();
+    }
+
+    @GetMapping("/{vaccineName}")
+    public ApiResponse<List<ResponseVaccine>> searchByName(@PathVariable String vaccineName){
+//        ApiResponse<List<ResponseVaccine>> response = new ApiResponse<>();
+//        response.setCode(3000);
+//        response.setResult(vaccineService.searchByName(vaccineName));
+//        return response;
+
+        return  ApiResponse.<List<ResponseVaccine>>builder()
+                .code(200)
+                .result(vaccineService.searchByName(vaccineName))
+                .build();
+        // return vaccineService.searchByName(vaccineName);
+    }
 }

@@ -17,7 +17,6 @@ public class ResponseVaccineCombo
 
     private String comboName;
 
-
     private String description;
 
     private double total;

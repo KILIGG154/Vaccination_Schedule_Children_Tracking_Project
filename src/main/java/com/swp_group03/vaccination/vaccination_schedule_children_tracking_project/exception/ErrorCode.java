@@ -16,6 +16,7 @@ public enum ErrorCode {
     USERNAME_NOT_EXIST(1003, "Username does not exist", HttpStatus.NOT_FOUND),
     EMPTY_USER(1004, "User data is empty", HttpStatus.NOT_FOUND),
     ROLE_NOT_FOUND(1010, "Role not found", HttpStatus.NOT_FOUND),
+    CATEGORY_NOT_FOUND(1011, "Vaccine Category not found", HttpStatus.NOT_FOUND),
 
     // Input validation errors
     INVALID_KEY(2000, "Invalid message key", HttpStatus.BAD_REQUEST),

@@ -1,8 +1,11 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.mapper;
 
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Vaccine;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.VaccineCategory;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.VaccineCombo;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.VaccineComboDetail;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.Vaccine.VaccineCategoryRequest;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.Vaccine.VaccineRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Vaccine.ResponseVaccine;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Vaccine.ResponseVaccineCombo;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Vaccine.ResponseVaccineDetails;
@@ -17,7 +20,15 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring")
 public interface VaccineMapper {
 
-    List<ResponseVaccine> toResponseVaccine(List<Vaccine> vaccines);
+    Vaccine toCreateVaccine (VaccineRequest request);
+
+    VaccineCategory toCreateVaccineCategory (VaccineCategoryRequest request);
+
+    @Mapping(target = "categoryID", source = "categoryId.categoryId")
+    @Mapping(target = "categoryName", source = "categoryId.categoryName")
+    ResponseVaccine toResponseVaccine (Vaccine vaccine);
+
+    List<ResponseVaccine> toResponseVaccineList(List<Vaccine> vaccines);
 
     List<ResponseVaccineCombo> toResponseVaccineCombo(List<VaccineCombo> vaccineCombos);
 

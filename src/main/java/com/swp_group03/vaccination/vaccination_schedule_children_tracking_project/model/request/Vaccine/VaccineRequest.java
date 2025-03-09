@@ -1,8 +1,6 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.Vaccine;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.VacineCategory;
-import jakarta.persistence.*;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.VaccineCategory;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
@@ -10,9 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
@@ -30,53 +25,43 @@ public class VaccineRequest {
     @Size(max = 255)
     String manufacturer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CategoryID")
-    VacineCategory categoryID;
+    VaccineCategory categoryID;
 
     @Size(max = 255)
     String dosage;
 
     String contraindications;
 
-
     String precautions;
-
 
     String interactions;
 
-
     String adverseReactions;
-
 
     String storageConditions;
 
-
     String recommended;
 
-
     String preVaccination;
-
 
     String compatibility;
 
     String imagineUrl;
 
-    private double unitPrice;
+    double unitPrice;
 
-    private double salePrice;
-
+    double salePrice;
 
     Integer quantity;
 
-
-    LocalDate expirationDate;
-
-
-    BigDecimal price;
-
-    @Size(max = 50)
     String status;
+
+//    LocalDate expirationDate;
+
+
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "CategoryID")
+
 
 
 

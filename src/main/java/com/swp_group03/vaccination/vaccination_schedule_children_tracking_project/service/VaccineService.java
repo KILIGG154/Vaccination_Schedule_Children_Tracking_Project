@@ -2,7 +2,10 @@ package com.swp_group03.vaccination.vaccination_schedule_children_tracking_proje
 
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Vaccine;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.*;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.AppException;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.ErrorCode;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.mapper.VaccineMapper;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.Vaccine.VaccineCategoryRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.Vaccine.VaccineCombeDetailRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.Vaccine.VaccineComboRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.Vaccine.VaccineRequest;
@@ -40,27 +43,44 @@ public class VaccineService {
     @Autowired
     private EntityManager entityManager;
 
+    @Autowired
+    private VaccineCategoryRepo VCRepo;
+
+
     @Transactional
-    public Vaccine addVaccine(VaccineRequest request) {
-        Vaccine vaccine = new Vaccine();
-        vaccine.setName(request.getName());
-        vaccine.setDescription(request.getDescription());
-        vaccine.setManufacturer(request.getManufacturer());
-        vaccine.setDosage(request.getDosage());
-        vaccine.setContraindications(request.getContraindications());
-        vaccine.setPrecautions(request.getPrecautions());
-        vaccine.setInteractions(request.getInteractions());
-        vaccine.setAdverseReactions(request.getAdverseReactions());
-        vaccine.setStorageConditions(request.getStorageConditions());
-        vaccine.setRecommended(request.getRecommended());
-        vaccine.setPreVaccination(request.getPreVaccination());
-        vaccine.setCompatibility(request.getCompatibility());
-        vaccine.setQuantity(request.getQuantity());
-        vaccine.setUnitPrice(request.getUnitPrice());
-        vaccine.setSalePrice(request.getSalePrice());
+    public VaccineCategory addVaccineCategory(VaccineCategoryRequest request) {
+
+        return VCRepo.save(vaccineMapper.toCreateVaccineCategory(request));
+    }
+
+
+    @Transactional
+    public Vaccine addVaccine(VaccineRequest request, Long categoryId) {
+//        Vaccine vaccine = new Vaccine();
+//        vaccine.setName(request.getName());
+//        vaccine.setDescription(request.getDescription());
+//        vaccine.setManufacturer(request.getManufacturer());
+//        vaccine.setDosage(request.getDosage());
+//        vaccine.setContraindications(request.getContraindications());
+//        vaccine.setPrecautions(request.getPrecautions());
+//        vaccine.setInteractions(request.getInteractions());
+//        vaccine.setAdverseReactions(request.getAdverseReactions());
+//        vaccine.setStorageConditions(request.getStorageConditions());
+//        vaccine.setRecommended(request.getRecommended());
+//        vaccine.setPreVaccination(request.getPreVaccination());
+//        vaccine.setCompatibility(request.getCompatibility());
+//        vaccine.setQuantity(request.getQuantity());
+//        vaccine.setUnitPrice(request.getUnitPrice());
+//        vaccine.setSalePrice(request.getSalePrice());
 //        vaccine.setExpirationDate(request.getExpirationDate());
-        vaccine.setImagineUrl(request.getImagineUrl());
+//        vaccine.setImagineUrl(request.getImagineUrl());
+
+        VaccineCategory category = VCRepo.findById(categoryId)
+                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
+
+        Vaccine vaccine = vaccineMapper.toCreateVaccine(request);
         vaccine.setStatus("true");
+        vaccine.setCategoryId(category);
 
 
         return vaccineRepo.save(vaccine);
@@ -68,12 +88,12 @@ public class VaccineService {
 
     public List<ResponseVaccine> getAllVaccines() {
 //        List<ResponseVaccine> vaccines = vaccineMapper.toResponseVaccine(vaccineRepo.findAll());
-        return vaccineMapper.toResponseVaccine(vaccineRepo.findAll());
+        return vaccineMapper.toResponseVaccineList(vaccineRepo.findAll());
     }
 
     public List<ResponseVaccine> searchByName(String vaccineName) {
         List<Vaccine> vaccine = vaccineRepo.findByNameContainingIgnoreCase(vaccineName);
-        return vaccineMapper.toResponseVaccine(vaccine);
+        return vaccineMapper.toResponseVaccineList(vaccine);
     }
 
     @Transactional
@@ -128,6 +148,9 @@ public class VaccineService {
         entityManager.flush();  // Đẩy dữ liệu xuống DB trước khi trả về kết quả
         return detail;
     }
+
+    // Logic lưu DB khi xử dụng Embeded ID - nhưng không handle được nên bị comment!
+    {
 //         // Tạo và  cấu hình VaccineComboDetail
 //         VaccineComboDetail detail = new VaccineComboDetail();
 //         detail.setId(key);
@@ -147,7 +170,10 @@ public class VaccineService {
 // //        vaccineCombos.save(vaccineCombo);
 //         return vaccineComboDetail.saveAndFlush(detail);
 //     }
+    }
 
+    // Method() giống cái dưới nhưng là xuất ra log để đọc lỗi!!!
+    {
 //    public List<ResponseVaccineCombo> getVaccineCombos() {
 //        List<VaccineCombo> combos = vaccineCombos.findAll();
 //
@@ -157,6 +183,8 @@ public class VaccineService {
 //
 //        return vaccineMapper.toResponseVaccineCombo(combos);
 //    }
+    }
+
 
     public List<ResponseVaccineCombo> getVaccineCombos(){
         return vaccineMapper.toResponseVaccineCombo(vaccineCombos.findAll());
@@ -168,6 +196,8 @@ public class VaccineService {
         return vaccineMapper.toResponseVaccineDetails(vaccineComboDetail.findAll());
     }
 
+    // Fore để tính totalPrice luôn nhưng tính khi gọi getAllVaccineCombosDetails
+    {
 //        List<ResponseVaccineDetails> details = vaccineMapper.toResponseVaccineDetails(vaccineComboDetail.findAll());
 //
 //        for(ResponseVaccineDetails detail : details){
@@ -177,8 +207,10 @@ public class VaccineService {
 //        }
 //        return details;
 //    }
+    }
 
-
+    // Method tính totalPrice của Combo nhưng Ver 1.0
+    {
 //    @Transactional
 //    private double getTotalPriceCombo(int id){
 //        VaccineCombo vaccineCombo = vaccineCombos.findById(id).orElseThrow(() -> new RuntimeException("Vaccine Combo not found with id: " ));
@@ -193,7 +225,7 @@ public class VaccineService {
 //
 //        return tolalP;
 //    }
-
+    }
 
 // Cái Method này thì chỉ cần trả về total Price mỗi khi có 1 Vaccine được add vào Combo
 @Transactional
