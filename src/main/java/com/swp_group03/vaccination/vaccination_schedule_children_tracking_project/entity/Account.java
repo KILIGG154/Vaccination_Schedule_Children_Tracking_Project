@@ -1,8 +1,11 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 import jakarta.persistence.CascadeType;
 
@@ -10,6 +13,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "Accounts")
 public class Account {
     @Id
@@ -17,7 +22,7 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String accountId;
 
-    @Column(name = "Username", length = 30,unique=true)
+    @Column(name = "Username", length = 30, unique = true)
     @Size(min = 2, max = 30, message = "Tên đăng nhập phải có ít nhất 6 ký tự và nhiều nhất 30 ký tự !!")
     private String username;
 
@@ -63,10 +68,16 @@ public class Account {
     @JoinTable(name = "Account_Role",
             joinColumns = @JoinColumn(name = "AccountId"),
             inverseJoinColumns = @JoinColumn(name = "RoleId"))
+    @JsonIgnore
     private Set<Role> roles = new HashSet<>();
 
+    @OneToMany(mappedBy = "account")
+    @JsonIgnore
+    private Set<WorkingSchedule> workingSchedules = new HashSet<>();
 
-    public Account() {}
+
+    public Account() {
+    }
 
     public Account(String username) {
         this.username = username;
@@ -86,90 +97,6 @@ public class Account {
         this.roles = roles;
     }
 
-    public String getAccountId() {
-        return accountId;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public Gender getGender() {
-        return gender;
-    }
-
-    public void setGender(Gender gender) {
-        this.gender = gender;
-    }
-
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
     // Phương thức để thêm một Role
     public void addRole(Role role) {
         this.roles.add(role);
@@ -181,113 +108,5 @@ public class Account {
         this.roles.remove(role);
         role.getAccounts().remove(this); // Cập nhật mối quan hệ hai chiều
     }
-
-    //
-//    public Account(String username, String password, String first_Name, String last_Name, String email,
-//                   String phone_number, String address, String gender, boolean status, String url_image,
-//                   Account_Role role) {
-//        this.username = username;
-//        this.password = password;
-//        First_Name = first_Name;
-//        Last_Name = last_Name;
-//        Email = email;
-//        Phone_number = phone_number;
-//        Address = address;
-//        Gender = gender;
-//        Status = status;
-//        this.urlIimage = url_image;
-//        this.role = role;
-//    }
-//
-//    public String getAccount_ID() {
-//        return Account_ID;
-//    }
-//
-//    public String getUsername() {
-//        return username;
-//    }
-//
-//    public void setUsername(String username) {
-//        this.username = username;
-//    }
-//
-//    public String getPassword() {
-//        return password;
-//    }
-//
-//    public void setPassword(String password) {
-//        this.password = password;
-//    }
-//
-//    public String getFirst_Name() {
-//        return First_Name;
-//    }
-//
-//    public void setFirstName(String first_Name) {
-//        First_Name = first_Name;
-//    }
-//
-//    public String getLast_Name() {
-//        return Last_Name;
-//    }
-//
-//    public void setLastName(String last_Name) {
-//        Last_Name = last_Name;
-//    }
-//
-//    public String getEmail() {
-//        return Email;
-//    }
-//
-//    public void setEmail(String email) {
-//        Email = email;
-//    }
-//
-//    public String getPhone_number() {
-//        return Phone_number;
-//    }
-//
-//    public void setPhone_number(String phone_number) {
-//        Phone_number = phone_number;
-//    }
-//
-//    public String getAddress() {
-//        return Address;
-//    }
-//
-//    public void setAddress(String address) {
-//        Address = address;
-//    }
-//
-//    public String getGender() {
-//        return Gender;
-//    }
-//
-//    public void setGender(String gender) {
-//        Gender = gender;
-//    }
-//
-//    public boolean isStatus() {
-//        return Status;
-//    }
-//
-//    public void setStatus(boolean status) {
-//        Status = status;
-//    }
-//
-//    public String getUrl_image() {
-//        return urlIimage;
-//    }
-//
-//    public void setUrlimage(String urlImage) {
-//        this.urlIimage = urlImage;
-//    }
-//
-//    public Account_Role getRole() {
-//        return role;
-//    }
-//
-//    public void setRole(Account_Role role) {
-//        this.role = role;
-//    }
 }
+

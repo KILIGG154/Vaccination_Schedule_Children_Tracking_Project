@@ -1,5 +1,6 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -23,10 +24,12 @@ public class VaccineComboDetail {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vaccineId", insertable = false, updatable = false) // Thêm insertable=false, updatable=false
+    @JsonIgnore
     private Vaccine vaccine;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comboId", insertable = false, updatable = false) // Thêm insertable=false, updatable=false
+    @JsonIgnore
     private VaccineCombo combo;
 
     @Column(name = "Dose")
