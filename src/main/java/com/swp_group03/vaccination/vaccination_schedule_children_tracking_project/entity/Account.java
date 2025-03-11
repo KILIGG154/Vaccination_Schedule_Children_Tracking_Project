@@ -10,6 +10,7 @@ import org.hibernate.annotations.Nationalized;
 import jakarta.persistence.CascadeType;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -75,6 +76,8 @@ public class Account {
     @JsonIgnore
     private Set<WorkingSchedule> workingSchedules = new HashSet<>();
 
+    @OneToMany(mappedBy = "account_Id", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Child> childs;
 
     public Account() {
     }

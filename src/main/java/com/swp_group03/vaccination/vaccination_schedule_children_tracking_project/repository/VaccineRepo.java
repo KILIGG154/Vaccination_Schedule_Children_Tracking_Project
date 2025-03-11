@@ -10,5 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface VaccineRepo extends JpaRepository<Vaccine, Integer> {
+
     List<Vaccine> findByNameContainingIgnoreCase(String name);
 }
