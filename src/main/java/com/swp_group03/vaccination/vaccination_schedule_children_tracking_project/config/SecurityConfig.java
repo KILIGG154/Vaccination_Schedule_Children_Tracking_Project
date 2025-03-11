@@ -37,7 +37,7 @@ public class SecurityConfig {
 
     private final String[] PRIVATE_ENPOINTS = {"/users", "/vaccine/addVaccine", "/vaccine/get" };
 
-    private final String[] SWAGGER_ENDPOINTS = {"/v3/api-docs", "/swagger-resources/**", "/swagger-ui/**", "/webjars/**"};
+    private final String[] SWAGGER_ENDPOINTS = {"/v3/api-docs/**", "/swagger-resources/**", "/swagger-ui/**", "/webjars/**", "/v3/api-docs", };
 
     //Mọi thứ liên quan đến JWT thì nên tìm và chỉnh thông qua 1 nơi duy nhất là JwtConfig
     @Autowired
@@ -64,8 +64,9 @@ public class SecurityConfig {
 ////                        .hasAuthority("ROLE_ADMIN") // Chỉ cho phép truy cập các API private với quyền ADMIN
 //                        .hasRole("ADMIN")
 
-//                        .requestMatchers(SWAGGER_ENDPOINTS).permitAll() // Cho phép truy cập Swagger UI
+                        .requestMatchers(SWAGGER_ENDPOINTS).permitAll() // Cho phép truy cập Swagger UI
                         .anyRequest().authenticated());
+
 
 
         //Dùng decoder để giải mã token ở Bearer token

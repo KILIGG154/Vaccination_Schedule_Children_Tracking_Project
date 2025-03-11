@@ -1,5 +1,6 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -23,57 +24,27 @@ public class WorkDate {
     private int id;
 
     @Column(name = "DayWork")
+    @Temporal(TemporalType.DATE) // Chỉ lưu ngày, không có giờ
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date dayWork;
 
-    @Column(name = "StartTime")
-    private String startTime;
+    @Column(name = "ShiftType")
+    private String shiftType;
 
-    @Column(name = "EndTime")
-    private String endTime;
+//    @Column(name = "EndTime")
+//    private String endTime;
 
     @OneToMany(mappedBy = "schedule")
+    @JsonIgnore
     private Set<WorkingSchedule> workingSchedules = new HashSet<>();
 
     public WorkDate() {
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public Date getDayWork() {
-        return dayWork;
-    }
-
-    public void setDayWork(Date dayWork) {
+    public WorkDate(Date dayWork, String shiftType, String endTime, Set<WorkingSchedule> workingSchedules) {
         this.dayWork = dayWork;
-    }
-
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
-    }
-
-    public Set<WorkingSchedule> getWorkingSchedules() {
-        return workingSchedules;
-    }
-
-    public void setWorkingSchedules(Set<WorkingSchedule> workingSchedules) {
+        this.shiftType = shiftType;
+//        this.endTime = endTime;
         this.workingSchedules = workingSchedules;
     }
 }

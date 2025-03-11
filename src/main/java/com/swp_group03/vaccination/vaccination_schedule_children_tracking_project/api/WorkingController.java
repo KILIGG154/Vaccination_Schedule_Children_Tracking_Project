@@ -1,14 +1,14 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.api;
 
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.WorkDate;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.WorkingSchedule;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.working.ScheduleRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.working.WorkingDetailRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.working.WorkingRequest;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Account.AccountResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Working.ScheduleResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Working.WorkingResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.user_auth.UserService;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.user_auth.WorkingService;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.WorkingService;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,32 +23,45 @@ public class WorkingController {
 
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private ScheduleService scheduleService;
 
     @PostMapping("add")
     public ApiResponse addWorking(@RequestBody WorkingRequest request) {
-        WorkDate work = workingService.createWorkDate(request);
-        return ApiResponse.builder().code(201).message("Successfully added working date").build();
+        return workingService.addWorking(request);
     }
 
     @PostMapping("/detail/{dateID}/{accountID}")
-    public ApiResponse addWorkingDetail(WorkingDetailRequest request, @PathVariable int dateID, @PathVariable String accountID) {
-         workingService.createWorkingSchedule(request, dateID, accountID);
-        return ApiResponse.builder().code(201).message("Successfully added working schedule detail").build();
+    public ApiResponse addWorkingDetail(@RequestBody WorkingDetailRequest request, @PathVariable int dateID, @PathVariable String accountID) {
+        return workingService.addWorkingDetail(request, dateID, accountID);
     }
 
-    @GetMapping("/all/{accountID}/{dateID}")
-    public ApiResponse<List<WorkingResponse>> getAllWorking(@PathVariable String accountID) {
-        // có một hàm tìm và trả về response của account
-        ApiResponse<AccountResponse> account = new ApiResponse<>();
-        account.setResult(userService.getAccountById(accountID));
-        // có 1 hàm tìm và trả về response của date
-
-
-        // trả chung giữa 2 thằng
-        ApiResponse<List<WorkingResponse>> lists =  new ApiResponse<>();
-//        lists.setResult(workingService.getAllWorkingResponseList());
-        lists.setCode(300);
-        return lists;
+    @GetMapping("/allworkdate/{accountID}")
+    public ApiResponse<List<WorkingResponse>> getAllWorkDateByAccountID(@PathVariable String accountID) {
+        return workingService.getAllWorking(accountID);
     }
+    
+    /**
+     * Tạo lịch làm việc mới
+     * @param request Thông tin lịch làm việc
+     * @return Danh sách các ngày làm việc đã được tạo
+     */
 
+    @PostMapping("/schedule/create")
+    public ApiResponse<ScheduleResponse> createSchedule(@RequestBody ScheduleRequest request) {
+        try {
+            ScheduleResponse response = scheduleService.createSchedule(request);
+            return ApiResponse.<ScheduleResponse>builder()
+                    .code(200)
+                    .message("Tạo lịch làm việc thành công")
+                    .result(response)
+                    .build();
+        } catch (Exception e) {
+            return ApiResponse.<ScheduleResponse>builder()
+                    .code(500)
+                    .message("Lỗi khi tạo lịch làm việc: " + e.getMessage())
+                    .build();
+        }
+    }
 }

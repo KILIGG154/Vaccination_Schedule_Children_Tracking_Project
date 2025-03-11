@@ -1,12 +1,12 @@
-package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.user_auth;
+package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service;
 
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Account;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.WorkDate;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.WorkingSchedule;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.WorkingScheduleId;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.mapper.WorkingMapper;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.working.WorkingDetailRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.working.WorkingRequest;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Working.WorkingResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.UserRepo;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.WorkingDateRepo;
@@ -31,13 +31,71 @@ public class WorkingService {
     @Autowired
     private WorkingScheduleRepo workingScheduleRepo;
 
+    /**
+     * Thêm một ngày làm việc mới
+     * @param request Thông tin ngày làm việc
+     * @return Kết quả thêm ngày làm việc
+     */
+    public ApiResponse addWorking(WorkingRequest request) {
+        try {
+            WorkDate work = createWorkDate(request);
+            return ApiResponse.builder().code(201).message("Successfully added working date").build();
+        } catch (Exception e) {
+            return ApiResponse.builder().code(500).message("Error adding working date: " + e.getMessage()).build();
+        }
+    }
 
+    /**
+     * Thêm chi tiết lịch làm việc
+     * @param request Thông tin chi tiết lịch làm việc
+     * @param dateID ID của ngày làm việc
+     * @param accountID ID của tài khoản
+     * @return Kết quả thêm chi tiết lịch làm việc
+     */
+    public ApiResponse addWorkingDetail(WorkingDetailRequest request, int dateID, String accountID) {
+        try {
+            createWorkingSchedule(request, dateID, accountID);
+            return ApiResponse.builder().code(201).message("Successfully added working schedule detail").build();
+        } catch (Exception e) {
+            return ApiResponse.builder().code(500).message("Error adding working schedule detail: " + e.getMessage()).build();
+        }
+    }
+
+    /**
+     * Lấy danh sách lịch làm việc của một tài khoản
+     * @param accountID ID của tài khoản
+     * @return Danh sách lịch làm việc
+     */
+    public ApiResponse<List<WorkingResponse>> getAllWorking(String accountID) {
+        try {
+            Account account = userRepo.findByAccountId(accountID);
+            if (account == null) {
+                return ApiResponse.<List<WorkingResponse>>builder()
+                        .code(404)
+                        .message("Account not found")
+                        .build();
+            }
+            
+            List<WorkingResponse> workingSchedules = workingMapper.toGetAllWorking(workingScheduleRepo.findByAccountId(accountID));
+            
+            return ApiResponse.<List<WorkingResponse>>builder()
+                    .code(200)
+                    .message("Successfully retrieved working schedules")
+                    .result(workingSchedules)
+                    .build();
+        } catch (Exception e) {
+            return ApiResponse.<List<WorkingResponse>>builder()
+                    .code(500)
+                    .message("Error retrieving working schedules: " + e.getMessage())
+                    .build();
+        }
+    }
 
     public WorkDate createWorkDate(WorkingRequest request){
        WorkDate workDate = new WorkDate();
          workDate.setDayWork(request.getDayWork());
-         workDate.setStartTime(request.getStartTime());
-         workDate.setEndTime(request.getEndTime());
+         workDate.setShiftType(request.getShiftType());
+//         workDate.setEndTime(request.getEndTime());
          return workingDateRepo.save(workDate);
     }
 

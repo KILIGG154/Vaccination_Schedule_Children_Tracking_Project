@@ -35,5 +35,5 @@ public class AccountCreate {
     String address;    // Changed from Address
 
     Gender gender;     // Changed from Gender
-    String urlImage;   // Changed from url_image
+//    String urlImage;   // Changed from url_image
 }

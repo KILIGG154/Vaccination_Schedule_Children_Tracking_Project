@@ -49,12 +49,12 @@ public class UserController {
     @GetMapping("/getAllUser")
     public ApiResponse<List<AccountResponse>> getAllAccount(){
 
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        log.info("User Authorities: {}", authentication.getAuthorities());
-
-        log.info("User: {}", authentication.getName());
-        authentication.getAuthorities().forEach(grantedAuthority -> log.info("Granted Authority: {}", grantedAuthority.getAuthority()));
+//        var authentication = SecurityContextHolder.getContext().getAuthentication();
+//
+//        log.info("User Authorities: {}", authentication.getAuthorities());
+//
+//        log.info("User: {}", authentication.getName());
+//        authentication.getAuthorities().forEach(grantedAuthority -> log.info("Granted Authority: {}", grantedAuthority.getAuthority()));
 
         ApiResponse<List<AccountResponse>> apiResponse = new ApiResponse<>();
         apiResponse.setResult(userService.getAllAccount());
