@@ -69,21 +69,20 @@ public class UserService {
     }
 
 
-    @PreAuthorize("hasRole('USER')")
+//    @PreAuthorize("hasRole('USER')")
     public  AccountResponse updateAccount(AccountUpdate request, String account_id){
-//        log.info("Update account with id: {}", account_id);
-//        Account account =  userRepo.findById(account_id).orElseThrow(() -> new AppException(
-//                ErrorCode.USER_NOT_FOUND
-//        ));
+        log.info("Update account with id: {}", account_id);
+        Account account =  userRepo.findById(account_id).orElseThrow(() -> new AppException(
+                ErrorCode.USER_NOT_FOUND
+        ));
 
-//         userMapper.toUpdateUser(request, account);
+         userMapper.toUpdateUser(request, account);
 //         account.setPassword(passwordEncoder.encode(request.getPassword()));
 
-
-        return userMapper.toAccountResponse(userRepo.updateById(account_id, request)) ;
+        return userMapper.toAccountResponse(userRepo.save(account));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public List<AccountResponse> getAllAccount(){
 
         List<AccountResponse> accounts = userMapper.toAllAccountResponse(userRepo.findAll());

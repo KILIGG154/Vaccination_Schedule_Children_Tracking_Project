@@ -9,7 +9,7 @@ import java.util.Optional;
 @Repository
 public interface UserRepo extends JpaRepository<Account, String> {
 
-    Account updateById(String id, AccountUpdate request);
+//    Account updateById(String id, AccountUpdate request);
 
     boolean existsByUsername(String username);
 

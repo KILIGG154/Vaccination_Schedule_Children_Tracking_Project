@@ -62,15 +62,15 @@ public class ChildService {
     }
 
     public Child updateChildren(ChildrenRequest request, int childId){
-//        Child chilren = childRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Child not found"));
+        Child child = childRepo.findById(childId).orElseThrow(() -> new EntityNotFoundException("Child not found"));
 
-//        if(child.getChild_name() != null) chilren.setChild_name(child.getChild_name());
-//        if(child.getDob() != null) chilren.setDob(child.getDob());
-//        if(child.getHeight() != null) chilren.setHeight(child.getHeight());
-//        if(child.getWeight() != null) chilren.setWeight(child.getWeight());
-//        if(child.getGender() != null) chilren.setGender(child.getGender());
-//        chilren =  childMapper.toUpdateChild(child);
-        return childRepo.updateById(childId, request);
+        if(request.getName() != null) child.setName(request.getName());
+        if(child.getDob() != null) child.setDob(request.getDob());
+        if(child.getHeight() != null) child.setHeight(request.getHeight());
+        if(child.getWeight() != null) child.setWeight(request.getWeight());
+        if(child.getGender() != null) child.setGender(request.getGender());
+        if(child.getUrlImage() != null) child.setUrlImage(request.getUrlImage());
+        return childRepo.save(child);
     }
 
     public List<ChildResponse> getChildren(){

@@ -13,7 +13,7 @@ import java.util.List;
 public interface ChildRepo extends JpaRepository<Child, Integer> {
     List<Child> findByNameContainingIgnoreCase(String name);
 
-    Child updateById(int id, ChildrenRequest request);
+//    Child updateById(int id, ChildrenRequest request);
 
 //    List<Child> findBy_AccountId(String accountId);
 }
