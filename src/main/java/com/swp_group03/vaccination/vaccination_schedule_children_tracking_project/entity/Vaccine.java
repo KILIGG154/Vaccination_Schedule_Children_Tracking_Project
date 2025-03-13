@@ -114,6 +114,7 @@ public class Vaccine {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "CategoryID")
+    @JsonIgnore
     private VaccineCategory categoryId;
 
 

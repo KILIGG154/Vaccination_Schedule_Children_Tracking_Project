@@ -77,9 +77,6 @@ public class AuthenticationController {
     }
 }
 
-
-
-
 //        if(isAuthen) {
 //            apiResponse.setCode(100);
 //            apiResponse.setMessage("Login successfully: " +isAuthen);

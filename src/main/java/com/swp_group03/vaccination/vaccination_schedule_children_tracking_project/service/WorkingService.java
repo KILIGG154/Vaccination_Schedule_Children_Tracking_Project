@@ -4,7 +4,7 @@ import com.swp_group03.vaccination.vaccination_schedule_children_tracking_projec
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.WorkDate;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.WorkingSchedule;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.mapper.WorkingMapper;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.working.WorkingDetailRequest;
+//import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.working.WorkingDetailRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.working.WorkingRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Working.WorkingResponse;
@@ -47,14 +47,14 @@ public class WorkingService {
 
     /**
      * Thêm chi tiết lịch làm việc
-     * @param request Thông tin chi tiết lịch làm việc
+//     * @param request Thông tin chi tiết lịch làm việc
      * @param dateID ID của ngày làm việc
      * @param accountID ID của tài khoản
      * @return Kết quả thêm chi tiết lịch làm việc
      */
-    public ApiResponse addWorkingDetail(WorkingDetailRequest request, int dateID, String accountID) {
+    public ApiResponse addWorkingDetail(int dateID, String accountID) {
         try {
-            createWorkingSchedule(request, dateID, accountID);
+            createWorkingSchedule(dateID, accountID);
             return ApiResponse.builder().code(201).message("Successfully added working schedule detail").build();
         } catch (Exception e) {
             return ApiResponse.builder().code(500).message("Error adding working schedule detail: " + e.getMessage()).build();
@@ -99,7 +99,7 @@ public class WorkingService {
          return workingDateRepo.save(workDate);
     }
 
-    public WorkingSchedule createWorkingSchedule(WorkingDetailRequest request, int workDateId, String accountId){
+    private WorkingSchedule createWorkingSchedule(int workDateId, String accountId){
         WorkDate workDate = workingDateRepo.findById(workDateId).orElseThrow(() -> new RuntimeException("WorkDate not found with id: " ));
         Account account = userRepo.findById(accountId).orElseThrow(() -> new RuntimeException("Account not found with id: " ));
 

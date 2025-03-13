@@ -33,7 +33,7 @@ public class ChildController {
     }
 
     @GetMapping()
-    public List<Child>  getChildren(){
+    public List<ChildResponse>  getChildren(){
         return childService.getChildren();
     }
 
@@ -42,7 +42,7 @@ public class ChildController {
     public ApiResponse<List<ChildResponse>> getChildByName(@PathVariable String name){
         return ApiResponse.<List<ChildResponse>>builder()
                 .code(200)
-                .result(childService.getChildByName(name))
+                .result(childService.searchChildByName(name))
                 .build();
     }
 

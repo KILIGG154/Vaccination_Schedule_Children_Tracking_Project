@@ -33,8 +33,10 @@ public class WorkingController {
     }
 
     @PostMapping("/detail/{dateID}/{accountID}")
-    public ApiResponse addWorkingDetail(@RequestBody WorkingDetailRequest request, @PathVariable int dateID, @PathVariable String accountID) {
-        return workingService.addWorkingDetail(request, dateID, accountID);
+//    public ApiResponse addWorkingDetail(@RequestBody WorkingDetailRequest request, @PathVariable int dateID, @PathVariable String accountID)
+    public ApiResponse addWorkingDetail(@PathVariable int dateID, @PathVariable String accountID)
+    {
+        return workingService.addWorkingDetail(dateID, accountID);
     }
 
     @GetMapping("/allworkdate/{accountID}")

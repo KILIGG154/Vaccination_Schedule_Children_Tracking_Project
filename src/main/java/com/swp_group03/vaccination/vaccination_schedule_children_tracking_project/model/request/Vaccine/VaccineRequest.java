@@ -25,8 +25,6 @@ public class VaccineRequest {
     @Size(max = 255)
     String manufacturer;
 
-    VaccineCategory categoryID;
-
     @Size(max = 255)
     String dosage;
 
@@ -54,7 +52,7 @@ public class VaccineRequest {
 
     Integer quantity;
 
-    String status;
+//    String status;
 
 //    LocalDate expirationDate;
 
