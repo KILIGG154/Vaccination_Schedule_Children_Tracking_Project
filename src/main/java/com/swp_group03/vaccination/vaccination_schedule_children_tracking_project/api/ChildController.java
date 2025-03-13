@@ -28,8 +28,8 @@ public class ChildController {
     }
 
     @PatchMapping("/{child_id}")
-    public ResponseEntity updateChild(@Validated @RequestBody ChildrenRequest child, @PathVariable int id) {
-        return ResponseEntity.ok(childService.updateChildren(child,id));
+    public ResponseEntity updateChild(@Validated @RequestBody ChildrenRequest child, @PathVariable int child_id) {
+        return ResponseEntity.ok(childService.updateChildren(child,child_id));
     }
 
     @GetMapping()
