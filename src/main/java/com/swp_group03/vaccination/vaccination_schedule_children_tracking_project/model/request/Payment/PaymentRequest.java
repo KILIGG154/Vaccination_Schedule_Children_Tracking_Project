@@ -1,11 +1,5 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.Payment;
 
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Payment_Method;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
 import java.util.Date;
 
 public class PaymentRequest {
@@ -14,7 +8,7 @@ public class PaymentRequest {
 
     private boolean status;
 
-    private Payment_Method paymentMethod;
+    private String paymentMethod;
 
     public PaymentRequest(Date paymentDate, boolean status) {
         this.paymentDate = paymentDate;
@@ -37,11 +31,11 @@ public class PaymentRequest {
         this.status = status;
     }
 
-    public Payment_Method getPaymentMethod() {
+    public String getPaymentMethod() {
         return paymentMethod;
     }
 
-    public void setPaymentMethod(Payment_Method paymentMethod) {
+    public void setPaymentMethod(String paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
 }

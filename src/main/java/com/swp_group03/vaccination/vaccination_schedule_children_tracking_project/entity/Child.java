@@ -1,9 +1,12 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "Child")
@@ -32,19 +35,25 @@ public class Child{
     private String urlImage;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "Account_ID")
-    private Account account_Id;
+    @JsonBackReference
+    private Account account;
+
+    @OneToMany(mappedBy = "child", fetch = FetchType.LAZY)
+    private List<Booking> bookings = new ArrayList<>();
+
 
     public Child() {
     }
 
-    public Child(String name, Date dob, String height, String weight, Gender gender, String urlImage, Account account_Id) {
+    public Child(String name, Date dob, String height, String weight, Gender gender, String urlImage, Account account, List<Booking> bookings) {
         this.name = name;
         this.dob = dob;
         this.height = height;
         this.weight = weight;
         this.gender = gender;
         this.urlImage = urlImage;
-        this.account_Id = account_Id;
+        this.account = account;
+        this.bookings = bookings;
     }
 
     public int getChild_id() {
@@ -95,12 +104,12 @@ public class Child{
         this.gender = gender;
     }
 
-    public Account getAccount_Id() {
-        return account_Id;
+    public Account getAccount() {
+        return account;
     }
 
-    public void setAccount_Id(Account account_Id) {
-        this.account_Id = account_Id;
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     public String getUrlImage() {
@@ -109,5 +118,13 @@ public class Child{
 
     public void setUrlImage(String urlImage) {
         this.urlImage = urlImage;
+    }
+
+    public List<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(List<Booking> bookings) {
+        this.bookings = bookings;
     }
 }

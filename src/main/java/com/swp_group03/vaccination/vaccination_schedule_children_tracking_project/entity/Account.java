@@ -1,6 +1,7 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -76,8 +77,9 @@ public class Account {
     @JsonIgnore
     private Set<WorkingSchedule> workingSchedules = new HashSet<>();
 
-    @OneToMany(mappedBy = "account_Id", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<Child> childs;
+    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Child> child;
 
     public Account() {
     }
@@ -86,8 +88,7 @@ public class Account {
         this.username = username;
     }
 
-    public Account(String accountId, String username, String password, String firstName, String lastName, String email, String phoneNumber, String address, Gender gender, boolean status, String urlImage, Set<Role> roles) {
-        this.accountId = accountId;
+    public Account(String username, String password, String firstName, String lastName, String email, String phoneNumber, String address, Gender gender, boolean status, Set<Role> roles, Set<WorkingSchedule> workingSchedules, List<Child> child) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
@@ -98,6 +99,8 @@ public class Account {
         this.gender = gender;
         this.status = status;
         this.roles = roles;
+        this.workingSchedules = workingSchedules;
+        this.child = child;
     }
 
     // Phương thức để thêm một Role

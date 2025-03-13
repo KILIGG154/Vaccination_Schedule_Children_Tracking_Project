@@ -1,5 +1,6 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.api;
 
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Account;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Child;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.ChildrenRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
@@ -20,9 +21,9 @@ public class ChildController {
     @Autowired
     private ChildService childService;
 
-    @PostMapping("/create")
-    public ResponseEntity createChild(@RequestBody ChildrenRequest child) {
-        Child newChild = childService.createChildren(child);
+    @PostMapping("/{accountID}/create")
+    public ResponseEntity createChild(@PathVariable String accountID,@RequestBody ChildrenRequest child) {
+        Child newChild = childService.createChildren(accountID,child);
         return ResponseEntity.ok(newChild);
     }
 
@@ -44,4 +45,11 @@ public class ChildController {
                 .result(childService.getChildByName(name))
                 .build();
     }
+
+//    @GetMapping("/{accountID}")
+//    public ResponseEntity<List<Child>> getChildByAccount(@PathVariable String accountID){
+//        List<Child> childList = childService.getChildByAccount(accountID);
+//        return ResponseEntity.ok(childList);
+//    }
+
 }

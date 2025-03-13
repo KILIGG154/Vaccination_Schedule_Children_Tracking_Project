@@ -20,17 +20,25 @@ public class Payment {
     @Column(name = "Status")
     private boolean status;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "PaymentMethodId")
-    private Payment_Method paymentMethod;
+    @Column(name = "Payment_Method")
+    private String paymentMethod;
 
-    public Payment(Date paymentDate, boolean status) {
-        this.paymentDate = paymentDate;
-        this.status = status;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "BookingId")
+    private Booking booking;
+
 
     public Payment() {
     }
+
+    public Payment(Date paymentDate, boolean status, String paymentMethod, Booking booking) {
+        this.paymentDate = paymentDate;
+        this.status = status;
+        this.paymentMethod = paymentMethod;
+        this.booking = booking;
+    }
+
+
 
     public int getId() {
         return id;
@@ -56,11 +64,19 @@ public class Payment {
         this.status = status;
     }
 
-    public Payment_Method getPaymentMethod() {
+    public String getPaymentMethod() {
         return paymentMethod;
     }
 
-    public void setPaymentMethod(Payment_Method paymentMethod) {
+    public void setPaymentMethod(String paymentMethod) {
         this.paymentMethod = paymentMethod;
+    }
+
+    public Booking getBooking() {
+        return booking;
+    }
+
+    public void setBooking(Booking booking) {
+        this.booking = booking;
     }
 }

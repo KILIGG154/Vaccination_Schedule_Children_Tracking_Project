@@ -2,6 +2,7 @@ package com.swp_group03.vaccination.vaccination_schedule_children_tracking_proje
 
 
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Account;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Booking;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Gender;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -34,5 +35,7 @@ public class ChildrenRequest {
     private String weight;
     private Gender gender;
     private String urlImage;
-    private Account account_Id;
+    private Booking booking;
+
+
 }

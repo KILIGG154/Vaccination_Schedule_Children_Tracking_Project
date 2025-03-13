@@ -37,7 +37,9 @@ public interface VaccineMapper {
     @Mapping(target = "description", source = "combo", qualifiedByName = "mapComboDescription")
     @Mapping(target = "total", source = "combo", qualifiedByName = "mapComboTotal")  // Thêm mapping cho total
     @Mapping(target = "vaccineName", source = "vaccine", qualifiedByName = "mapVaccineName")
+    @Mapping(target = "manufacturer", source = "vaccine.manufacturer")
     ResponseVaccineDetails toResponseVaccineDetail(VaccineComboDetail vaccineComboDetail);
+
 
 
     // Chuyển đổi danh sách VaccineComboDetail thành danh sách ResponseVaccineDetails

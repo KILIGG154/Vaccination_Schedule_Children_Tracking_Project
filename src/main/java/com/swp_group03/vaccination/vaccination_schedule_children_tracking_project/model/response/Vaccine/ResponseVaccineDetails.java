@@ -24,6 +24,7 @@ public class ResponseVaccineDetails {
     private String vaccineName;
     private String comboName;
 //    private double totalCombo;    Sai nên nên cmt lại
+    private String manufacturer;
     private double total;
     private String description;
 }

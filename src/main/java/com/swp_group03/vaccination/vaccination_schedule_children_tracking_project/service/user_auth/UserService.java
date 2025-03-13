@@ -8,6 +8,7 @@ import com.swp_group03.vaccination.vaccination_schedule_children_tracking_projec
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.mapper.UserMapper;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.account.AccountCreate;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.account.AccountUpdate;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Account.AccDTO;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Account.AccountResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.RoleRepo;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.UserRepo;
@@ -148,5 +149,9 @@ public class UserService {
         }
     }
 
+    public AccDTO getChildByAccId(String accountId){
+        Account account = userRepo.findById(accountId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        return new AccDTO(account);
+    }
 
 }
