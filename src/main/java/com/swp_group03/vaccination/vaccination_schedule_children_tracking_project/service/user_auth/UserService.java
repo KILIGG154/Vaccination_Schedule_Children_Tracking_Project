@@ -69,7 +69,7 @@ public class UserService {
     }
 
 
-    @PreAuthorize("hasRole('USER')")
+//    @PreAuthorize("hasRole('USER')")
     public  AccountResponse updateAccount(AccountUpdate request, String account_id){
         log.info("Update account with id: {}", account_id);
         Account account =  userRepo.findById(account_id).orElseThrow(() -> new AppException(
@@ -79,11 +79,10 @@ public class UserService {
          userMapper.toUpdateUser(request, account);
 //         account.setPassword(passwordEncoder.encode(request.getPassword()));
 
-
-        return userMapper.toAccountResponse(userRepo.save(account)) ;
+        return userMapper.toAccountResponse(userRepo.save(account));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public List<AccountResponse> getAllAccount(){
 
         List<AccountResponse> accounts = userMapper.toAllAccountResponse(userRepo.findAll());

@@ -16,5 +16,5 @@ public class VaccineComboRequest {
     private String description;
 
 
-    private boolean status;
+//    private boolean status;
 }

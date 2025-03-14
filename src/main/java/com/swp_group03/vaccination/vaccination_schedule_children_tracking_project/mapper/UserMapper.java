@@ -26,6 +26,7 @@ public interface UserMapper {
 //    @Mapping(target = "phoneNumber", source = "request.phoneNumber")
 //    @Mapping(target = "address", source = "request.address")
 //    @Mapping(target = "gender", source = "request.gender")
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Account toUpdateUser(AccountUpdate request, @MappingTarget Account account);
 
     @Mapping(target = "roleName", source = "roles", qualifiedByName = "mapRolesToRoleName")

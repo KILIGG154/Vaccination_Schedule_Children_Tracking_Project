@@ -61,23 +61,23 @@ public class ChildService {
         return childRepo.save(child);
     }
 
-    public Child updateChildren(ChildrenRequest child, int id){
-        Child chilren = childRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Child not found"));
+    public Child updateChildren(ChildrenRequest request, int childId){
+        Child child = childRepo.findById(childId).orElseThrow(() -> new EntityNotFoundException("Child not found"));
 
-//        if(child.getChild_name() != null) chilren.setChild_name(child.getChild_name());
-//        if(child.getDob() != null) chilren.setDob(child.getDob());
-//        if(child.getHeight() != null) chilren.setHeight(child.getHeight());
-//        if(child.getWeight() != null) chilren.setWeight(child.getWeight());
-//        if(child.getGender() != null) chilren.setGender(child.getGender());
-        chilren =  childMapper.toUpdateChild(child);
-        return childRepo.save(chilren);
+        if(request.getName() != null) child.setName(request.getName());
+        if(child.getDob() != null) child.setDob(request.getDob());
+        if(child.getHeight() != null) child.setHeight(request.getHeight());
+        if(child.getWeight() != null) child.setWeight(request.getWeight());
+        if(child.getGender() != null) child.setGender(request.getGender());
+        if(child.getUrlImage() != null) child.setUrlImage(request.getUrlImage());
+        return childRepo.save(child);
     }
 
-    public List<Child> getChildren(){
-        return childRepo.findAll();
+    public List<ChildResponse> getChildren(){
+        return childMapper.toResponseChildren(childRepo.findAll());
     }
 
-    public List<ChildResponse> getChildByName(String name){
+    public List<ChildResponse> searchChildByName(String name){
         List<Child> lists = childRepo.findByNameContainingIgnoreCase(name);
         return childMapper.toResponseChildren(lists);
     }

@@ -1,7 +1,7 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.api;
 
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.working.ScheduleRequest;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.working.WorkingDetailRequest;
+//import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.working.WorkingDetailRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.working.WorkingRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Working.ScheduleResponse;
@@ -33,8 +33,10 @@ public class WorkingController {
     }
 
     @PostMapping("/detail/{dateID}/{accountID}")
-    public ApiResponse addWorkingDetail(@RequestBody WorkingDetailRequest request, @PathVariable int dateID, @PathVariable String accountID) {
-        return workingService.addWorkingDetail(request, dateID, accountID);
+//    public ApiResponse addWorkingDetail(@RequestBody WorkingDetailRequest request, @PathVariable int dateID, @PathVariable String accountID)
+    public ApiResponse addWorkingDetail(@PathVariable int dateID, @PathVariable String accountID)
+    {
+        return workingService.addWorkingDetail(dateID, accountID);
     }
 
     @GetMapping("/allworkdate/{accountID}")
