@@ -28,7 +28,7 @@ public class Payment {
     }
 
     public Payment(Date paymentDate, OrderStatus status, String paymentMethod, VaccineOrder vaccineOrder) {
-        this.paymentDate = paymentDate;
+
         this.status = status;
         this.paymentMethod = paymentMethod;
         this.vaccineOrder = vaccineOrder;
@@ -42,13 +42,6 @@ public class Payment {
         this.id = id;
     }
 
-    public Date getPaymentDate() {
-        return paymentDate;
-    }
-
-    public void setPaymentDate(Date paymentDate) {
-        this.paymentDate = paymentDate;
-    }
 
     public OrderStatus getStatus() {
         return status;

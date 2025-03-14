@@ -1,13 +1,12 @@
-package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service;
-
+package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.child;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Account;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Booking;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Child;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.AppException;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.ErrorCode;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.mapper.ChildMapper;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.ChildrenRequest;
 
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.child.ChildrenRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.child.ChildResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.BookingRepo;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.ChildRepo;
@@ -43,7 +42,7 @@ public class ChildService {
 //        child.setAccount_Id(childrenRequest.getAccount_Id());
 //        return childRepo.save(child);
 //    }
-    public Child createChildren(String accountID,ChildrenRequest childrenRequest){
+    public Child createChildren(String accountID, ChildrenRequest childrenRequest){
         Account account = userRepo.findById(accountID).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
 
