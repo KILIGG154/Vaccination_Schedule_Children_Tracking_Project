@@ -22,22 +22,39 @@ public class Booking {
     @JoinColumn(name = "childId")
     private Child child;
 
-    @OneToMany(mappedBy = "booking", fetch = FetchType.LAZY)
-    private List<Payment> payments = new ArrayList<>();
 
     @Column(name = "Status")
     private boolean status;
+
+    @OneToMany(mappedBy = "booking",fetch = FetchType.LAZY)
+    @Column(name = "Vaccine_Order")
+    private List<VaccineOrder> vaccineOrders;
+
+    public void addVaccineOrder(VaccineOrder vaccineOrder) {
+
+        if (vaccineOrders == null) {
+            vaccineOrders = new ArrayList<>();
+        }
+        vaccineOrders.add(vaccineOrder);
+        vaccineOrder.setBooking(this);
+    }
+
+    public void removeVaccineOrder(VaccineOrder vaccineOrder) {
+        if (vaccineOrders != null) {
+            vaccineOrders.remove(vaccineOrder);
+            vaccineOrder.setBooking(null);
+        }
+    }
 
     public Booking() {
 
     }
 
-    public Booking(Date appointmentDate, Child child, List<Payment> payments, boolean status) {
+    public Booking(Date appointmentDate, Child child, boolean status, List<VaccineOrder> vaccineOrders) {
         this.appointmentDate = appointmentDate;
         this.child = child;
-        this.payments = payments;
         this.status = status;
-
+        this.vaccineOrders = vaccineOrders;
     }
 
     public int getBookingId() {
@@ -64,19 +81,19 @@ public class Booking {
         this.child = child;
     }
 
-    public List<Payment> getPayments() {
-        return payments;
-    }
-
-    public void setPayments(List<Payment> payments) {
-        this.payments = payments;
-    }
-
     public boolean isStatus() {
         return status;
     }
 
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    public List<VaccineOrder> getVaccineOrders() {
+        return vaccineOrders;
+    }
+
+    public void setVaccineOrders(List<VaccineOrder> vaccineOrders) {
+        this.vaccineOrders = vaccineOrders;
     }
 }

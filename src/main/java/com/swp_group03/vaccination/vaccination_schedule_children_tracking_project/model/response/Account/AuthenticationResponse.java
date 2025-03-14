@@ -1,8 +1,7 @@
-package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response;
+package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Account;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 

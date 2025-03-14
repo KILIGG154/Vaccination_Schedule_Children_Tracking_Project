@@ -1,4 +1,4 @@
-package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service;
+package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.working;
 
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.WorkDate;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.mapper.WorkingMapper;

@@ -1,33 +1,29 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.Payment;
 
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.OrderStatus;
+
 import java.util.Date;
 
 public class PaymentRequest {
 
-    private Date paymentDate;
 
-    private boolean status;
+    private OrderStatus status;
 
     private String paymentMethod;
 
-    public PaymentRequest(Date paymentDate, boolean status) {
-        this.paymentDate = paymentDate;
+    public PaymentRequest() {
+    }
+
+    public PaymentRequest(OrderStatus status, String paymentMethod) {
         this.status = status;
+        this.paymentMethod = paymentMethod;
     }
 
-    public Date getPaymentDate() {
-        return paymentDate;
-    }
-
-    public void setPaymentDate(Date paymentDate) {
-        this.paymentDate = paymentDate;
-    }
-
-    public boolean isStatus() {
+    public OrderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(OrderStatus status) {
         this.status = status;
     }
 

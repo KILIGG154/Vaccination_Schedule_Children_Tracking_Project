@@ -1,4 +1,4 @@
-package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service;
+package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.vaccine;
 
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Vaccine;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.*;
@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;

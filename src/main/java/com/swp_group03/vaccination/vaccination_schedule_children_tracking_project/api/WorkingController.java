@@ -7,8 +7,8 @@ import com.swp_group03.vaccination.vaccination_schedule_children_tracking_projec
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Working.ScheduleResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Working.WorkingResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.user_auth.UserService;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.WorkingService;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.ScheduleService;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.working.WorkingService;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.working.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

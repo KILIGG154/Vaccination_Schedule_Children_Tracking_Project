@@ -1,10 +1,8 @@
-package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request;
+package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.child;
 
 
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Account;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Booking;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Gender;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

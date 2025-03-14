@@ -11,6 +11,7 @@ import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -117,6 +118,18 @@ public class Vaccine {
     @JsonIgnore
     private VaccineCategory categoryId;
 
+    @OneToMany(mappedBy = "vaccine",fetch = FetchType.LAZY)
+    private List<VaccineOrderDetail> vaccineOrderDetails;
+
+    public void addVaccineOrderDetail(VaccineOrderDetail vaccineOrderDetail) {
+        vaccineOrderDetails.add(vaccineOrderDetail);
+        vaccineOrderDetail.setVaccine(this);
+    }
+
+    public void removeVaccineOrderDetail(VaccineOrderDetail vaccineOrderDetail) {
+        vaccineOrderDetails.remove(vaccineOrderDetail);
+        vaccineOrderDetail.setVaccine(null);
+    }
 
 
 }

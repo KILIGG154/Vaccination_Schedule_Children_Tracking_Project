@@ -1,12 +1,10 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.api;
 
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Account;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Child;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.ChildrenRequest;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.child.ChildrenRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.child.ChildResponse;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.ChildService;
-import jakarta.validation.Valid;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.child.ChildService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;

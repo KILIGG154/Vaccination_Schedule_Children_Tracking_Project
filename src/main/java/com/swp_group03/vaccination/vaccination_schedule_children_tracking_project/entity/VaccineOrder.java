@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+import java.util.List;
+
 @Entity
 @Table(name = "vaccine_order")
 @NoArgsConstructor
@@ -16,21 +19,33 @@ public class VaccineOrder {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "OrderId")
     private int vaccineOrderID;
 
-    @Column(name = "Type")
-    private boolean type;
-
-    @Column(name = "Total")
-    private double total;
-
-    @Column(name = "Status")
-    private boolean status;
+    private Date orderDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "AccountID")
-    private Account account;
+    @JoinColumn(name = "Booking")
+    private Booking booking;
 
     @OneToOne(mappedBy = "vaccineOrder", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private VaccineCombo vaccineCombo;
+
+    @OneToOne(mappedBy = "vaccineOrder",fetch = FetchType.LAZY)
+    private Payment payment;
+
+    @OneToMany(mappedBy = "vaccineOrder")
+    private List<VaccineOrderDetail> vaccineOrderDetails;
+
+    public void addVaccineOrderDetail(VaccineOrderDetail vaccineOrderDetail) {
+        vaccineOrderDetails.add(vaccineOrderDetail);
+        vaccineOrderDetail.setVaccineOrder(this);
+    }
+
+    public void removeVaccineOrderDetail(VaccineOrderDetail vaccineOrderDetail) {
+        vaccineOrderDetails.remove(vaccineOrderDetail);
+        vaccineOrderDetail.setVaccineOrder(null);
+    }
+
+
 }

@@ -14,31 +14,25 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "Payment_Date")
-    private Date paymentDate;
-
     @Column(name = "Status")
-    private boolean status;
+    private OrderStatus status = OrderStatus.IN_PROCESS;
 
     @Column(name = "Payment_Method")
     private String paymentMethod;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "BookingId")
-    private Booking booking;
-
+    @OneToOne
+    @JoinColumn(name = "OrderId",referencedColumnName = "OrderId")
+    private VaccineOrder vaccineOrder;
 
     public Payment() {
     }
 
-    public Payment(Date paymentDate, boolean status, String paymentMethod, Booking booking) {
+    public Payment(Date paymentDate, OrderStatus status, String paymentMethod, VaccineOrder vaccineOrder) {
         this.paymentDate = paymentDate;
         this.status = status;
         this.paymentMethod = paymentMethod;
-        this.booking = booking;
+        this.vaccineOrder = vaccineOrder;
     }
-
-
 
     public int getId() {
         return id;
@@ -56,11 +50,11 @@ public class Payment {
         this.paymentDate = paymentDate;
     }
 
-    public boolean isStatus() {
+    public OrderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(OrderStatus status) {
         this.status = status;
     }
 
@@ -72,11 +66,11 @@ public class Payment {
         this.paymentMethod = paymentMethod;
     }
 
-    public Booking getBooking() {
-        return booking;
+    public VaccineOrder getVaccineOrder() {
+        return vaccineOrder;
     }
 
-    public void setBooking(Booking booking) {
-        this.booking = booking;
+    public void setVaccineOrder(VaccineOrder vaccineOrder) {
+        this.vaccineOrder = vaccineOrder;
     }
 }
