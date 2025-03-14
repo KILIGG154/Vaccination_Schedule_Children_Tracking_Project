@@ -13,18 +13,18 @@ public class ChildDTO {
     private int id;
     private String name;
     private Date dob;
-//    private String height;
-//    private String weight;
-//    private Gender gender;
+    private String height;
+    private String weight;
+    private Gender gender;
 //    private String urlImage;
 
     public ChildDTO(Child child) {
         this.id = child.getChild_id();
         this.name = child.getName();
         this.dob = child.getDob();
-//        this.height = child.getHeight();
-//        this.weight = child.getWeight();
-//        this.gender = child.getGender();
+        this.height = child.getHeight();
+        this.weight = child.getWeight();
+        this.gender = child.getGender();
 //        this.urlImage = child.getUrlImage();
     }
 }
