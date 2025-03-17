@@ -151,7 +151,7 @@ public class AuthenticationService {
                 .subject(String.valueOf(account.getAccountId())) // Chỉ để accountId làm subject
                 .issuer("swp_group3.com")
                 .issueTime(new Date())
-                .expirationTime(new Date(Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()))
+                .expirationTime(new Date(Instant.now().plus(1, ChronoUnit.DAYS).toEpochMilli()))
                 .jwtID(UUID.randomUUID().toString())
                 .claim("username", account.getUsername()) // Thêm username vào claim riêng
                 .claim("scope", buildScope(account))

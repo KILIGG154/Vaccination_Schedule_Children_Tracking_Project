@@ -26,7 +26,10 @@ public enum ErrorCode {
     // Authorization errors
     UNAUTHENTICATED(4001, "Invalid Username or Password", HttpStatus .UNAUTHORIZED),
     UNAUTHORIZED(4002, "You do not have permission", HttpStatus.FORBIDDEN),
-    INVALID_TOKEN(4003, "Invalid token", HttpStatus.UNAUTHORIZED);
+    INVALID_TOKEN(4003, "Invalid token", HttpStatus.UNAUTHORIZED),
+
+    //Payment
+    PAYMENT_FAIL(4221,"Something went wrong", HttpStatus.NOT_FOUND);
 
     private final int code;
     private final String message;
