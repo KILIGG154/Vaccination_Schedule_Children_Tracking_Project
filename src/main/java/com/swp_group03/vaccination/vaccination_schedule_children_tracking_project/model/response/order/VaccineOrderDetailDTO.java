@@ -1,38 +1,25 @@
-package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity;
+package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.order;
 
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Vaccine;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.VaccineOrder;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.VaccineOrderDetail;
 import jakarta.persistence.*;
 
-@Entity
-@Table(name = "VaccineOrderDetail")
-public class VaccineOrderDetail {
-
-    @Id
-    @Column(name = "DetailID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class VaccineOrderDetailDTO {
     private int detailID;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "VaccineOrderID")
     private VaccineOrder vaccineOrder;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "VaccineID")
     private Vaccine vaccine;
-
-    @Column(name = "Quantity")
     private int qunatity;
-
-    @Column(name = "TotalPrice")
     private double totalPrice;
-    public VaccineOrderDetail() {
+
+    public VaccineOrderDetailDTO(VaccineOrderDetail vaccineOrderDetail) {
+        this.detailID = vaccineOrderDetail.getDetailID();
+        this.vaccineOrder = vaccineOrderDetail.getVaccineOrder();
+        this.vaccine = vaccineOrderDetail.getVaccine();
+        this.qunatity = vaccineOrderDetail.getQunatity();
+        this.totalPrice = vaccineOrderDetail.getTotalPrice();
     }
 
-    public VaccineOrderDetail(VaccineOrder vaccineOrder, Vaccine vaccine, int qunatity, double totalPrice) {
-        this.vaccineOrder = vaccineOrder;
-        this.vaccine = vaccine;
-        this.qunatity = qunatity;
-        this.totalPrice = totalPrice;
-    }
 
     public int getDetailID() {
         return detailID;

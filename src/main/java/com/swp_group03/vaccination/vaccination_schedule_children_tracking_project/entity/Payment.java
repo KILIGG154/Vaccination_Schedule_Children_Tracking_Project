@@ -21,7 +21,7 @@ public class Payment {
     private String paymentMethod;
 
     @OneToOne
-    @JoinColumn(name = "OrderId",referencedColumnName = "OrderId")
+    @JoinColumn(name = "OrderId")
     private VaccineOrder vaccineOrder;
 
     public Payment() {

@@ -42,7 +42,7 @@ public class VaccineCombo {
     private Set<VaccineComboDetail> vaccineComboDetails = new HashSet<>();
 
     @OneToOne
-    @JoinColumn(name = "VaccineOrderId", referencedColumnName = "VaccineOrderId")
+    @JoinColumn(name = "VaccineOrderId")
     @JsonIgnore
     private VaccineOrder vaccineOrder;
 

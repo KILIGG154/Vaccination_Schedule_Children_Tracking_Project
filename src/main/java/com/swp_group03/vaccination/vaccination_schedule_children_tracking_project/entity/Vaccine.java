@@ -118,8 +118,8 @@ public class Vaccine {
     @JsonIgnore
     private VaccineCategory categoryId;
 
-    @OneToMany(mappedBy = "vaccine",fetch = FetchType.LAZY)
-    private List<VaccineOrderDetail> vaccineOrderDetails;
+    @OneToMany(mappedBy = "vaccine",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<VaccineOrderDetail> vaccineOrderDetails = new HashSet<>();
 
     public void addVaccineOrderDetail(VaccineOrderDetail vaccineOrderDetail) {
         vaccineOrderDetails.add(vaccineOrderDetail);

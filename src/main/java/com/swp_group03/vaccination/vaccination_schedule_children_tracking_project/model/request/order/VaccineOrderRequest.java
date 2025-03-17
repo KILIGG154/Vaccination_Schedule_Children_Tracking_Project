@@ -1,14 +1,17 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.order;
 
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.VaccineOrderDetail;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import java.util.List;
 
 public class VaccineOrderRequest {
-    private Date orderDate;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date orderDate;
     private List<VaccineOrderDetail> orderDetail;
+
     public VaccineOrderRequest() {
     }
 
