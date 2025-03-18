@@ -17,9 +17,15 @@ public class OrderController {
     private VaccineOrderService vaccineOrderService;
 
     @PostMapping("/{bookingID}/create")
-    public ApiResponse createOrder(@PathVariable int bookingID, @RequestBody VaccineOrderRequest request) {
+    public ApiResponse<VaccineOrderDTO> createOrder(@PathVariable int bookingID, @RequestBody VaccineOrderRequest request) {
+//        VaccineOrderDTO order = vaccineOrderService.createVaccineOrder(bookingID,request);
         VaccineOrderDTO order = vaccineOrderService.createVaccineOrder(bookingID,request);
-        return ApiResponse.builder().code(201).message("Successfully created order").result(order).build();
+//        return ApiResponse.builder().code(201).message("Successfully created order").result(order).build();
+        return ApiResponse.<VaccineOrderDTO>builder()
+                .code(201)
+                .message("Successfully created order")
+                .result(order)
+                .build();
     }
 
     @PostMapping("/{orderID}/addDetail/{vaccineID}")
