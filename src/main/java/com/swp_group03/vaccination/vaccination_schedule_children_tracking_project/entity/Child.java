@@ -36,7 +36,6 @@ public class Child{
     private String urlImage;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "Account_ID")
-    @JsonBackReference
     private Account account;
 
     @OneToMany(mappedBy = "child", fetch = FetchType.LAZY)

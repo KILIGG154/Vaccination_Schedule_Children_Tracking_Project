@@ -78,7 +78,7 @@ public class Account {
     private Set<WorkingSchedule> workingSchedules = new HashSet<>();
 
     @OneToMany(mappedBy = "account", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonIgnore
     private List<Child> child;
 
     public Account() {
