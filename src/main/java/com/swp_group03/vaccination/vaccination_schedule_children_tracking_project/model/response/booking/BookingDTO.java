@@ -12,17 +12,26 @@ import java.util.stream.Collectors;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class BookingDTO {
+    private int bookingId;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date appointmentDate;
     private ChildDTO child;
-    private List<VaccineOrderDTO> order;
+
     private boolean status;
 
     public BookingDTO(Booking booking) {
+        this.bookingId = booking.getBookingId();
         this.appointmentDate = booking.getAppointmentDate();
         this.child = new ChildDTO(booking.getChild());
         this.status = booking.isStatus();
-        this.order = booking.getVaccineOrders().stream().map(VaccineOrderDTO::new).collect(Collectors.toList());
+    }
+
+    public int getBookingId() {
+        return bookingId;
+    }
+
+    public void setBookingId(int bookingId) {
+        this.bookingId = bookingId;
     }
 
     public Date getAppointmentDate() {
@@ -39,14 +48,6 @@ public class BookingDTO {
 
     public void setChild(ChildDTO child) {
         this.child = child;
-    }
-
-    public List<VaccineOrderDTO> getOrder() {
-        return order;
-    }
-
-    public void setOrder(List<VaccineOrderDTO> order) {
-        this.order = order;
     }
 
     public boolean isStatus() {

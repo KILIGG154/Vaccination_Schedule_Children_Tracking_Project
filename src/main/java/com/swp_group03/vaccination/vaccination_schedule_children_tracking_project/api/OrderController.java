@@ -18,8 +18,8 @@ public class OrderController {
 
     @PostMapping("/{bookingID}/create")
     public ApiResponse createOrder(@PathVariable int bookingID, @RequestBody VaccineOrderRequest request) {
-        VaccineOrder order = vaccineOrderService.createVaccineOrder(bookingID,request);
-        return ApiResponse.builder().code(201).message("Successfully created order").build();
+        VaccineOrderDTO order = vaccineOrderService.createVaccineOrder(bookingID,request);
+        return ApiResponse.builder().code(201).message("Successfully created order").result(order).build();
     }
 
     @PostMapping("/{orderID}/addDetail/{vaccineID}")

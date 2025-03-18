@@ -21,7 +21,7 @@ public class VaccineOrder {
 
     @Column(name = "OrderDate")
     @Temporal(TemporalType.DATE)
-    private Date dateOrderVaccine;
+    private Date orderDate;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -51,8 +51,8 @@ public class VaccineOrder {
     public VaccineOrder() {
     }
 
-    public VaccineOrder(Date dateOrderVaccine, Booking booking, VaccineCombo vaccineCombo, Payment payment, Set<VaccineOrderDetail> vaccineOrderDetails) {
-        this.dateOrderVaccine = dateOrderVaccine;
+    public VaccineOrder(Date orderDate, Booking booking, VaccineCombo vaccineCombo, Payment payment, Set<VaccineOrderDetail> vaccineOrderDetails) {
+        this.orderDate = orderDate;
         this.booking = booking;
         this.vaccineCombo = vaccineCombo;
         this.payment = payment;
@@ -67,12 +67,12 @@ public class VaccineOrder {
         this.id = id;
     }
 
-    public Date getDateOrderVaccine() {
-        return dateOrderVaccine;
+    public Date getOrderDate() {
+        return orderDate;
     }
 
-    public void setDateOrderVaccine(Date dateOrderVaccine) {
-        this.dateOrderVaccine = dateOrderVaccine;
+    public void setOrderDate(Date orderDate) {
+        this.orderDate = orderDate;
     }
 
     public Booking getBooking() {

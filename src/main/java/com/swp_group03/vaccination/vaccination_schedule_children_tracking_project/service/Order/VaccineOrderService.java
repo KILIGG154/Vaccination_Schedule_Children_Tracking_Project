@@ -29,15 +29,26 @@ public class VaccineOrderService {
     @Autowired
     private VaccineRepo vaccineRepo;
 
-    public VaccineOrder createVaccineOrder(int bookingID , VaccineOrderRequest request) {
+//    public VaccineOrder createVaccineOrder(int bookingID , VaccineOrderRequest request) {
+//        Booking booking = bookingRepo.findById(bookingID).orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
+//
+//        VaccineOrder order = new VaccineOrder();
+//        log.info("Order date: {}", request.getOrderDate());
+//        order.setDateOrderVaccine(request.getOrderDate());
+//        booking.addVaccineOrder(order);
+//        bookingRepo.save(booking);
+//        return vaccineOrderRepo.save(order);
+//    }
+
+    public VaccineOrderDTO createVaccineOrder(int bookingID , VaccineOrderRequest request) {
         Booking booking = bookingRepo.findById(bookingID).orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
 
         VaccineOrder order = new VaccineOrder();
-        log.info("Order date: {}", request.getOrderDate());
-        order.setDateOrderVaccine(request.getOrderDate());
+        order.setOrderDate(request.getOrderDate());
         booking.addVaccineOrder(order);
         bookingRepo.save(booking);
-        return vaccineOrderRepo.save(order);
+        vaccineOrderRepo.save(order);
+        return new VaccineOrderDTO(order);
     }
 
     public VaccineOrderDetail createVaccineOrderDetail(int orderID, int vaccineId ,VaccineaOrderDetaIlRequest request) {

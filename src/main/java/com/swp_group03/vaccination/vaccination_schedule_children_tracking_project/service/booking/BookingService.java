@@ -25,7 +25,18 @@ public class BookingService {
     @Autowired
     private ChildRepo childRepo;
 
-    public Booking createBookingRepo(int childID, BookingRequest bookingRequest) {
+//    public Booking createBookingRepo(int childID, BookingRequest bookingRequest) {
+//        Child child = childRepo.findById(childID).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+//
+//        Booking booking = new Booking();
+//        booking.setAppointmentDate(bookingRequest.getAppointmentDate());
+//        booking.setStatus(booking.isStatus());
+//        booking.setChild(child);
+//        childRepo.save(child);
+//        return bookingRepo.save(booking);
+//    }
+
+    public BookingDTO createBookingRepo(int childID, BookingRequest bookingRequest) {
         Child child = childRepo.findById(childID).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         Booking booking = new Booking();
@@ -33,7 +44,8 @@ public class BookingService {
         booking.setStatus(booking.isStatus());
         booking.setChild(child);
         childRepo.save(child);
-        return bookingRepo.save(booking);
+        bookingRepo.save(booking);
+        return new BookingDTO(booking);
     }
 
     public BookingDTO getAllBooking(int bookingID){
