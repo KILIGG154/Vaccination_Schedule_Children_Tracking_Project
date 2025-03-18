@@ -24,7 +24,11 @@ public class OrderController {
 
     @PostMapping("/{orderID}/addDetail/{vaccineID}")
     public ApiResponse addDetail(@PathVariable int orderID, @PathVariable int vaccineID, @RequestBody VaccineaOrderDetaIlRequest request) {
-        return ApiResponse.builder().code(201).message("Successfully added detail").result(vaccineOrderService.createVaccineOrderDetail(orderID, vaccineID, request)).build();
+        return ApiResponse.builder()
+                .code(201)
+                .message("Successfully added detail")
+                .result(vaccineOrderService.createVaccineOrderDetail(orderID, vaccineID, request))
+                .build();
     }
 
 

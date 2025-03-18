@@ -1,13 +1,9 @@
-package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity;
+package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.vaccine;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.math.BigDecimal;
 
 
 @Entity

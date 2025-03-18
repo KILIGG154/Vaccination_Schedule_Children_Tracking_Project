@@ -13,8 +13,10 @@ import com.swp_group03.vaccination.vaccination_schedule_children_tracking_projec
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.WorkingScheduleRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class WorkingService {
@@ -61,23 +63,56 @@ public class WorkingService {
         }
     }
 
+//    public ApiResponse<List<WorkingResponse>> getAllWorking(String accountID) {
+//        try {
+//            account account = userRepo.findByAccountId(accountID);
+//            if (account == null) {
+//                return ApiResponse.<List<WorkingResponse>>builder()
+//                        .code(404)
+//                        .message("account not found")
+//                        .build();
+//            }
+//
+//            List<WorkingSchedule> schedules = workingScheduleRepo.findByAccountId(accountID);
+//            List<WorkingResponse> workingSchedules = schedules.stream()
+//                    .map(schedule -> new WorkingResponse(
+//                            schedule.getDateId(),
+//                            schedule.getAccountId(),
+//                            schedule.getSchedule(),
+//                            schedule.isStatus() ? "Active" : "Inactive"
+//                    ))
+//                    .collect(Collectors.toList());
+//
+//            return ApiResponse.<List<WorkingResponse>>builder()
+//                    .code(200)
+//                    .message("Successfully retrieved working schedules")
+//                    .result(workingSchedules)
+//                    .build();
+//        } catch (Exception e) {
+//            return ApiResponse.<List<WorkingResponse>>builder()
+//                    .code(500)
+//                    .message("Error retrieving working schedules: " + e.getMessage())
+//                    .build();
+//        }
+//    }
     /**
      * Lấy danh sách lịch làm việc của một tài khoản
      * @param accountID ID của tài khoản
      * @return Danh sách lịch làm việc
      */
+    @Transactional(readOnly = true)
     public ApiResponse<List<WorkingResponse>> getAllWorking(String accountID) {
         try {
             Account account = userRepo.findByAccountId(accountID);
             if (account == null) {
                 return ApiResponse.<List<WorkingResponse>>builder()
                         .code(404)
-                        .message("Account not found")
+                        .message("account not found")
                         .build();
             }
-            
+
             List<WorkingResponse> workingSchedules = workingMapper.toGetAllWorking(workingScheduleRepo.findByAccountId(accountID));
-            
+
             return ApiResponse.<List<WorkingResponse>>builder()
                     .code(200)
                     .message("Successfully retrieved working schedules")
@@ -101,7 +136,7 @@ public class WorkingService {
 
     private WorkingSchedule createWorkingSchedule(int workDateId, String accountId){
         WorkDate workDate = workingDateRepo.findById(workDateId).orElseThrow(() -> new RuntimeException("WorkDate not found with id: " ));
-        Account account = userRepo.findById(accountId).orElseThrow(() -> new RuntimeException("Account not found with id: " ));
+        Account account = userRepo.findById(accountId).orElseThrow(() -> new RuntimeException("account not found with id: " ));
 
 //        WorkingScheduleId work = new WorkingScheduleId();
 //        work.setDateId(request.getDateID());

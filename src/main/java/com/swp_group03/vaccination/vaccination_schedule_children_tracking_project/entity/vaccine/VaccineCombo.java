@@ -1,14 +1,13 @@
-package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity;
+package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.vaccine;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.VaccineOrder;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 

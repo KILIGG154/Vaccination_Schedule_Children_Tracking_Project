@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "Booking")
 public class Booking {
@@ -20,6 +22,7 @@ public class Booking {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "childId")
+    @JsonIgnore
     private Child child;
 
 
@@ -28,6 +31,7 @@ public class Booking {
 
     @OneToMany(mappedBy = "booking",fetch = FetchType.LAZY)
     @Column(name = "Vaccine_Order")
+    @JsonIgnore
     private List<VaccineOrder> vaccineOrders;
 
     public void addVaccineOrder(VaccineOrder vaccineOrder) {

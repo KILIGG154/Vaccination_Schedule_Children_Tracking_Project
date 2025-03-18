@@ -2,10 +2,13 @@ package com.swp_group03.vaccination.vaccination_schedule_children_tracking_proje
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Gender;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
+
+import java.util.Set;
 
 @Data
 @AllArgsConstructor

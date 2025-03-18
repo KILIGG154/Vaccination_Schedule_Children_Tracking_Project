@@ -1,6 +1,7 @@
-package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity;
+package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.vaccine;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.VaccineOrderDetail;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -11,7 +12,6 @@ import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Getter

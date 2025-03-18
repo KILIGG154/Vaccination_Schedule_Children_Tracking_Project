@@ -1,13 +1,7 @@
-package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity;
+package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.vaccine;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.Hibernate;
 
 import java.io.Serializable;
 import java.util.Objects;

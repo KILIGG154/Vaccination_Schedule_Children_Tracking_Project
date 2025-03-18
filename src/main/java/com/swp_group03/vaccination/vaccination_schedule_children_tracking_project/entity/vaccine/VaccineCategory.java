@@ -1,4 +1,4 @@
-package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity;
+package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.vaccine;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;

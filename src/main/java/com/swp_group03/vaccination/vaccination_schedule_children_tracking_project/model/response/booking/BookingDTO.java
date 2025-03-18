@@ -3,6 +3,9 @@ package com.swp_group03.vaccination.vaccination_schedule_children_tracking_proje
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Booking;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Child;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Payment;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.payment.PaymentDTO;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.child.ChildDTO;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.order.VaccineOrderDTO;
 

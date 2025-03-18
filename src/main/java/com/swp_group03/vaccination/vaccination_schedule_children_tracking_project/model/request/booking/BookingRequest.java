@@ -12,8 +12,8 @@ public class BookingRequest {
 
 
     private Date appointmentDate;
-    private Child child;
-    private List<Payment> payments;
+//    private Child child;
+//    private List<payment> payments;
     private boolean status;
 
     public BookingRequest() {
@@ -22,8 +22,8 @@ public class BookingRequest {
 
     public BookingRequest(Date appointmentDate, Child child, List<Payment> payments, boolean status) {
         this.appointmentDate = appointmentDate;
-        this.child = child;
-        this.payments = payments;
+//        this.child = child;
+//        this.payments = payments;
         this.status = status;
     }
 
@@ -35,21 +35,21 @@ public class BookingRequest {
         this.appointmentDate = appointmentDate;
     }
 
-    public Child getChild() {
-        return child;
-    }
-
-    public void setChild(Child child) {
-        this.child = child;
-    }
-
-    public List<Payment> getPayments() {
-        return payments;
-    }
-
-    public void setPayments(List<Payment> payments) {
-        this.payments = payments;
-    }
+//    public Child getChild() {
+//        return child;
+//    }
+//
+//    public void setChild(Child child) {
+//        this.child = child;
+//    }
+//
+//    public List<payment> getPayments() {
+//        return payments;
+//    }
+//
+//    public void setPayments(List<payment> payments) {
+//        this.payments = payments;
+//    }
 
     public boolean isStatus() {
         return status;

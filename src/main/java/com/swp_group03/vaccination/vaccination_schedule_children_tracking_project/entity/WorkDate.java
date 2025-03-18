@@ -2,6 +2,8 @@ package com.swp_group03.vaccination.vaccination_schedule_children_tracking_proje
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +19,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "Work_Date")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class WorkDate {
     @Id
     @Column(name = "DateId", nullable = false)
