@@ -28,7 +28,7 @@ public enum ErrorCode {
     UNAUTHORIZED(4002, "You do not have permission", HttpStatus.FORBIDDEN),
     INVALID_TOKEN(4003, "Invalid token", HttpStatus.UNAUTHORIZED),
 
-    //Payment
+    //payment
     PAYMENT_FAIL(4221,"Something went wrong", HttpStatus.NOT_FOUND);
 
     private final int code;

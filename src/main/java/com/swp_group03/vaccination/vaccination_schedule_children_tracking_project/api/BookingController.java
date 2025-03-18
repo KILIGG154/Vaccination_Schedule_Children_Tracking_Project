@@ -18,9 +18,13 @@ public class BookingController {
     private BookingService bookingService;
 
     @PostMapping("/{childID}/create")
-    public ApiResponse createBooking(@PathVariable int childID, @RequestBody BookingRequest bookingDTO){
+    public ApiResponse<Booking> createBooking(@PathVariable int childID, @RequestBody BookingRequest bookingDTO){
         Booking booing = bookingService.createBookingRepo(childID,bookingDTO);
-        return ApiResponse.builder().code(201).message("Successfully created booking method").build();
+        return ApiResponse.<Booking>builder()
+        .code(201)
+        .message("Successfully created booking method")
+        .result(booing)
+        .build();
     }
 
     @GetMapping("/all")

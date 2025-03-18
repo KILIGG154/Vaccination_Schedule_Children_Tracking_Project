@@ -31,7 +31,7 @@ public class WorkingSchedule {
     private Account account;
 
     @Column(name = "status")
-    private Boolean status;
+    private boolean status;
 
     public WorkingSchedule() {
     }

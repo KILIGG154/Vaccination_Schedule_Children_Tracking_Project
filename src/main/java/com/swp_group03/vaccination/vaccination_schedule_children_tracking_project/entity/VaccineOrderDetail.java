@@ -1,5 +1,7 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.vaccine.Vaccine;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,10 +15,12 @@ public class VaccineOrderDetail {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "VaccineOrderID")
+    @JsonIgnore
     private VaccineOrder vaccineOrder;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "VaccineID")
+    @JsonIgnore
     private Vaccine vaccine;
 
     @Column(name = "Quantity")

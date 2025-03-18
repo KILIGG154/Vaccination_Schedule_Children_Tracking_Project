@@ -1,6 +1,6 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository;
 
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Vaccine;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.vaccine.Vaccine;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

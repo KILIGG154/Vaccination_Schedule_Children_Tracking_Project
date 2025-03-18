@@ -4,8 +4,7 @@ import com.swp_group03.vaccination.vaccination_schedule_children_tracking_projec
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.order.VaccineOrderRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.order.VaccineaOrderDetaIlRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.order.VaccineOrderDTO;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.Order.VaccineOrderService;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.order.VaccineOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,14 +16,22 @@ public class OrderController {
     private VaccineOrderService vaccineOrderService;
 
     @PostMapping("/{bookingID}/create")
-    public ApiResponse createOrder(@PathVariable int bookingID, @RequestBody VaccineOrderRequest request) {
+    public ApiResponse<VaccineOrder> createOrder(@PathVariable int bookingID, @RequestBody VaccineOrderRequest request) {
         VaccineOrder order = vaccineOrderService.createVaccineOrder(bookingID,request);
-        return ApiResponse.builder().code(201).message("Successfully created order").build();
+        return ApiResponse.<VaccineOrder>builder()
+                .code(201)
+                .message("Successfully created order")
+                .result(order)
+                .build();
     }
 
     @PostMapping("/{orderID}/addDetail/{vaccineID}")
     public ApiResponse addDetail(@PathVariable int orderID, @PathVariable int vaccineID, @RequestBody VaccineaOrderDetaIlRequest request) {
-        return ApiResponse.builder().code(201).message("Successfully added detail").result(vaccineOrderService.createVaccineOrderDetail(orderID, vaccineID, request)).build();
+        return ApiResponse.builder()
+                .code(201)
+                .message("Successfully added detail")
+                .result(vaccineOrderService.createVaccineOrderDetail(orderID, vaccineID, request))
+                .build();
     }
 
 

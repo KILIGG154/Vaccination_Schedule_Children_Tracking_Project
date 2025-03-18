@@ -15,6 +15,7 @@ public class Payment {
     private int id;
 
     @Column(name = "Status")
+    @Enumerated(EnumType.STRING) // Use STRING to store the enum as a string in the database
     private OrderStatus status = OrderStatus.IN_PROCESS;
 
     @Column(name = "Payment_Method")

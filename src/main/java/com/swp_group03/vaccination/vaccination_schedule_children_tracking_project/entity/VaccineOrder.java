@@ -1,10 +1,8 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.vaccine.VaccineCombo;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -26,15 +24,20 @@ public class VaccineOrder {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Booking")
+    @JsonIgnore
     private Booking booking;
 
     @OneToOne(mappedBy = "vaccineOrder", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
     private VaccineCombo vaccineCombo;
 
     @OneToOne(mappedBy = "vaccineOrder")
+    @JsonIgnore
+
     private Payment payment;
 
     @OneToMany(mappedBy = "vaccineOrder", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
     @Column(name = "VaccineOrderID")
     private Set<VaccineOrderDetail> vaccineOrderDetails = new HashSet<>();
 

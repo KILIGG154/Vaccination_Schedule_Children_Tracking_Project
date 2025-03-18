@@ -1,7 +1,9 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.vaccine;
 
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Vaccine;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.*;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.vaccine.Vaccine;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.vaccine.VaccineCategory;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.vaccine.VaccineCombo;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.vaccine.VaccineComboDetail;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.AppException;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.ErrorCode;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.mapper.VaccineMapper;
@@ -109,12 +111,12 @@ public class VaccineService {
         // Log để debug
         log.info("Adding VaccineComboDetail for vaccineId={}, comboId={}");
 
-        // Tìm Vaccine và VaccineCombo theo ID
+        // Tìm vaccine và VaccineCombo theo ID
         Vaccine vaccine = vaccineRepo.findById(vaccineId)
-                .orElseThrow(() -> new RuntimeException("Vaccine not found with id: "));
+                .orElseThrow(() -> new RuntimeException("vaccine not found with id: "));
 
         VaccineCombo vaccineCombo = vaccineCombos.findById(comboId)
-                .orElseThrow(() -> new RuntimeException("Vaccine Combo not found with id: "));
+                .orElseThrow(() -> new RuntimeException("vaccine Combo not found with id: "));
 
         // Tạo ID cho VaccineComboDetail
 //        VaccineComboDetailId key = new VaccineComboDetailId();
@@ -161,7 +163,7 @@ public class VaccineService {
 
 // //        vaccine.getVaccineComboDetails().add(detail);
 // //        vaccineCombo.getVaccineComboDetails().add(detail);
-// //        log.info("Added VaccineComboDetail to Vaccine and VaccineCombo", detail.getVaccine(), detail.getCombo());
+// //        log.info("Added VaccineComboDetail to vaccine and VaccineCombo", detail.getVaccine(), detail.getCombo());
 
 
 //         // Lưu và trả về kết quả
