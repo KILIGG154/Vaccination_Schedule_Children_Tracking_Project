@@ -2,30 +2,41 @@ package com.swp_group03.vaccination.vaccination_schedule_children_tracking_proje
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Booking;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Child;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Payment;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Payment.PaymentDTO;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.child.ChildDTO;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.order.VaccineOrderDTO;
 
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class BookingDTO {
+public class BookingResponse {
+    private int bookingId;
+    
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date appointmentDate;
+    
     private ChildDTO child;
     private List<VaccineOrderDTO> order;
     private boolean status;
 
-    public BookingDTO(Booking booking) {
-        this.appointmentDate = booking.getAppointmentDate();
-        this.child = new ChildDTO(booking.getChild());
-        this.status = booking.isStatus();
-        this.order = booking.getVaccineOrders().stream().map(VaccineOrderDTO::new).collect(Collectors.toList());
+    public BookingResponse() {
+    }
+    
+    public BookingResponse(int bookingId, Date appointmentDate, Child child, List<VaccineOrderDTO> order, boolean status) {
+        this.bookingId = bookingId;
+        this.appointmentDate = appointmentDate;
+        this.child = new ChildDTO(child);
+        this.order = order;
+        this.status = status;
+    }
+
+    public int getBookingId() {
+        return bookingId;
+    }
+
+    public void setBookingId(int bookingId) {
+        this.bookingId = bookingId;
     }
 
     public Date getAppointmentDate() {

@@ -6,10 +6,15 @@ import com.swp_group03.vaccination.vaccination_schedule_children_tracking_projec
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.ErrorCode;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.booking.BookingRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Booking.BookingDTO;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Booking.BookingResponse;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.order.VaccineOrderDTO;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.BookingRepo;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.ChildRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BookingService {
@@ -34,5 +39,20 @@ public class BookingService {
     public BookingDTO getAllBooking(int bookingID){
         Booking booking = bookingRepo.findById(bookingID).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         return new BookingDTO(booking);
+    }
+
+    public List<BookingResponse> getBook() {
+        List<Booking> bookings = bookingRepo.findAll();
+        return bookings.stream()
+            .map(booking -> new BookingResponse(
+                booking.getBookingId(),
+                booking.getAppointmentDate(),
+                booking.getChild(),
+                booking.getVaccineOrders().stream()
+                    .map(order -> new VaccineOrderDTO(order))
+                    .collect(Collectors.toList()),
+                booking.isStatus()
+            ))
+            .collect(Collectors.toList());
     }
 }

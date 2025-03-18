@@ -8,24 +8,24 @@ import java.util.List;
 
 public class VaccineOrderRequest {
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date orderDate;
+//    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date dateOrderVaccine;
     private List<VaccineOrderDetail> orderDetail;
 
     public VaccineOrderRequest() {
     }
 
-    public VaccineOrderRequest(Date orderDate, List<VaccineOrderDetail> orderDetail) {
-        this.orderDate = orderDate;
+    public VaccineOrderRequest(Date dateOrderVaccine, List<VaccineOrderDetail> orderDetail) {
+        this.dateOrderVaccine = dateOrderVaccine;
         this.orderDetail = orderDetail;
     }
 
     public Date getOrderDate() {
-        return orderDate;
+        return dateOrderVaccine;
     }
 
-    public void setOrderDate(Date orderDate) {
-        this.orderDate = orderDate;
+    public void setOrderDate(Date dateOrderVaccine) {
+        this.dateOrderVaccine = dateOrderVaccine;
     }
 
     public List<VaccineOrderDetail> getOrderDetail() {

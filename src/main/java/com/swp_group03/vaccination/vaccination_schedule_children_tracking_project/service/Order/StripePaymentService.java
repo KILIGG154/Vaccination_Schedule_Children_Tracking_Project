@@ -29,6 +29,7 @@ public class StripePaymentService {
 
     public Payment processStripePayment(int orderID, PaymentRequest request) {
         log.info("Get token: " + request.getToken());
+        log.info("Get amount: " + request.getAmount());
         try {
             // Xử lý thanh toán qua Stripe
             Charge charge = stripeService.chargeCard(
@@ -36,7 +37,9 @@ public class StripePaymentService {
                     request.getAmount(),
                     "vnd" // hoặc "USD" tùy vào loại tiền tệ bạn sử dụng
             );
-            log.info("Charge status: " + charge.getPaid());
+            
+            log.info("Charge status: " + charge.getId());
+            log.info("Charge status: " + charge.getStatus());
             // Nếu thanh toán thành công
             if (charge.getPaid()) {
                 // Cập nhật request với thông tin từ Stripe
@@ -53,6 +56,9 @@ public class StripePaymentService {
             }
         } catch (StripeException e) {
             // Xử lý ngoại lệ từ Stripe
+            log.error("Stripe error: " + e.getMessage());
+            log.error("Stripe error type: " + e.getStackTrace());
+            log.error("Stripe error code: " + e.getCode());
             throw new AppException(ErrorCode.PAYMENT_FAIL);
         }
     }

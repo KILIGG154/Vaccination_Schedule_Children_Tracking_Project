@@ -115,10 +115,10 @@ public class Vaccine {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "CategoryID")
-    @JsonIgnore
     private VaccineCategory categoryId;
 
     @OneToMany(mappedBy = "vaccine",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<VaccineOrderDetail> vaccineOrderDetails = new HashSet<>();
 
     public void addVaccineOrderDetail(VaccineOrderDetail vaccineOrderDetail) {

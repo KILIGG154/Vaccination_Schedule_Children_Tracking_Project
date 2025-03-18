@@ -1,6 +1,7 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
@@ -39,6 +40,7 @@ public class Child{
     private Account account;
 
     @OneToMany(mappedBy = "child", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Booking> bookings = new ArrayList<>();
 
 
