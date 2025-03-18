@@ -4,7 +4,7 @@ import com.stripe.model.PaymentIntent;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Payment;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.payment.PaymentRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.order.StripePaymentService;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.Order.StripePaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
@@ -51,7 +51,7 @@ public class PaymentController {
             //         .message("Payment intent created successfully")
             //         .result(response)
             //         .build();
-            log.info("Successfully created payment intent for order: {}", orderID);
+            log.info("Successfully created payment intent for Order: {}", orderID);
 
             return ApiResponse.builder()
                     .code(201)

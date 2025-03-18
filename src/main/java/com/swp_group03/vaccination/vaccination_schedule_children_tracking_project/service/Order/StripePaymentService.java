@@ -1,4 +1,4 @@
-package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.order;
+package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.Order;
 
 import com.stripe.exception.StripeException;
 // import com.stripe.model.Charge;
