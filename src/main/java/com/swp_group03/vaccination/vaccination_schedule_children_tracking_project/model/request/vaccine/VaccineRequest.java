@@ -1,6 +1,5 @@
-package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.Vaccine;
+package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.vaccine;
 
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.VaccineCategory;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;

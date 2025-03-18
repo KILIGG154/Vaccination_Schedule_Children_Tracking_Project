@@ -4,7 +4,7 @@ import com.swp_group03.vaccination.vaccination_schedule_children_tracking_projec
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Role;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.account.AccountCreate;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.account.AccountUpdate;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Account.AccountResponse;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.account.AccountResponse;
 import org.mapstruct.*;
 
 import java.util.List;

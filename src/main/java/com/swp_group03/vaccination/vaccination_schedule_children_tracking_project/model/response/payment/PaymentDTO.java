@@ -1,9 +1,7 @@
-package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Payment;
+package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.payment;
 
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Booking;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.OrderStatus;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Payment;
-import jakarta.persistence.*;
 
 import java.util.Date;
 

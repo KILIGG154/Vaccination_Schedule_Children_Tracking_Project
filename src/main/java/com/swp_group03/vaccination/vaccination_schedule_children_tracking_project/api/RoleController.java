@@ -1,7 +1,7 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.api;
 
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.account.RoleRequest;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Account.RoleResponse;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.account.RoleResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.user_auth.RoleService;
 import org.springframework.web.bind.annotation.GetMapping;

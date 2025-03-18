@@ -1,9 +1,7 @@
-package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Working;
+package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.working;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.WorkDate;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

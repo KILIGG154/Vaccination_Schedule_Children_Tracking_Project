@@ -13,9 +13,11 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 public class VaccineOrderDTO {
+    private int id;
     private Date orderDate;
     private List<VaccineOrderDetailDTO> orderDetail;
     public VaccineOrderDTO(VaccineOrder vaccineOrder) {
+        this.id = vaccineOrder.getId();
         this.orderDate = vaccineOrder.getDateOrderVaccine();
         this.orderDetail = vaccineOrder.getVaccineOrderDetails().stream().map(VaccineOrderDetailDTO::new).collect(Collectors.toList());
     }

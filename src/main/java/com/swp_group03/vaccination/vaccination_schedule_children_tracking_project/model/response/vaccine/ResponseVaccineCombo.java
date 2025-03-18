@@ -1,4 +1,4 @@
-package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.Vaccine;
+package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.vaccine;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
