@@ -7,6 +7,7 @@ import com.swp_group03.vaccination.vaccination_schedule_children_tracking_projec
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.mapper.ChildMapper;
 
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.child.ChildrenRequest;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.child.ChildDTO;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.child.ChildResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.BookingRepo;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.ChildRepo;
@@ -75,6 +76,7 @@ public class ChildService {
     public List<ChildResponse> getChildren(){
         return childMapper.toResponseChildren(childRepo.findAll());
     }
+
 
     public List<ChildResponse> searchChildByName(String name){
         List<Child> lists = childRepo.findByNameContainingIgnoreCase(name);

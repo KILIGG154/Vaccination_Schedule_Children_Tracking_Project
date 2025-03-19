@@ -21,7 +21,7 @@ public class ChildDTO {
 //    private String urlImage;
 
     public ChildDTO(Child child) {
-        this.id = child.getChild_id();
+        this.id = child.getId();
         this.name = child.getName();
         this.dob = child.getDob();
         this.height = child.getHeight();

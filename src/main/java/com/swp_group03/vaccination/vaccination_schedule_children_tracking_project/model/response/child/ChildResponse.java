@@ -12,6 +12,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChildResponse {
+    private int id;
     private String name;
     private Date dob;
     private String height;

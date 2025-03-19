@@ -14,7 +14,7 @@ import java.util.List;
 public class Child{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int child_id;
+    private int id;
 
     @Column(name = "name",length = 100)
 //    @NotBlank(message = "Vui lòng nhập tên cảu trẻ")
@@ -57,12 +57,12 @@ public class Child{
         this.bookings = bookings;
     }
 
-    public int getChild_id() {
-        return child_id;
+    public int getId() {
+        return id;
     }
 
-    public void setChild_id(int child_id) {
-        this.child_id = child_id;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
