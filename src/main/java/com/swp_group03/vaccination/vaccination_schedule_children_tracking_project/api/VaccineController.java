@@ -1,18 +1,10 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.api;
 
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.vaccine.Vaccine;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.vaccine.VaccineCategory;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.vaccine.VaccineCombo;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.vaccine.VaccineComboDetail;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.vaccine.*;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.ErrorCode;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.vaccine.VaccineCategoryRequest;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.vaccine.VaccineCombeDetailRequest;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.vaccine.VaccineComboRequest;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.vaccine.VaccineRequest;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.vaccine.*;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.vaccine.ResponseVaccine;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.vaccine.ResponseVaccineCombo;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.vaccine.ResponseVaccineDetails;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.vaccine.*;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.vaccine.VaccineService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,19 +56,19 @@ public class VaccineController {
 
 
 //    @PostMapping("/combo/detail/{vaccineId}/{comboId}")
-//    public ResponseEntity addVaccineComboDetail(@RequestBody VaccineCombeDetailRequest request, @PathVariable int vaccineId, @PathVariable int comboId){
+//    public ResponseEntity addVaccineComboDetail(@RequestBody VaccineComboDetailRequest request, @PathVariable int vaccineId, @PathVariable int comboId){
 //        log.info("Adding combo detail for vaccine {} and combo {}", vaccineId, comboId);
 //        return ResponseEntity.ok(vaccineService.addVaccineComboDetail(request, vaccineId, comboId));
 //    }
 
     // @PostMapping("/addVaccineComboDetail")
-    // public ResponseEntity<?> addVaccineComboDetail(@RequestBody VaccineCombeDetailRequest request) {
+    // public ResponseEntity<?> addVaccineComboDetail(@RequestBody VaccineComboDetailRequest request) {
     //     System.out.println("Received request: " + request);
     //     return ResponseEntity.ok(vaccineService.addVaccineComboDetail(request));
     // }
 
     @PostMapping("/combo/detail/{comboId}/{vaccineId}")
-    public ApiResponse<VaccineComboDetail> addVaccineComboDetail(@RequestBody VaccineCombeDetailRequest request,
+    public ApiResponse<VaccineComboDetail> addVaccineComboDetail(@RequestBody VaccineComboDetailRequest request,
                                                 @PathVariable int vaccineId,
                                                 @PathVariable int comboId) {
         log.info("Adding combo detail for vaccine {} and combo {}", vaccineId, comboId);
@@ -149,4 +141,34 @@ public class VaccineController {
                 .build();
         // return vaccineService.searchByName(vaccineName);
     }
+
+    //Api for Protocol - Protocol Vaccine
+
+    @PostMapping("/protocol")
+    public ApiResponse<ProtocolResponse> addProtocol(@RequestBody ProtocolRequest request) {
+        return ApiResponse.<ProtocolResponse>builder()
+                .code(200)
+                .message("Successfully adding new Protocol!")
+                .result(vaccineService.addNewProtocol(request))
+                .build();
+    }
+
+    @GetMapping("/protocol")
+    public ApiResponse<List<ProtocolResponse>> getAllProtocols() {
+        return ApiResponse.<List<ProtocolResponse>>builder()
+                .code(200)
+                .message("Successfully getting all protocols!")
+                .result(vaccineService.getAllProtocols())
+                .build();
+    }
+
+    @GetMapping("/protocol/{protocolId}")
+    public ApiResponse<ProtocolResponse> getProtocolById(@PathVariable Long protocolId) {
+        return ApiResponse.<ProtocolResponse>builder()
+                .code(200)
+                .message("Successfully getting protocol by ID!")
+                .result(vaccineService.getProtocolById(protocolId))
+                .build();
+    }
+
 }

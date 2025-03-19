@@ -16,12 +16,19 @@ public enum ErrorCode {
     USERNAME_NOT_EXIST(1003, "Username does not exist", HttpStatus.NOT_FOUND),
     EMPTY_USER(1004, "User data is empty", HttpStatus.NOT_FOUND),
     ROLE_NOT_FOUND(1010, "Role not found", HttpStatus.NOT_FOUND),
-    CATEGORY_NOT_FOUND(1011, "Vaccine Category not found", HttpStatus.NOT_FOUND),
+    INVALID_ROLE(1011, "Invalid role specified", HttpStatus.BAD_REQUEST),
+    CATEGORY_NOT_FOUND(1012, "Vaccine Category not found", HttpStatus.NOT_FOUND),
+    VACCINE_NOT_FOUND(1013, "Vaccine not found", HttpStatus.NOT_FOUND),
+    PROTOCOL_NOT_FOUND(1014, "Protocol not found", HttpStatus.NOT_FOUND),
+    BOOKING_NOT_FOUND(1015, "Booking not found", HttpStatus.NOT_FOUND),
+    WORK_DATE_NOT_FOUND(1016, "Work Date not found", HttpStatus.NOT_FOUND),
+    DIAGNOSIS_NOT_FOUND(1017, "Diagnosis not found", HttpStatus.NOT_FOUND),
 
     // Input validation errors
     INVALID_KEY(2000, "Invalid message key", HttpStatus.BAD_REQUEST),
     USERNAME_INVALID(2001, "Username must be between 3 and 16 characters", HttpStatus.BAD_REQUEST),
     PASSWORD_INVALID(2002, "Password must be between 3 and 16 characters", HttpStatus.BAD_REQUEST),
+    INVALID_DOSE_COUNT(2003, "Total Dose cannot exceed 5", HttpStatus.BAD_REQUEST),
 
     // Authorization errors
     UNAUTHENTICATED(4001, "Invalid Username or Password", HttpStatus .UNAUTHORIZED),
@@ -29,7 +36,7 @@ public enum ErrorCode {
     INVALID_TOKEN(4003, "Invalid token", HttpStatus.UNAUTHORIZED),
 
     //payment
-    PAYMENT_FAIL(4221,"Something went wrong", HttpStatus.NOT_FOUND);
+    PAYMENT_FAIL(4221,"Something went wrong", HttpStatus.NOT_FOUND),;
 
     private final int code;
     private final String message;

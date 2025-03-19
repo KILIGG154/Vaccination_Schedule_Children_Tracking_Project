@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class VaccineCombeDetailRequest {
+public class VaccineComboDetailRequest {
 //    private int vaccineId;
 //    private int comboId;
     private int dose;

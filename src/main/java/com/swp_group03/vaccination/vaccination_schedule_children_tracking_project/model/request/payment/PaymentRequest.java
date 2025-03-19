@@ -1,6 +1,6 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.payment;
 
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.OrderStatus;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.PaymentStatus;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.VaccineOrder;
 
 
@@ -10,7 +10,7 @@ public class PaymentRequest {
 
     private double amount;
 
-    private OrderStatus status;
+    private PaymentStatus status;
 
     private String paymentMethod;
 
@@ -19,7 +19,7 @@ public class PaymentRequest {
     public PaymentRequest() {
     }
 
-    public PaymentRequest(String token, double amount, OrderStatus status, String paymentMethod, VaccineOrder vaccineOrder) {
+    public PaymentRequest(String token, double amount, PaymentStatus status, String paymentMethod, VaccineOrder vaccineOrder) {
         this.token = token;
         this.amount = amount;
         this.status = status;
@@ -27,11 +27,11 @@ public class PaymentRequest {
         this.vaccineOrder = vaccineOrder;
     }
 
-    public OrderStatus getStatus() {
+    public PaymentStatus getStatus() {
         return status;
     }
 
-    public void setStatus(OrderStatus status) {
+    public void setStatus(PaymentStatus status) {
         this.status = status;
     }
 

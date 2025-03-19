@@ -3,7 +3,7 @@ package com.swp_group03.vaccination.vaccination_schedule_children_tracking_proje
 import com.stripe.exception.StripeException;
 // import com.stripe.model.Charge;
 import com.stripe.model.PaymentIntent;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.OrderStatus;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.PaymentStatus;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Payment;
 // import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.VaccineOrder;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.AppException;
@@ -71,7 +71,7 @@ public class StripePaymentService {
 
             if ("succeeded".equals(confirmedIntent.getStatus())) {
                 // Update request with success status
-                request.setStatus(OrderStatus.COMPLETED);
+                request.setStatus(PaymentStatus.COMPLETED);
                 // request.setPaymentMethod("MasterCard");
 
                 // Sử dụng service hiện có để lưu thông tin thanh toán
@@ -84,7 +84,7 @@ public class StripePaymentService {
             } else {
                 // Handle failed payment
                 log.warn("Payment failed with status: {} for orderID: {}", confirmedIntent.getStatus(), orderID);
-                request.setStatus(OrderStatus.FAIL);
+                request.setStatus(PaymentStatus.FAIL);
                 // request.setPaymentMethod("MasterCard");
                 // return paymentService.createPayment(orderID, request);
 
@@ -99,7 +99,7 @@ public class StripePaymentService {
             log.error("Stripe exception details:", e);
 
             // Create a failed payment record in the database
-            request.setStatus(OrderStatus.FAIL);
+            request.setStatus(PaymentStatus.FAIL);
             request.setPaymentMethod("Credit Card");
             try {
                 paymentService.createPayment(orderID, request);
@@ -113,7 +113,7 @@ public class StripePaymentService {
             log.error("Exception details:", e);
 
             // Create a failed payment record
-            request.setStatus(OrderStatus.FAIL);
+            request.setStatus(PaymentStatus.FAIL);
             request.setPaymentMethod("Credit Card");
             try {
                 paymentService.createPayment(orderID, request);

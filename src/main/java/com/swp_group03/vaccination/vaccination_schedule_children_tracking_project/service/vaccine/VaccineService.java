@@ -1,19 +1,11 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.vaccine;
 
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.vaccine.Vaccine;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.vaccine.VaccineCategory;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.vaccine.VaccineCombo;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.vaccine.VaccineComboDetail;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.vaccine.*;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.AppException;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.ErrorCode;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.mapper.VaccineMapper;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.vaccine.VaccineCategoryRequest;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.vaccine.VaccineCombeDetailRequest;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.vaccine.VaccineComboRequest;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.vaccine.VaccineRequest;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.vaccine.ResponseVaccine;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.vaccine.ResponseVaccineCombo;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.vaccine.ResponseVaccineDetails;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.vaccine.*;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.vaccine.*;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.*;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -57,24 +50,6 @@ public class VaccineService {
 
     @Transactional
     public Vaccine addVaccine(VaccineRequest request, Long categoryId) {
-//        Vaccine vaccine = new Vaccine();
-//        vaccine.setName(request.getName());
-//        vaccine.setDescription(request.getDescription());
-//        vaccine.setManufacturer(request.getManufacturer());
-//        vaccine.setDosage(request.getDosage());
-//        vaccine.setContraindications(request.getContraindications());
-//        vaccine.setPrecautions(request.getPrecautions());
-//        vaccine.setInteractions(request.getInteractions());
-//        vaccine.setAdverseReactions(request.getAdverseReactions());
-//        vaccine.setStorageConditions(request.getStorageConditions());
-//        vaccine.setRecommended(request.getRecommended());
-//        vaccine.setPreVaccination(request.getPreVaccination());
-//        vaccine.setCompatibility(request.getCompatibility());
-//        vaccine.setQuantity(request.getQuantity());
-//        vaccine.setUnitPrice(request.getUnitPrice());
-//        vaccine.setSalePrice(request.getSalePrice());
-//        vaccine.setExpirationDate(request.getExpirationDate());
-//        vaccine.setImagineUrl(request.getImagineUrl());
 
         VaccineCategory category = VCRepo.findById(categoryId)
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
@@ -107,7 +82,7 @@ public class VaccineService {
     }
 
     @Transactional
-    public VaccineComboDetail addVaccineComboDetail(VaccineCombeDetailRequest request, int vaccineId, int comboId) {
+    public VaccineComboDetail addVaccineComboDetail(VaccineComboDetailRequest request, int vaccineId, int comboId) {
         // Log để debug
         log.info("Adding VaccineComboDetail for vaccineId={}, comboId={}");
 
@@ -117,13 +92,6 @@ public class VaccineService {
 
         VaccineCombo vaccineCombo = vaccineCombos.findById(comboId)
                 .orElseThrow(() -> new RuntimeException("vaccine Combo not found with id: "));
-
-        // Tạo ID cho VaccineComboDetail
-//        VaccineComboDetailId key = new VaccineComboDetailId();
-//        key.setVaccineId(request.getVaccineId());
-//        key.setComboId(request.getComboId());
-//
-//        log.info("Created composite key: vaccineId={}, comboId={}", key.getVaccineId(), key.getComboId());
 
 
         // Tạo và cấu hình VaccineComboDetail - THAY ĐỔI Ở ĐÂY
@@ -150,43 +118,6 @@ public class VaccineService {
         return detail;
     }
 
-    // Logic lưu DB khi xử dụng Embeded ID - nhưng không handle được nên bị comment!
-    {
-//         // Tạo và  cấu hình VaccineComboDetail
-//         VaccineComboDetail detail = new VaccineComboDetail();
-//         detail.setId(key);
-//         detail.setVaccine(vaccine);
-//         detail.setCombo(vaccineCombo);
-//         detail.setDose(request.getDose());
-//         detail.setAgeGroup(request.getAgeGroup());
-//         detail.setSaleOff(request.getSaleOff());
-
-// //        vaccine.getVaccineComboDetails().add(detail);
-// //        vaccineCombo.getVaccineComboDetails().add(detail);
-// //        log.info("Added VaccineComboDetail to vaccine and VaccineCombo", detail.getVaccine(), detail.getCombo());
-
-
-//         // Lưu và trả về kết quả
-// //        vaccineRepo.save(vaccine);
-// //        vaccineCombos.save(vaccineCombo);
-//         return vaccineComboDetail.saveAndFlush(detail);
-//     }
-    }
-
-    // Method() giống cái dưới nhưng là xuất ra log để đọc lỗi!!!
-    {
-//    public List<ResponseVaccineCombo> getVaccineCombos() {
-//        List<VaccineCombo> combos = vaccineCombos.findAll();
-//
-//        // Kiểm tra giá trị total trước khi mapping
-////        combos.forEach(combo -> System.out.println("Combo: " + combo.getId() + " | Total: " + combo.getTotal()));
-//        //Đúng rồi nên chả cần kiểm tra nữa!!!
-//
-//        return vaccineMapper.toResponseVaccineCombo(combos);
-//    }
-    }
-
-
     public List<ResponseVaccineCombo> getVaccineCombos(){
         return vaccineMapper.toResponseVaccineCombo(vaccineCombos.findAll());
     }
@@ -195,37 +126,6 @@ public class VaccineService {
     //Gọi mapper và xử lý việc map các dữ liệu thì cứ để mapper lo, mình lo chơi bời thôi!
     public List<ResponseVaccineDetails> getAllVaccineCombosDetails() {
         return vaccineMapper.toResponseVaccineDetails(vaccineComboDetail.findAll());
-    }
-
-    // Fore để tính totalPrice luôn nhưng tính khi gọi getAllVaccineCombosDetails
-    {
-//        List<ResponseVaccineDetails> details = vaccineMapper.toResponseVaccineDetails(vaccineComboDetail.findAll());
-//
-//        for(ResponseVaccineDetails detail : details){
-//            double price = detail.getVaccine().getSalePrice();
-//            int doseNumber = detail.getDose();
-//            detail.setTotalCombo(price * doseNumber);
-//        }
-//        return details;
-//    }
-    }
-
-    // Method tính totalPrice của Combo nhưng Ver 1.0
-    {
-//    @Transactional
-//    private double getTotalPriceCombo(int id){
-//        VaccineCombo vaccineCombo = vaccineCombos.findById(id).orElseThrow(() -> new RuntimeException("Vaccine Combo not found with id: " ));
-//
-//        double tolalP = vaccineCombo.getVaccineComboDetails().stream().mapToDouble(detail -> {
-//            Vaccine vaccine = detail.getVaccine(); // Lấy thông tin vaccine
-//            double price = vaccine.getSalePrice();
-//            int doseNumber = detail.getDose(); // Lấy số mũi từ bảng trung gian
-//            return price * doseNumber; // Tính giá tiền
-//
-//        }).sum();
-//
-//        return tolalP;
-//    }
     }
 
 // Cái Method này thì chỉ cần trả về total Price mỗi khi có 1 Vaccine được add vào Combo
@@ -244,5 +144,92 @@ protected double getTotalPriceCombo(int id) {
     return totalP;
 }
 
+    //Protocol Service in Vaccine Service
+
+    @Autowired
+    ProtocolRepo protocolRepo;
+
+    @Autowired
+    ProtocolDetailRepo protocolDetailRepo;
+
+    @Autowired
+    VaccineProtocolDoseRepo vProtocolRepo;
+
+    @Transactional
+    public ProtocolResponse addNewProtocol(ProtocolRequest request) {
+        // Tạo Protocol
+        Protocol protocol = new Protocol();
+        protocol.setName(request.getName());
+        protocol.setDescription(request.getDescription());
+
+        // Lưu Protocol trước để có ID
+        protocol = protocolRepo.save(protocol);
+
+        // Thêm các ProtocolDetail
+        for (ProtocolDetailRequest detailRequest : request.getDetails()) {
+            ProtocolDetail detail = new ProtocolDetail();
+            detail.setProtocol(protocol);
+            detail.setDoseNumber(detailRequest.getDoseNumber());
+            detail.setIntervalDays(detailRequest.getIntervalDays());
+
+            protocol.addDetail(detail);
+        }
+
+        // Lưu lại Protocol với các detail
+         protocolRepo.save(protocol);
+
+        return mapToProtocolResponse(protocol);
+    }
+
+    public List<ProtocolResponse> getAllProtocols() {
+        List<Protocol> protocols = protocolRepo.findAll();
+        return protocols.stream()
+                .map(this::mapToProtocolResponse)
+                .collect(Collectors.toList());
+    }
+
+
+    public ProtocolResponse getProtocolById(Long protocolId) {
+        Protocol protocol = protocolRepo.findById(protocolId)
+                .orElseThrow(() -> new AppException(ErrorCode.PROTOCOL_NOT_FOUND));
+        return mapToProtocolResponse(protocol);
+    }
+
+
+    public ResponseProtocolDose getProtocolDoseByVaccine(int vaccineId) {
+        Vaccine vaccine = vaccineRepo.findById(vaccineId)
+                .orElseThrow(() -> new AppException(ErrorCode.VACCINE_NOT_FOUND));
+
+        List<VaccineProtocolDose> doses = vProtocolRepo.findByVaccineId(vaccineId);
+
+        ResponseProtocolDose response = new ResponseProtocolDose();
+        response.setVaccineId(vaccineId);
+        response.setVaccineName(vaccine.getName());
+        response.setDoseList(doses);
+
+        return response;
+    }
+
+    private ProtocolResponse mapToProtocolResponse(Protocol protocol) {
+        ProtocolResponse response = new ProtocolResponse();
+        response.setProtocolId(protocol.getProtocolId());
+        response.setName(protocol.getName());
+        response.setDescription(protocol.getDescription());
+
+        List<ProtocolDetailResponse> detailResponses = protocol.getDetails().stream()
+                .map(this::mapToProtocolDetailResponse)
+                .collect(Collectors.toList());
+        response.setDetails(detailResponses);
+
+        return response;
+    }
+
+    private ProtocolDetailResponse mapToProtocolDetailResponse(ProtocolDetail detail) {
+        ProtocolDetailResponse response = new ProtocolDetailResponse();
+        response.setDetailId(detail.getDetailId());
+        response.setDoseNumber(detail.getDoseNumber());
+        response.setIntervalDays(detail.getIntervalDays());
+        return response;
+    }
 
 }

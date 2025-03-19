@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +29,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    /**
+     * Endpoint for normal user registration
+     */
     @PostMapping("/register")
     @Operation(summary = "Register a new user")
     public ApiResponse<Account> registerUser(@Valid @RequestBody AccountCreate request){
@@ -38,6 +42,33 @@ public class UserController {
         apiResponse.setMessage("Registered Successfully");
 
        return apiResponse;
+    }
+    
+    /**
+     * Endpoint for admin to create staff accounts (DOCTOR, NURSE)
+     * Only admin can access this endpoint
+     */
+    @PostMapping("/staff")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Create staff account (DOCTOR, NURSE)")
+    public ApiResponse<AccountResponse> createStaffAccount(@Valid @RequestBody AccountCreate request) {
+        // Make sure a role is specified and is either DOCTOR or NURSE
+        String role = request.getRoleName();
+        if (role == null || (!role.equals("DOCTOR") && !role.equals("NURSE"))) {
+            return ApiResponse.<AccountResponse>builder()
+                    .code(400)
+                    .message("Staff role must be either DOCTOR or NURSE")
+                    .build();
+        }
+        
+        Account staffAccount = userService.createAccount(request);
+        AccountResponse response = userService.getAccountById(staffAccount.getAccountId());
+        
+        return ApiResponse.<AccountResponse>builder()
+                .code(200)
+                .message("Staff account created successfully")
+                .result(response)
+                .build();
     }
 
     @PatchMapping("/{accountId}")

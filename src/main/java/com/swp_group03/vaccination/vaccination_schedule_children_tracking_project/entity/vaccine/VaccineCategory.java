@@ -13,7 +13,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "Vacine_Category")
+@Table(name = "Vaccine_Category")
 public class VaccineCategory {
     @Id
     @Column(name = "CategoryId", nullable = false)

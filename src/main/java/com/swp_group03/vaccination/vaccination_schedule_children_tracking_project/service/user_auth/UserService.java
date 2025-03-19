@@ -20,6 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -40,35 +41,54 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    private static final List<String> VALID_ROLES = Arrays.asList("ADMIN", "USER", "DOCTOR", "NURSE");
 
+    @Transactional
     public Account createAccount(AccountCreate request){
-
+        // Validate if username already exists
         if(userRepo.existsByUsername(request.getUsername())){
             throw new AppException(ErrorCode.USER_ALREADY_EXIST);
         }
 
+        // Create account based on request
         Account account = userMapper.toCreateUser(request);
         account.setPassword(passwordEncoder.encode(request.getPassword()));
+        account.setStatus(true);
 
-
-        //Tạm thời test Role thôi chứ không chốt làm như thế này
-        Role userRole = roleRepo.findByRoleName("USER");
-        if (userRole == null) {
-            userRole = new Role("USER");
-            roleRepo.save(userRole);
-
+        // Set up role for the account
+        String roleName = request.getRoleName();
+        if (roleName == null || roleName.isEmpty()) {
+            // Default to USER if no role specified
+            roleName = "USER";
+        } else if (!VALID_ROLES.contains(roleName)) {
+            throw new AppException(ErrorCode.INVALID_ROLE);
         }
-            HashSet<Role> roles = new HashSet<>();
-            roles.add(userRole); // Sử dụng userRole đã tìm thấy hoặc tạo mới
-            account.setRoles(roles);
-            account.setStatus(true);
 
+        // //Tạm thời test Role thôi chứ không chốt làm như thế này
+        // Role userRole = roleRepo.findByRoleName("USER");
+        // if (userRole == null) {
+        //     userRole = new Role("USER");
+        //     roleRepo.save(userRole);
+        Role role = roleRepo.findByRoleName(roleName);
+        if (role == null) {
+            throw new AppException(ErrorCode.ROLE_NOT_FOUND);
+        }
+            // HashSet<Role> roles = new HashSet<>();
+            // roles.add(userRole); // Sử dụng userRole đã tìm thấy hoặc tạo mới
+            // account.setRoles(roles);
+            // account.setStatus(true);
+
+        // Set up roles for the account
+        HashSet<Role> roles = new HashSet<>();
+        roles.add(role);
+        account.setRoles(roles);
+        
+        // Save the account
+        log.info("Creating new account with role: {}", roleName);
         return userRepo.save(account);
-
     }
 
-
-//    @PreAuthorize("hasRole('USER')")
+    @Transactional
     public  AccountResponse updateAccount(AccountUpdate request, String account_id){
         log.info("Update account with id: {}", account_id);
         Account account =  userRepo.findById(account_id).orElseThrow(() -> new AppException(
@@ -81,9 +101,7 @@ public class UserService {
         return userMapper.toAccountResponse(userRepo.save(account));
     }
 
-//    @PreAuthorize("hasRole('ADMIN')")
     public List<AccountResponse> getAllAccount(){
-
         List<AccountResponse> accounts = userMapper.toAllAccountResponse(userRepo.findAll());
 
           if (accounts !=null){
@@ -93,13 +111,10 @@ public class UserService {
           }
     }
 
-    @PostAuthorize("returnObject.name == authentication.name")
     public AccountResponse getAccountById(String id){
         Account account = userRepo.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-//        return userMapper.toAccountResponse(userRepo.findById(id));
         return userMapper.toAccountResponse(userRepo.findByAccountId(id));
     }
-
 
     public AccountResponse getMyInfo() {
         var context = SecurityContextHolder.getContext();
@@ -141,7 +156,7 @@ public class UserService {
 
             // Save Admin Account
             userRepo.save(admin);
-            log.warn("Admin user has been created with default password 'admin'. Please change it immediately.");
+            log.warn("Admin user has been created with default password 'admin123'. Please change it immediately.");
         } else {
             log.info("Admin account already exists, skipping creation.");
         }
@@ -151,5 +166,4 @@ public class UserService {
         Account account = userRepo.findById(accountId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         return new AccDTO(account);
     }
-
 }

@@ -43,7 +43,7 @@ public class Vaccine {
     private String manufacturer;
 
     @Size(max = 255)
-    @Column(name = "Dosage")
+    @Column(name = "Dosage") //Đây là cột liều lượng cho một lần tiêm á!!!
     @Nationalized
     private String dosage;
 
@@ -103,6 +103,9 @@ public class Vaccine {
 
     @Column(name = "SalePrice")
     private double salePrice;
+
+    @Column(name = "TotalDoses")
+    private int totalDose;
 
     @Size(max = 50)
     @Column(name = "Status", length = 50)

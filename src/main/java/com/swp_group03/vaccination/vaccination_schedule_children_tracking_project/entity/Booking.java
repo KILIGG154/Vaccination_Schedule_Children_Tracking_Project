@@ -1,5 +1,6 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
 
@@ -15,9 +16,12 @@ public class Booking {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "BookingId")
     private int bookingId;
 
-    @Column(name = "Appointmen_tDate")
+    @Column(name = "Appointment_Date")
+    @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date appointmentDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -25,9 +29,19 @@ public class Booking {
     @JsonIgnore
     private Child child;
 
+//
+//    @Column(name = "Status")
+//    private boolean status;
 
     @Column(name = "Status")
-    private boolean status;
+    @Enumerated(EnumType.STRING)
+    private BookingStatus status;
+
+    @Column(name = "reaction")
+    private String reaction; // Phản ứng sau tiêm
+
+    @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL)
+    private Diagnosis diagnosis;
 
     @OneToMany(mappedBy = "booking",fetch = FetchType.LAZY)
     @Column(name = "Vaccine_Order")
@@ -54,11 +68,12 @@ public class Booking {
 
     }
 
-    public Booking(Date appointmentDate, Child child, boolean status, List<VaccineOrder> vaccineOrders) {
+    public Booking(Date appointmentDate, Child child, BookingStatus status, List<VaccineOrder> vaccineOrders, String reaction) {
         this.appointmentDate = appointmentDate;
         this.child = child;
         this.status = status;
         this.vaccineOrders = vaccineOrders;
+        this.reaction = reaction;
     }
 
     public int getBookingId() {
@@ -85,11 +100,11 @@ public class Booking {
         this.child = child;
     }
 
-    public boolean isStatus() {
+    public BookingStatus getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(BookingStatus status) {
         this.status = status;
     }
 
@@ -99,5 +114,13 @@ public class Booking {
 
     public void setVaccineOrders(List<VaccineOrder> vaccineOrders) {
         this.vaccineOrders = vaccineOrders;
+    }
+
+    public String getReaction() {
+        return reaction;
+    }
+
+    public void setReaction(String reaction) {
+        this.reaction = reaction;
     }
 }

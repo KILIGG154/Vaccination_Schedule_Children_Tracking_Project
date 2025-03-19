@@ -36,4 +36,7 @@ public class AccountCreate {
 
     Gender gender;     // Changed from Gender
 //    String urlImage;   // Changed from url_image
+
+    // Added field for role specification
+    String roleName;   // Can be "USER", "ADMIN", "DOCTOR", "NURSE"
 }

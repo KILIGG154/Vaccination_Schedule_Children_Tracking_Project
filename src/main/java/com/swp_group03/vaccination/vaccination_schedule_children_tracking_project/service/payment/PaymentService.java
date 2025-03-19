@@ -37,13 +37,9 @@ public class PaymentService {
     }
 
 
-
-
     public List<Payment> getAllPayment(){
         return paymentRepo.findAll();
     }
-
-
 
 
 }

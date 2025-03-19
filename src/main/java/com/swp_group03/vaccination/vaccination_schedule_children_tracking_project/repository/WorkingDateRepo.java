@@ -6,9 +6,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface WorkingDateRepo extends JpaRepository<WorkDate, Integer> {
     List<WorkDate> findByDayWorkBetween(Date startDate, Date endDate);
 
+    Optional<WorkDate> findByDayWork(Date date);
 }

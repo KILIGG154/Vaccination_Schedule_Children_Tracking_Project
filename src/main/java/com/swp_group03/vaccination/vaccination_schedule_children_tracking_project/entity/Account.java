@@ -81,6 +81,9 @@ public class Account {
     @JsonIgnore
     private List<Child> child;
 
+    @OneToOne(mappedBy = "account")
+    private Diagnosis diagnosis;
+
     public Account() {
     }
 

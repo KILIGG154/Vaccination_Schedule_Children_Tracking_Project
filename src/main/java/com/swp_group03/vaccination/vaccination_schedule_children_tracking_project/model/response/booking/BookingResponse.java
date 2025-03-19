@@ -2,6 +2,8 @@ package com.swp_group03.vaccination.vaccination_schedule_children_tracking_proje
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Booking;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.BookingStatus;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Child;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.child.ChildDTO;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.order.VaccineOrderDTO;
@@ -18,12 +20,12 @@ public class BookingResponse {
     
     private ChildDTO child;
     private List<VaccineOrderDTO> order;
-    private boolean status;
+    private BookingStatus status;
 
     public BookingResponse() {
     }
     
-    public BookingResponse(int bookingId, Date appointmentDate, Child child, List<VaccineOrderDTO> order, boolean status) {
+    public BookingResponse(int bookingId, Date appointmentDate, Child child, List<VaccineOrderDTO> order, BookingStatus status) {
         this.bookingId = bookingId;
         this.appointmentDate = appointmentDate;
         this.child = new ChildDTO(child);
@@ -63,11 +65,11 @@ public class BookingResponse {
         this.order = order;
     }
 
-    public boolean isStatus() {
+    public BookingStatus isStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(BookingStatus status) {
         this.status = status;
     }
 }

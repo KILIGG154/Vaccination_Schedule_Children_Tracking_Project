@@ -12,10 +12,15 @@ import org.springframework.context.annotation.Configuration;
 public class ApplicationInitConfig {
 
     private final UserService userService;
+    private final RoleService roleService;
 
     @Bean
     ApplicationRunner applicationRunner() {
         return args -> {
+            // Initialize all required roles first
+            roleService.initializeRoles();
+            
+            // Create admin account
             userService.createAdminAccountIfNotExists();
         };
     }

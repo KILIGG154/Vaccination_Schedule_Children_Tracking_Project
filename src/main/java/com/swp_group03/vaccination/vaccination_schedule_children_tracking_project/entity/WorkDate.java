@@ -26,7 +26,7 @@ public class WorkDate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "DayWork")
+    @Column(name = "DayWork", unique = true)
     @Temporal(TemporalType.DATE) // Chỉ lưu ngày, không có giờ
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date dayWork;

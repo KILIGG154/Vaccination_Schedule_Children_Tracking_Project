@@ -16,7 +16,7 @@ public class Payment {
 
     @Column(name = "Status")
     @Enumerated(EnumType.STRING) // Use STRING to store the enum as a string in the database
-    private OrderStatus status = OrderStatus.IN_PROCESS;
+    private PaymentStatus status = PaymentStatus.IN_PROCESS;
 
     @Column(name = "Payment_Method")
     private String paymentMethod;
@@ -28,7 +28,7 @@ public class Payment {
     public Payment() {
     }
 
-    public Payment(Date paymentDate, OrderStatus status, String paymentMethod, VaccineOrder vaccineOrder) {
+    public Payment(Date paymentDate, PaymentStatus status, String paymentMethod, VaccineOrder vaccineOrder) {
 
         this.status = status;
         this.paymentMethod = paymentMethod;
@@ -44,11 +44,11 @@ public class Payment {
     }
 
 
-    public OrderStatus getStatus() {
+    public PaymentStatus getStatus() {
         return status;
     }
 
-    public void setStatus(OrderStatus status) {
+    public void setStatus(PaymentStatus status) {
         this.status = status;
     }
 
