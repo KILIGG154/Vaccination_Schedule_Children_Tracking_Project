@@ -62,10 +62,10 @@ public class Vaccine {
     @Nationalized
     private String interactions;
 
-    @Lob
-    @Column(name = "AdverseReactions")
-    @Nationalized
-    private String adverseReactions;
+//    @Lob
+//    @Column(name = "AdverseReactions")
+//    @Nationalized
+//    private String adverseReactions;
 
     @Lob
     @Column(name = "StorageConditions")

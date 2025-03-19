@@ -107,7 +107,8 @@ public class SecurityConfig {
 public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
     configuration.setAllowedOriginPatterns(List.of("*")); // Chấp nhận tất cả origin
-    configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Cho phép các phương thức HTTP
+//    configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Cho phép các phương thức HTTP
+      configuration.setAllowedMethods(List.of("*")); // Cho phép các phương thức HTTP
     configuration.setAllowedHeaders(List.of("*")); // Cho phép tất cả headers
     configuration.setAllowCredentials(true);
     configuration.setMaxAge(3600L);

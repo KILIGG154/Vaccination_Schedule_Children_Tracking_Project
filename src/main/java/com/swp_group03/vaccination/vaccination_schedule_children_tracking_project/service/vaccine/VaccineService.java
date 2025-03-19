@@ -17,6 +17,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.ArrayList;
+
 
 @Slf4j
 @Service
@@ -43,10 +45,12 @@ public class VaccineService {
 
     @Transactional
     public VaccineCategory addVaccineCategory(VaccineCategoryRequest request) {
-
         return VCRepo.save(vaccineMapper.toCreateVaccineCategory(request));
     }
 
+    public List<VaccineCategory> getAllCategories() {
+        return VCRepo.findAll();
+    }
 
     @Transactional
     public Vaccine addVaccine(VaccineRequest request, Long categoryId) {
@@ -210,6 +214,52 @@ protected double getTotalPriceCombo(int id) {
         return response;
     }
 
+    @Transactional
+    public List<VaccineProtocolDose> addVaccineToProtocol(Integer vaccineId, Long protocolId) {
+        // Tìm vaccine và protocol
+        Vaccine vaccine = vaccineRepo.findById(vaccineId)
+                .orElseThrow(() -> new AppException(ErrorCode.VACCINE_NOT_FOUND));
+                
+        Protocol protocol = protocolRepo.findById(protocolId)
+                .orElseThrow(() -> new AppException(ErrorCode.PROTOCOL_NOT_FOUND));
+                
+        // Lấy danh sách protocol details, đảm bảo sắp xếp theo doseNumber
+        List<ProtocolDetail> protocolDetails = protocolDetailRepo.findByProtocolOrderByDoseNumber(protocol);
+        
+        // Kiểm tra số liều vaccine và số lượng chi tiết protocol
+        int totalDose = vaccine.getTotalDose();
+        
+        if (totalDose > 5) {
+            throw new AppException(ErrorCode.INVALID_DOSE_COUNT);
+        }
+        
+        if (protocolDetails.size() < totalDose) {
+            throw new AppException(ErrorCode.PROTOCOL_NOT_FOUND);
+        }
+        
+        // Xóa các VaccineProtocolDose hiện có của vaccine này (nếu có)
+        List<VaccineProtocolDose> existingDoses = vProtocolRepo.findByVaccineId(vaccineId);
+        if (!existingDoses.isEmpty()) {
+            vProtocolRepo.deleteAll(existingDoses);
+        }
+        
+        // Tạo các VaccineProtocolDose mới
+        List<VaccineProtocolDose> doses = new ArrayList<>();
+        
+        for (int i = 0; i < totalDose; i++) {
+            ProtocolDetail detail = protocolDetails.get(i);
+            
+            VaccineProtocolDose dose = new VaccineProtocolDose();
+            dose.setVaccine(vaccine);
+            dose.setProtocolDetail(detail);
+            
+            VaccineProtocolDose savedDose = vProtocolRepo.save(dose);
+            doses.add(savedDose);
+        }
+        
+        return doses;
+    }
+
     private ProtocolResponse mapToProtocolResponse(Protocol protocol) {
         ProtocolResponse response = new ProtocolResponse();
         response.setProtocolId(protocol.getProtocolId());
@@ -231,5 +281,6 @@ protected double getTotalPriceCombo(int id) {
         response.setIntervalDays(detail.getIntervalDays());
         return response;
     }
+
 
 }

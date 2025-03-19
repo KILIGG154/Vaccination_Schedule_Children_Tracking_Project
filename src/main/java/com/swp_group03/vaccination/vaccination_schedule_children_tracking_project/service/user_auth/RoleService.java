@@ -51,4 +51,5 @@ public class RoleService {
     public List<RoleResponse> getAll() {
         return roleRepo.findAll().stream().map(roleMapper::toRoleResponse).toList();
     }
+
 } 

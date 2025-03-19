@@ -33,7 +33,7 @@ public class VaccineRequest {
 
     String interactions;
 
-    String adverseReactions;
+//    String adverseReactions;
 
     String storageConditions;
 
@@ -50,6 +50,8 @@ public class VaccineRequest {
     double salePrice;
 
     Integer quantity;
+
+    int totalDose;
 
 //    String status;
 
