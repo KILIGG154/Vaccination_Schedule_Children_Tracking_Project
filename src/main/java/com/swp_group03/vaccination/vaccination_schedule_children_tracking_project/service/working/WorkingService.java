@@ -7,6 +7,7 @@ import com.swp_group03.vaccination.vaccination_schedule_children_tracking_projec
 //import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.working.WorkingDetailRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.working.WorkingRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.working.WorkDateDTO;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.working.WorkingResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.UserRepo;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.WorkingDateRepo;
@@ -111,7 +112,22 @@ public class WorkingService {
                         .build();
             }
 
-            List<WorkingResponse> workingSchedules = workingMapper.toGetAllWorking(workingScheduleRepo.findByAccountId(accountID));
+            // Lấy tất cả các lịch làm việc của tài khoản
+            List<WorkingSchedule> schedules = workingScheduleRepo.findByAccountId(accountID);
+            
+            // Chuyển đổi sang WorkingResponse với thông tin chi tiết
+            List<WorkingResponse> workingSchedules = schedules.stream()
+                .map(schedule -> WorkingResponse.builder()
+                    .dateId(schedule.getDateId())
+                    .accountId(schedule.getAccountId())
+                    .date(WorkDateDTO.builder()
+                        .id(schedule.getSchedule().getId())
+                        .dayWork(schedule.getSchedule().getDayWork())
+                        .shiftType(schedule.getSchedule().getShiftType())
+                        .build())
+                    .status(schedule.isStatus() ? "Active" : "Inactive")
+                    .build())
+                .collect(Collectors.toList());
 
             return ApiResponse.<List<WorkingResponse>>builder()
                     .code(200)

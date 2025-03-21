@@ -18,13 +18,17 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
+
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.AppException;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.ErrorCode;
 
 @RestController
 @RequestMapping("/users")
 @Tag(name = "User", description = "User management")
 @Slf4j
-public class UserController {
+public class  UserController {
 
     @Autowired
     private UserService userService;
@@ -49,7 +53,6 @@ public class UserController {
      * Only admin can access this endpoint
      */
     @PostMapping("/staff")
-    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Create staff account (DOCTOR, NURSE)")
     public ApiResponse<AccountResponse> createStaffAccount(@Valid @RequestBody AccountCreate request) {
         // Make sure a role is specified and is either DOCTOR or NURSE
@@ -72,10 +75,23 @@ public class UserController {
     }
 
     @PatchMapping("/{accountId}")
-    public ApiResponse<AccountResponse> updateUser(@PathVariable String accountId, @Validated @RequestBody AccountUpdate request){
-        return ApiResponse.<AccountResponse>builder()
-                .result(userService.updateAccount(request,accountId))
+    public ApiResponse<AccountResponse> updateUser(
+        @PathVariable String accountId, 
+        @Validated @RequestBody AccountUpdate request
+    ){
+        try {
+            AccountResponse updatedAccount = userService.updateAccount(request, accountId);
+            return ApiResponse.<AccountResponse>builder()
+                .code(200)
+                .message("Account updated successfully")
+                .result(updatedAccount)
                 .build();
+        } catch (AppException e) {
+            return ApiResponse.<AccountResponse>builder()
+                .code(e.getErrorCode().getCode())
+                .message(e.getMessage())
+                .build();
+        }
     }
 
     @GetMapping("/getAllUser")
@@ -123,9 +139,11 @@ public class UserController {
     }
 
     @GetMapping("/{accountId}/children")
-    public ResponseEntity<AccDTO> getChildrenByAccount(@PathVariable String accountId){
-
-        AccDTO dto = userService.getChildByAccId(accountId);
-        return ResponseEntity.ok(dto);
+    public ApiResponse<AccDTO> getChildrenByAccount(@PathVariable String accountId){
+        return ApiResponse.<AccDTO>builder()
+                .code(200)
+                .message("Children retrieved successfully")
+                .result(userService.getChildByAccId(accountId))
+                .build();
     }
 }

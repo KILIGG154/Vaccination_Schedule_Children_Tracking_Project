@@ -19,7 +19,7 @@ public class VaccineProtocolDose {
     @Id
     @Column(name = "dose_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long doseId;
+    private Long doseId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vaccine_id")

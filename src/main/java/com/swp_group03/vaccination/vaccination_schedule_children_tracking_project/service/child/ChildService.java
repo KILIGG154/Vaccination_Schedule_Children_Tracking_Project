@@ -60,8 +60,8 @@ public class ChildService {
         return childRepo.save(child);
     }
 
-    public Child updateChildren(ChildrenRequest request, int childId){
-        Child child = childRepo.findById(childId).orElseThrow(() -> new EntityNotFoundException("Child not found"));
+    public Child updateChildren(ChildrenRequest request, int Id){
+        Child child = childRepo.findById(Id).orElseThrow(() -> new EntityNotFoundException("Child not found"));
 
         if(request.getName() != null) child.setName(request.getName());
         if(child.getDob() != null) child.setDob(request.getDob());

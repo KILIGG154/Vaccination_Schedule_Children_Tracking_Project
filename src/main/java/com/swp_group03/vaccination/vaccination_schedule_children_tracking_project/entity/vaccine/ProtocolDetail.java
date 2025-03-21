@@ -2,6 +2,7 @@ package com.swp_group03.vaccination.vaccination_schedule_children_tracking_proje
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 
@@ -24,6 +25,7 @@ public class ProtocolDetail {
     private int intervalDays;
 
     @OneToMany(mappedBy = "protocolDetail", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<VaccineProtocolDose> vaccineProtocolDoses;
 
     public ProtocolDetail() {

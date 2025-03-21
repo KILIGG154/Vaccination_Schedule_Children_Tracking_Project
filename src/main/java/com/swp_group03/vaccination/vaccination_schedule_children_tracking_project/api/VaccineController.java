@@ -96,7 +96,7 @@ public class VaccineController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @GetMapping("/combos")
+    @GetMapping("/combo")
     public ResponseEntity<ApiResponse<List<ResponseVaccineCombo>>> getVaccineCombos() {
         List<ResponseVaccineCombo> combos = vaccineService.getVaccineCombos();
         ApiResponse<List<ResponseVaccineCombo>> response = ApiResponse.<List<ResponseVaccineCombo>>builder()
@@ -107,7 +107,7 @@ public class VaccineController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/combosDetails")
+    @GetMapping("/comboDetails")
     public ResponseEntity<ApiResponse<List<ResponseVaccineDetails>>> getAllVaccineCombosDetails() {
         List<ResponseVaccineDetails> details = vaccineService.getAllVaccineCombosDetails();
         ApiResponse<List<ResponseVaccineDetails>> response = ApiResponse.<List<ResponseVaccineDetails>>builder()

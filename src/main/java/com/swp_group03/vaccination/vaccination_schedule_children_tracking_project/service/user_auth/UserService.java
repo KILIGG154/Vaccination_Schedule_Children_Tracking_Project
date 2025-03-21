@@ -42,9 +42,13 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     private static final List<String> VALID_ROLES = Arrays.asList("ADMIN", "USER", "DOCTOR", "NURSE");
+    private static final List<String> VALID_ROLES_FOR_UPDATE = Arrays.asList("ADMIN", "DOCTOR", "NURSE");
 
     @Transactional
     public Account createAccount(AccountCreate request){
+        // Validate role
+        validateRole(request.getRoleName());
+
         // Validate if username already exists
         if(userRepo.existsByUsername(request.getUsername())){
             throw new AppException(ErrorCode.USER_ALREADY_EXIST);
@@ -60,23 +64,12 @@ public class UserService {
         if (roleName == null || roleName.isEmpty()) {
             // Default to USER if no role specified
             roleName = "USER";
-        } else if (!VALID_ROLES.contains(roleName)) {
-            throw new AppException(ErrorCode.INVALID_ROLE);
         }
 
-        // //Tạm thời test Role thôi chứ không chốt làm như thế này
-        // Role userRole = roleRepo.findByRoleName("USER");
-        // if (userRole == null) {
-        //     userRole = new Role("USER");
-        //     roleRepo.save(userRole);
         Role role = roleRepo.findByRoleName(roleName);
         if (role == null) {
             throw new AppException(ErrorCode.ROLE_NOT_FOUND);
         }
-            // HashSet<Role> roles = new HashSet<>();
-            // roles.add(userRole); // Sử dụng userRole đã tìm thấy hoặc tạo mới
-            // account.setRoles(roles);
-            // account.setStatus(true);
 
         // Set up roles for the account
         HashSet<Role> roles = new HashSet<>();
@@ -89,15 +82,35 @@ public class UserService {
     }
 
     @Transactional
-    public  AccountResponse updateAccount(AccountUpdate request, String account_id){
+    public AccountResponse updateAccount(AccountUpdate request, String account_id) {
         log.info("Update account with id: {}", account_id);
-        Account account =  userRepo.findById(account_id).orElseThrow(() -> new AppException(
-                ErrorCode.USER_NOT_FOUND
-        ));
+        
+        // Tìm account
+        Account account = userRepo.findById(account_id)
+            .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
-         userMapper.toUpdateUser(request, account);
-//         account.setPassword(passwordEncoder.encode(request.getPassword()));
+        // Validate role nếu được cung cấp
+        if (request.getRoleName() != null) {
+            // Kiểm tra role có hợp lệ không
+            if (!VALID_ROLES_FOR_UPDATE.contains(request.getRoleName())) {
+                throw new AppException(ErrorCode.INVALID_ROLE);
+            }
 
+            // Tìm và cập nhật role
+            Role newRole = roleRepo.findByRoleName(request.getRoleName());
+            if (newRole == null) {
+                throw new AppException(ErrorCode.ROLE_NOT_FOUND);
+            }
+            
+            // Xóa các role cũ và thêm role mới
+            account.getRoles().clear();
+            account.getRoles().add(newRole);
+        }
+
+        // Cập nhật thông tin từ request
+        userMapper.toUpdateUser(request, account);
+
+        // Lưu và trả về account đã cập nhật
         return userMapper.toAccountResponse(userRepo.save(account));
     }
 
@@ -165,5 +178,12 @@ public class UserService {
     public AccDTO getChildByAccId(String accountId){
         Account account = userRepo.findById(accountId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         return new AccDTO(account);
+    }
+
+    // Thêm method validate role để tái sử dụng
+    private void validateRole(String roleName) {
+        if (roleName != null && !VALID_ROLES.contains(roleName)) {
+            throw new AppException(ErrorCode.INVALID_ROLE);
+        }
     }
 }

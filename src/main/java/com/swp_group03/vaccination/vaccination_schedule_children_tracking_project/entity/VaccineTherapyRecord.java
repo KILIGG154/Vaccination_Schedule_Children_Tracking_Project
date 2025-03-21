@@ -18,7 +18,7 @@ public class VaccineTherapyRecord {
     @Id
     @Column(name = "therapy_vaccine_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long tVaccineId;
+    private Long tVaccineId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "booking_id")

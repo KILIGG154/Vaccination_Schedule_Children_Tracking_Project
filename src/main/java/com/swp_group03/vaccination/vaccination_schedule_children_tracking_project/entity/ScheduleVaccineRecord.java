@@ -18,7 +18,7 @@ public class ScheduleVaccineRecord {
     @Id
     @Column(name = "vaccine_record_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "booking_id")

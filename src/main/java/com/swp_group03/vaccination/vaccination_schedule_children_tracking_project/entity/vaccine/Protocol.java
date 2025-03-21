@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Nationalized;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +21,11 @@ public class Protocol {
     private  Long protocolId;
 
     @Column(name = "Name", unique = true)
+    @Nationalized
     private String name;
 
     @Column(name = "Description")
+    @Nationalized
     private String description;
 
     @OneToMany(mappedBy = "protocol", cascade = CascadeType.ALL, orphanRemoval = true)

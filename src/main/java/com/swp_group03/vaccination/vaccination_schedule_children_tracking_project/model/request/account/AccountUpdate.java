@@ -22,7 +22,11 @@ public class AccountUpdate {
      String phoneNumber; 
      String address;    
      Gender gender;    
-     String urlImage;  
+     String urlImage;
+     boolean status;
+     
+     // Thêm trường roleName để hỗ trợ update role
+     String roleName;
 
 }
 

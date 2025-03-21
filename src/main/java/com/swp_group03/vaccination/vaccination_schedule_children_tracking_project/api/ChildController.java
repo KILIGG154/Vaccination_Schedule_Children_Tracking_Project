@@ -32,10 +32,10 @@ public class ChildController {
         return ResponseEntity.ok(childService.updateChildren(child,child_id));
     }
 
-    @GetMapping()
-    public List<ChildResponse>  getChildren(){
-        return childService.getChildren();
-    }
+//    @GetMapping()
+//    public List<ChildResponse>  getChildren(){
+//        return childService.getChildren();
+//    }
 
 
     @GetMapping("/{name}")

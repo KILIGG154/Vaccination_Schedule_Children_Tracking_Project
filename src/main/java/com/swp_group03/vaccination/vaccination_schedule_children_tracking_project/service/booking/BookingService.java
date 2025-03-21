@@ -58,7 +58,7 @@ public class BookingService {
 
         Booking booking = new Booking();
         booking.setAppointmentDate(bookingRequest.getAppointmentDate());
-        booking.setStatus(booking.getStatus());
+        booking.setStatus(bookingRequest.getStatus() != null ? bookingRequest.getStatus() : BookingStatus.PENDING);
         booking.setChild(child);
         childRepo.save(child);
         bookingRepo.save(booking);
@@ -73,15 +73,30 @@ public class BookingService {
     public List<BookingResponse> getBook() {
         List<Booking> bookings = bookingRepo.findAll();
         return bookings.stream()
-            .map(booking -> new BookingResponse(
-                booking.getBookingId(),
-                booking.getAppointmentDate(),
-                booking.getChild(),
-                booking.getVaccineOrders().stream()
-                    .map(order -> new VaccineOrderDTO(order))
-                    .collect(Collectors.toList()),
-                booking.getStatus()
-            ))
+            .map(booking -> {
+                try {
+                    // Đảm bảo child không null trước khi mapping
+                    Child child = booking.getChild();
+                    List<VaccineOrderDTO> orderDTOs = booking.getVaccineOrders() != null ? 
+                        booking.getVaccineOrders().stream()
+                            .map(VaccineOrderDTO::new)
+                            .collect(Collectors.toList()) : 
+                        null;
+                    
+                    return new BookingResponse(
+                        booking.getBookingId(),
+                        booking.getAppointmentDate(),
+                        child,
+                        orderDTOs,
+                        booking.getStatus()
+                    );
+                } catch (Exception e) {
+                    // Log lỗi và bỏ qua booking có vấn đề
+                    log.error("Error mapping booking with ID {}: {}", booking.getBookingId(), e.getMessage());
+                    return null;
+                }
+            })
+            .filter(response -> response != null) // Loại bỏ các response null do lỗi
             .collect(Collectors.toList());
     }
 

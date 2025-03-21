@@ -9,12 +9,18 @@ import com.swp_group03.vaccination.vaccination_schedule_children_tracking_projec
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.payment.PaymentDTO;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.child.ChildDTO;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.order.VaccineOrderDTO;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class BookingDTO {
     private int bookingId;
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -30,35 +36,4 @@ public class BookingDTO {
         this.status = booking.getStatus();
     }
 
-    public int getBookingId() {
-        return bookingId;
-    }
-
-    public void setBookingId(int bookingId) {
-        this.bookingId = bookingId;
-    }
-
-    public Date getAppointmentDate() {
-        return appointmentDate;
-    }
-
-    public void setAppointmentDate(Date appointmentDate) {
-        this.appointmentDate = appointmentDate;
-    }
-
-    public ChildDTO getChild() {
-        return child;
-    }
-
-    public void setChild(ChildDTO child) {
-        this.child = child;
-    }
-
-    public BookingStatus isStatus() {
-        return status;
-    }
-
-    public void setStatus(BookingStatus status) {
-        this.status = status;
-    }
 }

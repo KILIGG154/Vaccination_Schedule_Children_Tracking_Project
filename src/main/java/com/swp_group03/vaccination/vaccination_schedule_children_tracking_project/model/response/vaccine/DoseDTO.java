@@ -6,14 +6,14 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 class DoseDTO {
-    private long doseId;
+    private Long doseId;
     private int doseNumber;
     private int intervalDays;
     private Long protocolId;
     private String protocolName;
 
     // Constructor đơn giản cho trường hợp chỉ cần thông tin cơ bản
-    public DoseDTO(long doseId, int doseNumber, int intervalDays) {
+    public DoseDTO(Long doseId, int doseNumber, int intervalDays) {
         this.doseId = doseId;
         this.doseNumber = doseNumber;
         this.intervalDays = intervalDays;
