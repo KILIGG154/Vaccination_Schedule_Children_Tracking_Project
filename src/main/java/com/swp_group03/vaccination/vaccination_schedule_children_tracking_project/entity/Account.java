@@ -10,6 +10,7 @@ import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 import jakarta.persistence.CascadeType;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -77,12 +78,17 @@ public class Account {
     @JsonIgnore
     private Set<WorkingSchedule> workingSchedules = new HashSet<>();
 
+    @OneToMany(mappedBy = "account")
+    @JsonIgnore
+    private List<Diagnosis> diagnoses = new ArrayList<>();
+
+    @OneToMany(mappedBy = "account")
+    @JsonIgnore
+    private List<ScheduleVaccineRecord> vaccineRecords = new ArrayList<>();
+
     @OneToMany(mappedBy = "account", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Child> child;
-
-    @OneToOne(mappedBy = "account")
-    private Diagnosis diagnosis;
 
     public Account() {
     }
@@ -91,7 +97,7 @@ public class Account {
         this.username = username;
     }
 
-    public Account(String username, String password, String firstName, String lastName, String email, String phoneNumber, String address, Gender gender, boolean status, Set<Role> roles, Set<WorkingSchedule> workingSchedules, List<Child> child) {
+    public Account(String username, String password, String firstName, String lastName, String email, String phoneNumber, String address, Gender gender, boolean status, Set<Role> roles, Set<WorkingSchedule> workingSchedules, List<Child> child, List<Diagnosis> diagnoses, List<ScheduleVaccineRecord> vaccineRecords) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
@@ -104,6 +110,8 @@ public class Account {
         this.roles = roles;
         this.workingSchedules = workingSchedules;
         this.child = child;
+        this.diagnoses = diagnoses;
+        this.vaccineRecords = vaccineRecords;
     }
 
     // Phương thức để thêm một Role

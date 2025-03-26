@@ -28,7 +28,7 @@ public class ScheduleVaccineRecord {
     @JoinColumn(name = "dose_id")
     private VaccineProtocolDose dose;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
     private Account account; //Đây là Nurse
 

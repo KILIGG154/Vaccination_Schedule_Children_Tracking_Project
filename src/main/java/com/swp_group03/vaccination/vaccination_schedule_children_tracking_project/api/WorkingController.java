@@ -36,6 +36,18 @@ public class WorkingController {
 //    public ApiResponse addWorkingDetail(@RequestBody WorkingDetailRequest request, @PathVariable int dateID, @PathVariable String accountID)
     public ApiResponse addWorkingDetail(@PathVariable int dateID, @PathVariable String accountID)
     {
+        if (dateID <= 0) {
+            return ApiResponse.builder()
+                    .code(400)
+                    .message("DateID không hợp lệ")
+                    .build();
+        }
+        if (accountID == null || accountID.trim().isEmpty()) {
+            return ApiResponse.builder()
+                    .code(400)
+                    .message("AccountID không hợp lệ")
+                    .build();
+        }
         return workingService.addWorkingDetail(dateID, accountID);
     }
 

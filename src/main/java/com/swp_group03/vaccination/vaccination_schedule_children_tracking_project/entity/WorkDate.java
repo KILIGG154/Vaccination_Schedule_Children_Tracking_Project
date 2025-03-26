@@ -24,7 +24,7 @@ public class WorkDate {
     @Id
     @Column(name = "DateId", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int dateId;
 
     @Column(name = "DayWork", unique = true)
     @Temporal(TemporalType.DATE) // Chỉ lưu ngày, không có giờ

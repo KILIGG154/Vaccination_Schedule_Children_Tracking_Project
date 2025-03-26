@@ -23,6 +23,10 @@ public enum ErrorCode {
     BOOKING_NOT_FOUND(1015, "Booking not found", HttpStatus.NOT_FOUND),
     WORK_DATE_NOT_FOUND(1016, "Work Date not found", HttpStatus.NOT_FOUND),
     DIAGNOSIS_NOT_FOUND(1017, "Diagnosis not found", HttpStatus.NOT_FOUND),
+    EMAIL_NOT_FOUND(1018, "Email không tồn tại trong hệ thống", HttpStatus.NOT_FOUND),
+    INVALID_OTP(1019, "Mã OTP không hợp lệ", HttpStatus.BAD_REQUEST),
+    OTP_EXPIRED(1020, "Mã OTP đã hết hạn", HttpStatus.BAD_REQUEST),
+    EMAIL_SENDING_ERROR(1021, "Không thể gửi email", HttpStatus.BAD_REQUEST),
 
     // Input validation errors
     INVALID_KEY(2000, "Invalid message key", HttpStatus.BAD_REQUEST),

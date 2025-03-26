@@ -9,24 +9,26 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "Working_Schedule")
-@IdClass(WorkingScheduleId.class)
 public class WorkingSchedule {
 
     @Id
-    @Column(name = "dateId")
+    @Column(name = "scheduleId")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int scheduleId;
+
+    @Column(name = "dateId", insertable = true, updatable = true)
     private int dateId;
 
-    @Id
-    @Column(name = "AccountId")
+    @Column(name = "AccountId", insertable = true, updatable = true)
     private String accountId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "dateId", insertable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "dateId", referencedColumnName = "DateId", insertable = false, updatable = false)
     @JsonIgnore
     private WorkDate schedule;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "AccountId", insertable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "AccountId", referencedColumnName = "accountId", insertable = false, updatable = false)
     @JsonIgnore
     private Account account;
 
@@ -41,6 +43,6 @@ public class WorkingSchedule {
         this.accountId = accountId;
         this.schedule = schedule;
         this.account = account;
-        this.status = status;
+        this.status = status != null ? status : true;
     }
 }

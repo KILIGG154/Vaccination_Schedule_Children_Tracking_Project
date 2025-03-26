@@ -122,7 +122,8 @@ public class BookingService {
                     .orElseThrow(() -> new AppException(ErrorCode.WORK_DATE_NOT_FOUND));
 
             // 3. Tìm danh sách nhân viên làm việc vào ngày đó
-            List<WorkingSchedule> workingSchedules = workingScheduleRepo.findByDateId(workDate.getId());
+            List<WorkingSchedule> workingSchedules = workingScheduleRepo.findByDateId(workDate.getDateId());
+
 
             if (workingSchedules.isEmpty()) {
                 return ApiResponse.builder()

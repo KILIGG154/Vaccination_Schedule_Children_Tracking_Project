@@ -29,9 +29,9 @@ public class Diagnosis {
     @JoinColumn(name = "BookingId", nullable = false)
     private Booking booking;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "AccountId", nullable = false)
-    private Account account;    //Đây là DoctorDoctor
+    private Account account;    //Đây là Doctor
 
     public Diagnosis() {
     }

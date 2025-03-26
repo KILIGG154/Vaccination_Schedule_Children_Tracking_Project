@@ -51,14 +51,11 @@ public class DiagnosisService {
                     .orElseThrow(() -> new RuntimeException("Doctor not found"));
 
             // Create or update diagnosis
-            Diagnosis diagnosis = diagnosisRepo.findByBookingBookingId(bookingId).orElseThrow(()->
-                    new AppException(ErrorCode.DIAGNOSIS_NOT_FOUND));
-            if (diagnosis == null) {
-                diagnosis = new Diagnosis();
-                diagnosis.setBooking(booking);
-                diagnosis.setAccount(doctor);
-            }
-
+            Diagnosis diagnosis = diagnosisRepo.findByBookingBookingId(bookingId)
+                    .orElse(new Diagnosis());
+            
+            diagnosis.setBooking(booking);
+            diagnosis.setAccount(doctor);
             diagnosis.setDescription(request.getDescription());
             diagnosis.setTreatment(request.getTreatment());
             diagnosis.setResult(request.getResult());

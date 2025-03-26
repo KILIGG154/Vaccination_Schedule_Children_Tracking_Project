@@ -1,14 +1,13 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository;
 
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.WorkingSchedule;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.WorkingScheduleId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface WorkingScheduleRepo extends JpaRepository<WorkingSchedule, WorkingScheduleId> {
+public interface WorkingScheduleRepo extends JpaRepository<WorkingSchedule, Integer> {
     /**
      * Tìm danh sách lịch làm việc theo ID của tài khoản
      * @param accountId ID của tài khoản

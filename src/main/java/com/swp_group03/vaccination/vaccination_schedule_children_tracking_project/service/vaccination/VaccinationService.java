@@ -80,6 +80,7 @@ public class VaccinationService {
             return ApiResponse.builder()
                     .code(200)
                     .message("Vaccine injection recorded successfully")
+                    .result(record)
                     .build();
         } catch (AppException e) {
             log.error("Error recording vaccine injection: ", e);

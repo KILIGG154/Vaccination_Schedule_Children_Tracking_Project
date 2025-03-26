@@ -46,7 +46,7 @@ public class VaccineController {
     }
 
     @PostMapping("/add/{categoryId}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+//    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ApiResponse<Vaccine>> addVaccine(@RequestBody @Valid VaccineRequest request, @PathVariable("categoryId") Long categoryId) {
         Vaccine vaccine = vaccineService.addVaccine(request, categoryId);
         ApiResponse<Vaccine> response = ApiResponse.<Vaccine>builder()
@@ -69,7 +69,7 @@ public class VaccineController {
     }
 
     @PostMapping("/addCombo")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+//    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ApiResponse<VaccineCombo>> addVaccineCombo(@RequestBody @Valid VaccineComboRequest request) {
         VaccineCombo combo = vaccineService.addVaccineCombo(request);
         ApiResponse<VaccineCombo> response = ApiResponse.<VaccineCombo>builder()
@@ -81,7 +81,7 @@ public class VaccineController {
     }
 
     @PostMapping("/addDetailCombo/{vaccineId}/{comboId}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+//    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ApiResponse<VaccineComboDetail>> addVaccineComboDetail(
             @RequestBody @Valid VaccineComboDetailRequest request,
             @PathVariable("vaccineId") Integer vaccineId,
@@ -120,7 +120,7 @@ public class VaccineController {
 
     // Protocol API endpoints
     @PostMapping("/protocol/add")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+//    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ApiResponse<ProtocolResponse>> addProtocol(@RequestBody @Valid ProtocolRequest request) {
         ProtocolResponse protocol = vaccineService.addNewProtocol(request);
         ApiResponse<ProtocolResponse> response = ApiResponse.<ProtocolResponse>builder()
@@ -154,7 +154,7 @@ public class VaccineController {
     }
 
     @PostMapping("/protocol/{protocolId}/addVaccine/{vaccineId}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+//    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ApiResponse<List<VaccineProtocolDose>>> addVaccineToProtocol(
             @PathVariable Integer vaccineId,
             @PathVariable Long protocolId) {
