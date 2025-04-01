@@ -1,6 +1,7 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.user_auth;
 
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Account;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.AccountStatus;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Gender;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Role;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.AppException;
@@ -57,7 +58,7 @@ public class UserService {
         // Create account based on request
         Account account = userMapper.toCreateUser(request);
         account.setPassword(passwordEncoder.encode(request.getPassword()));
-        account.setStatus(true);
+        account.setStatus(AccountStatus.ACTIVE);
 
         // Set up role for the account
         String roleName = request.getRoleName();
@@ -161,7 +162,7 @@ public class UserService {
             admin.setPhoneNumber("0903731347");
             admin.setAddress("HCM");
             admin.setGender(Gender.OTHER);
-            admin.setStatus(true);
+            admin.setStatus(AccountStatus.ACTIVE);
 
             // Properly manage roles
             admin.setRoles(new HashSet<>());
@@ -185,5 +186,18 @@ public class UserService {
         if (roleName != null && !VALID_ROLES.contains(roleName)) {
             throw new AppException(ErrorCode.INVALID_ROLE);
         }
+    }
+
+    //update account status
+    public Account deactiveAccountStatus(String accountId) {
+        Account account = userRepo.findById(accountId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        account.setStatus(AccountStatus.DEACTIVE);
+        return userRepo.save(account);
+    }
+
+    public Account activeAccountStatus(String accountId) {
+        Account account = userRepo.findById(accountId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        account.setStatus(AccountStatus.ACTIVE);
+        return userRepo.save(account);
     }
 }

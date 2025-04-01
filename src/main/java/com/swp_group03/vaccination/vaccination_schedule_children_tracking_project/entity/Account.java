@@ -65,7 +65,8 @@ public class Account {
     private Gender gender; // Change from String to Gender enum
 
     @Column(name = "Status")
-    private boolean status;
+    @Enumerated(EnumType.STRING)
+    private AccountStatus status = AccountStatus.ACTIVE;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @JoinTable(name = "Account_Role",
@@ -97,7 +98,7 @@ public class Account {
         this.username = username;
     }
 
-    public Account(String username, String password, String firstName, String lastName, String email, String phoneNumber, String address, Gender gender, boolean status, Set<Role> roles, Set<WorkingSchedule> workingSchedules, List<Child> child, List<Diagnosis> diagnoses, List<ScheduleVaccineRecord> vaccineRecords) {
+    public Account(String username, String password, String firstName, String lastName, String email, String phoneNumber, String address, Gender gender, AccountStatus status, Set<Role> roles, Set<WorkingSchedule> workingSchedules, List<Child> child, List<Diagnosis> diagnoses, List<ScheduleVaccineRecord> vaccineRecords) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;

@@ -146,4 +146,25 @@ public class  UserController {
                 .result(userService.getChildByAccId(accountId))
                 .build();
     }
+
+    @PutMapping("/{accountId}/active")
+    public ApiResponse activateAccount(@PathVariable String accountId){
+
+            Account updatedAccount = userService.activeAccountStatus(accountId);
+            return ApiResponse.builder()
+                .code(200)
+                .message("Account activated successfully")
+                .result(updatedAccount)
+                .build();
+    }
+
+    @PutMapping("/{accountId}/inactive")
+    public ApiResponse inActivateAccount(@PathVariable String accountId){
+        Account updatedAccount = userService.deactiveAccountStatus(accountId);
+        return ApiResponse.builder()
+            .code(200)
+            .message("Account inactivated successfully")
+            .result(updatedAccount)
+            .build();
+    }
 }
