@@ -31,10 +31,12 @@ import java.util.List;
 @EnableMethodSecurity(prePostEnabled = true) // Bật kiểm tra quyền ở mức method
 public class SecurityConfig {
 
-    private final String[] PUBLIC_ENPOINTS = {"/users/register", "/auth/login","/auth/logout", "/auth/refresh", "/auth/introspect", "/vaccine/addVaccine", "/vaccine/get", "/users/{accountID}", "/vaccine/combo/add", "/vaccine/combo/detail/{vaccineId}/{comboId}", "/vaccine/addVaccineComboDetail","/vaccine/get/combo" ,"/vaccine/get/comboDetail", "/vaccine/{vaccineName}", "/users/getAllUser", "/users/getAllUser/{accountId}", 
+    private final String[] PUBLIC_ENPOINTS = {"/users/register", "/auth/login","/auth/logout", "/auth/refresh",
+            "/auth/forgot-password", "/auth/resend-otp", "/auth/verify-otp","/auth/reset-password", "/auth/introspect",
+            "/vaccine/addVaccine", "/vaccine/get", "/users/{accountID}", "/vaccine/combo/add", "/vaccine/combo/detail/{vaccineId}/{comboId}", "/vaccine/addVaccineComboDetail","/vaccine/get/combo" ,"/vaccine/get/comboDetail", "/vaccine/{vaccineName}", "/users/getAllUser", "/users/getAllUser/{accountId}",
     "/working/add", "/working/detail/{dateID}/{accountID}", "/working/allworkdate/{accountID}", "/working/schedule/create",
     "/children/{accountID}/create", "/children/{child_id}", "/children/{name}",
-    "/booking/{childID}/create", "/booking/all", "/booking/{bookingId}/payment", "/booking/{bookingId}/checkin", 
+    "/booking/{childID}/create", "/booking/all", "/booking/{bookingId}/payment", "/booking/{bookingId}/checkin",
     "/booking/{bookingId}/assign", "/booking/{bookingId}/reaction"};
 
 //    private final String[] PUBLIC_ENPOINTS = {"/users/register", "/auth/login", "/auth/introspect"};

@@ -42,9 +42,16 @@ public class WorkingService {
     public ApiResponse addWorking(WorkingRequest request) {
         try {
             WorkDate work = createWorkDate(request);
-            return ApiResponse.builder().code(201).message("Successfully added working date").build();
+            return ApiResponse.builder()
+                    .code(201)
+                    .message("Successfully added working date")
+                    .result(work.getDateId())
+                    .build();
         } catch (Exception e) {
-            return ApiResponse.builder().code(500).message("Error adding working date: " + e.getMessage()).build();
+            return ApiResponse.builder()
+                    .code(500)
+                    .message("Error adding working date: " + e.getMessage())
+                    .build();
         }
     }
 
@@ -118,10 +125,10 @@ public class WorkingService {
             // Chuyển đổi sang WorkingResponse với thông tin chi tiết
             List<WorkingResponse> workingSchedules = schedules.stream()
                 .map(schedule -> WorkingResponse.builder()
-                    .dateId(schedule.getDateId())
-                    .accountId(schedule.getAccountId())
+                    .dateId(schedule.getSchedule().getDateId())
+                    .accountId(schedule.getAccount().getAccountId())
                     .date(WorkDateDTO.builder()
-                        .id(schedule.getSchedule().getId())
+                        .id(schedule.getSchedule().getDateId())
                         .dayWork(schedule.getSchedule().getDayWork())
                         .shiftType(schedule.getSchedule().getShiftType())
                         .build())
@@ -150,22 +157,28 @@ public class WorkingService {
          return workingDateRepo.save(workDate);
     }
 
-    private WorkingSchedule createWorkingSchedule(int workDateId, String accountId){
-        WorkDate workDate = workingDateRepo.findById(workDateId).orElseThrow(() -> new RuntimeException("WorkDate not found with id: " ));
-        Account account = userRepo.findById(accountId).orElseThrow(() -> new RuntimeException("account not found with id: " ));
+    private WorkingSchedule createWorkingSchedule(int workDateId, String accountId) {
+        try {
+            // Kiểm tra workDate tồn tại
+            WorkDate workDate = workingDateRepo.findById(workDateId)
+                    .orElseThrow(() -> new RuntimeException("Không tìm thấy ngày làm việc với ID: " + workDateId));
 
-//        WorkingScheduleId work = new WorkingScheduleId();
-//        work.setDateId(request.getDateID());
-//        work.setAccountId(request.getAccountID());
+            // Kiểm tra account tồn tại
+            Account account = userRepo.findById(accountId)
+                    .orElseThrow(() -> new RuntimeException("Không tìm thấy tài khoản với ID: " + accountId));
 
-        WorkingSchedule workingSchedule = new WorkingSchedule();
-        workingSchedule.setDateId(workDateId);
-        workingSchedule.setAccountId(accountId);
-        workingSchedule.setSchedule(workDate);
-        workingSchedule.setAccount(account);
-        workingSchedule.setStatus(true);
+            // Tạo mới WorkingSchedule
+            WorkingSchedule workingSchedule = new WorkingSchedule();
+            workingSchedule.setDateId(workDateId);
+            workingSchedule.setAccountId(accountId);
+            workingSchedule.setSchedule(workDate);
+            workingSchedule.setAccount(account);
+            workingSchedule.setStatus(true);
 
-        return workingScheduleRepo.save(workingSchedule);
+            return workingScheduleRepo.save(workingSchedule);
+        } catch (Exception e) {
+            throw new RuntimeException("Lỗi khi tạo lịch làm việc: " + e.getMessage());
+        }
     }
 
     public List<WorkingResponse> getAllWorkingResponseList(String accountID , int dateID){
