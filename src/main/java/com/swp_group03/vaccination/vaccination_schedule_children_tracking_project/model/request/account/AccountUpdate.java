@@ -24,8 +24,6 @@ public class AccountUpdate {
      Gender gender;    
      String urlImage;
      boolean status;
-     
-     // Thêm trường roleName để hỗ trợ update role
      String roleName;
 
 }

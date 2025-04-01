@@ -53,23 +53,14 @@ public class SecurityConfig {
     CustomJwtDecoder customJwtDecoder;
 
 
-    @Bean
+    @Bean 
     public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthenticationConverter jwtConverter) throws Exception {
 
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers(HttpMethod.POST, PUBLIC_ENPOINTS ).permitAll() // Cho phép truy cập các API public
-
-                        .requestMatchers(HttpMethod.GET, PUBLIC_ENPOINTS ).permitAll() // Cho phép truy cập các API public
-//
-//                        .requestMatchers(HttpMethod.POST, "/users/register", "/auth/login").permitAll()
-
-
-//                        .requestMatchers(HttpMethod.GET, PRIVATE_ENPOINTS)
-////                        .hasAuthority("ROLE_ADMIN") // Chỉ cho phép truy cập các API private với quyền ADMIN
-//                        .hasRole("ADMIN")
-
+                        .requestMatchers(PUBLIC_ENPOINTS).permitAll() // Allow all HTTP methods for public endpoints
+                        .requestMatchers(HttpMethod.PATCH, "/auth/reset-password").permitAll() // Explicitly allow PATCH for reset-password
                         .requestMatchers(SWAGGER_ENDPOINTS).permitAll() // Cho phép truy cập Swagger UI
                         .anyRequest().authenticated());
 
@@ -113,8 +104,7 @@ public class SecurityConfig {
 public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
     configuration.setAllowedOriginPatterns(List.of("*")); // Chấp nhận tất cả origin
-//    configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Cho phép các phương thức HTTP
-      configuration.setAllowedMethods(List.of("*")); // Cho phép các phương thức HTTP
+    configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")); // Cho phép các phương thức HTTP cụ thể
     configuration.setAllowedHeaders(List.of("*")); // Cho phép tất cả headers
     configuration.setAllowCredentials(true);
     configuration.setMaxAge(3600L);

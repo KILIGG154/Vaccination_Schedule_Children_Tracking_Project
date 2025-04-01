@@ -77,4 +77,12 @@ public class ResetPasswordController {
                 .message("Mật khẩu đã được đặt lại thành công")
                 .build();
     }
+    
+    // Add POST version to support both methods
+    @PostMapping("/reset-password") 
+    @Operation(summary = "Đặt lại mật khẩu sau khi xác thực OTP (POST version)")
+    public ApiResponse<Void> resetPasswordPost(@Valid @RequestBody ResetPasswordRequest request) {
+        log.info("Reset password request (POST) for email: {}", request.getEmail());
+        return resetPassword(request); // Reuse existing method
+    }
 }

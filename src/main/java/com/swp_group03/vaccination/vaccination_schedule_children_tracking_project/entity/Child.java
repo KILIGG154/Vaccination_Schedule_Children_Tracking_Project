@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.annotations.Nationalized;
+
 @Entity
 @Table(name = "Child")
 public class Child{
@@ -17,6 +19,7 @@ public class Child{
     private int id;
 
     @Column(name = "name",length = 100)
+    @Nationalized
 //    @NotBlank(message = "Vui lòng nhập tên cảu trẻ")
     private String name;
     @Temporal(TemporalType.DATE)
