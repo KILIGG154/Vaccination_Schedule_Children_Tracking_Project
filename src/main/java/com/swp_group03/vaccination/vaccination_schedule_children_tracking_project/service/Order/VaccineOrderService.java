@@ -1,20 +1,25 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.Order;
 
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Booking;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.OrderStatus;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.vaccine.Vaccine;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.VaccineOrder;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.VaccineOrderDetail;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.vaccine.VaccineCombo;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.AppException;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.ErrorCode;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.order.VaccineOrderRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.order.VaccineaOrderDetaIlRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.order.VaccineOrderDTO;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.BookingRepo;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.VaccineComboRepo;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.VaccineOrderRepo;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.VaccineRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -29,6 +34,9 @@ public class VaccineOrderService {
     @Autowired
     private VaccineRepo vaccineRepo;
 
+    @Autowired
+    private VaccineComboRepo vaccineComboRepo;
+
 //    public VaccineOrder createVaccineOrder(int bookingID , VaccineOrderRequest request) {
 //        Booking booking = bookingRepo.findById(bookingID).orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
 //
@@ -40,12 +48,21 @@ public class VaccineOrderService {
 //        return vaccineOrderRepo.save(order);
 //    }
 
+    public List<VaccineOrderDTO> getAllOrderByBookingId(int bookingId){
+        Booking booking = bookingRepo.findById(bookingId).orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
+        for (VaccineOrder order : booking.getVaccineOrders()) {
+            return List.of(new VaccineOrderDTO(order));
+        }
+        return null;
+    }
+
     public VaccineOrderDTO createVaccineOrder(int bookingID , VaccineOrderRequest request) {
         Booking booking = bookingRepo.findById(bookingID).orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
 
         VaccineOrder order = new VaccineOrder();
         order.setOrderDate(request.getOrderDate());
         booking.addVaccineOrder(order);
+//        order.setPayment();
         bookingRepo.save(booking);
         vaccineOrderRepo.save(order);
         return new VaccineOrderDTO(order);
@@ -63,5 +80,26 @@ public class VaccineOrderService {
         order.addVaccineOrderDetail(detail);
         vaccineOrderRepo.save(order);
         return detail;
+    }
+
+    public VaccineOrder createOrderVaccineCombo(int orderID, int comboId){
+        VaccineOrder order = vaccineOrderRepo.findById(orderID).orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
+
+        VaccineCombo combo = vaccineComboRepo.findById(comboId).orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
+
+        order.setVaccineCombo(combo);
+         return vaccineOrderRepo.save(order);
+    }
+
+    public VaccineOrder doneOrder(int id){
+        VaccineOrder order = vaccineOrderRepo.findById(id).orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
+        order.setStatus(OrderStatus.DONE);
+        return vaccineOrderRepo.save(order);
+    }
+
+    public VaccineOrder rejectOrder(int id){
+        VaccineOrder order = vaccineOrderRepo.findById(id).orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
+        order.setStatus(OrderStatus.REJECTED);
+        return vaccineOrderRepo.save(order);
     }
 }

@@ -7,7 +7,6 @@ import java.util.Date;
 
 public class PaymentDTO {
     private int id;
-    private Date paymentDate;
     private PaymentStatus status;
     private String paymentMethod;
 

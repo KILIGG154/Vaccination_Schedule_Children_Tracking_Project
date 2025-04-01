@@ -2,9 +2,8 @@ package com.swp_group03.vaccination.vaccination_schedule_children_tracking_proje
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Booking;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.VaccineOrder;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.VaccineOrderDetail;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.*;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.payment.PaymentDTO;
 import lombok.*;
 
 import java.util.Date;
@@ -19,6 +18,8 @@ public class VaccineOrderDTO {
     private int id;
     private int bookingId;
     private Date orderDate;
+    private Payment payment;
+    private OrderStatus status;
     private List<VaccineOrderDetailDTO> orderDetail;
     
     public VaccineOrderDTO(VaccineOrder vaccineOrder) {
@@ -30,5 +31,8 @@ public class VaccineOrderDTO {
         this.orderDetail = vaccineOrder.getVaccineOrderDetails().stream()
                 .map(VaccineOrderDetailDTO::new)
                 .collect(Collectors.toList());
+        this.payment = vaccineOrder.getPayment();
+        this.status = vaccineOrder.getStatus();
     }
+
 }

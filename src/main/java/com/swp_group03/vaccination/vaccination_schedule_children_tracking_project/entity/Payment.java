@@ -1,6 +1,7 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -21,14 +22,17 @@ public class Payment {
     @Column(name = "Payment_Method")
     private String paymentMethod;
 
-    @OneToOne
-    @JoinColumn(name = "OrderId")
+//    @OneToOne
+//    @JoinColumn(name = "OrderId")
+//    @JsonIgnore
+//    private VaccineOrder vaccineOrder;
+    @OneToOne (mappedBy = "payment")
     private VaccineOrder vaccineOrder;
 
     public Payment() {
     }
 
-    public Payment(Date paymentDate, PaymentStatus status, String paymentMethod, VaccineOrder vaccineOrder) {
+    public Payment( PaymentStatus status, String paymentMethod, VaccineOrder vaccineOrder) {
 
         this.status = status;
         this.paymentMethod = paymentMethod;

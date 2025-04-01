@@ -31,10 +31,13 @@ public class VaccineOrder {
     @JsonIgnore
     private VaccineCombo vaccineCombo;
 
-    @OneToOne(mappedBy = "vaccineOrder")
-    @JsonIgnore
-
+    @OneToOne
+    @JoinColumn(name = "PaymentID")
     private Payment payment;
+
+    @Column(name = "Status")
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status = OrderStatus.DONE;
 
     @OneToMany(mappedBy = "vaccineOrder", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
@@ -108,5 +111,13 @@ public class VaccineOrder {
 
     public void setVaccineOrderDetails(Set<VaccineOrderDetail> vaccineOrderDetails) {
         this.vaccineOrderDetails = vaccineOrderDetails;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
     }
 }
