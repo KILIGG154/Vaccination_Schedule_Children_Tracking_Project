@@ -1,5 +1,6 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.vaccine;
 
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.vaccine.VaccineStatus;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
@@ -13,8 +14,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class VaccineRequest {
-
-
+    
     @Size(max = 255)
     @NotNull
     String name;
@@ -52,6 +52,8 @@ public class VaccineRequest {
     Integer quantity;
 
     int totalDose;
+
+    VaccineStatus status;
 
 //    String status;
 

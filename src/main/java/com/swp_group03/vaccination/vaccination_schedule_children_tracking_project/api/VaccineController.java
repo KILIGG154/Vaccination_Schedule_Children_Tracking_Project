@@ -177,4 +177,51 @@ public class VaccineController {
                 .build();
         return ResponseEntity.ok(response);
     }
+
+    @PutMapping("/{vaccID}/active")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ApiResponse activeVaccine(@PathVariable int vaccID) {
+        Vaccine vaccine = vaccineService.activeVaccie(vaccID);
+       return ApiResponse.builder()
+                .code(200)
+                .result(vaccine)
+                .build();
+
+    }
+
+    @PutMapping("/{vaccineID}/deactive-vaccine")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ApiResponse deActiveVaccine(@PathVariable int vaccineID) {
+        Vaccine vaccine = vaccineService.deactiveVaccine(vaccineID);
+      return  ApiResponse.builder()
+                .code(200)
+                .message("Vaccine activated successfully")
+                .result(vaccine)
+                .build();
+    }
+
+    @PutMapping("/{comboID}/deactive-combo")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<ApiResponse<VaccineCombo>> deActiveCombo(@PathVariable int comboID) {
+        VaccineCombo vaccineCombo = vaccineService.deactiveCombo(comboID);
+        ApiResponse<VaccineCombo> response = ApiResponse.<VaccineCombo>builder()
+                .code(200)
+                .message("Vaccine activated successfully")
+                .result(vaccineCombo)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{comboID}/active-combo")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<ApiResponse<VaccineCombo>> activeCombo(@PathVariable int comboID) {
+        VaccineCombo vaccineCombo = vaccineService.activeCombo(comboID);
+        ApiResponse<VaccineCombo> response = ApiResponse.<VaccineCombo>builder()
+                .code(200)
+                .message("Vaccine activated successfully")
+                .result(vaccineCombo)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
 }

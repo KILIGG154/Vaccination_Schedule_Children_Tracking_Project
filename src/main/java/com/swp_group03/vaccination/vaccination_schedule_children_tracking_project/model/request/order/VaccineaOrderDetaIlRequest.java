@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 public class VaccineaOrderDetaIlRequest {
     private int quantity;
-    private int totalPrice;
+    private double totalPrice;
 //    private VaccineOrder vaccineOrder;
 //    private vaccine vaccine;
 }

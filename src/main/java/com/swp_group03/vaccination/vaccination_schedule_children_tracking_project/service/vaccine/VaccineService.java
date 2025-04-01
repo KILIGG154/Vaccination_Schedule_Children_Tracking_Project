@@ -1,5 +1,6 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.vaccine;
 
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.ComboStatus;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.vaccine.*;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.AppException;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.ErrorCode;
@@ -59,7 +60,7 @@ public class VaccineService {
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
 
         Vaccine vaccine = vaccineMapper.toCreateVaccine(request);
-        vaccine.setStatus("true");
+        vaccine.setStatus(VaccineStatus.ACTIVE);
         vaccine.setCategoryId(category);
 
 
@@ -81,7 +82,7 @@ public class VaccineService {
         VaccineCombo vaccineCombo = new VaccineCombo();
         vaccineCombo.setComboName(request.getComboName());
         vaccineCombo.setDescription(request.getDescription());
-        vaccineCombo.setStatus(true);
+        vaccineCombo.setStatus(ComboStatus.AVAILABLE);
         return vaccineCombos.save(vaccineCombo);
     }
 
@@ -280,6 +281,46 @@ protected double getTotalPriceCombo(int id) {
         response.setDoseNumber(detail.getDoseNumber());
         response.setIntervalDays(detail.getIntervalDays());
         return response;
+    }
+
+    public Vaccine updateVaccineNecessary(int id, VaccineUpdate request){
+        Vaccine vac = vaccineRepo.findById(id).orElseThrow(() -> new AppException(ErrorCode.VACCINE_NOT_FOUND));
+
+        if(request.getQuantity() != 0){
+         vac.setQuantity(request.getQuantity());
+        }
+        if(request.getUnitPrice() != 0){
+            vac.setUnitPrice(request.getUnitPrice());
+        }
+        if(request.getSalePrice() != 0){
+            vac.setSalePrice(request.getSalePrice());
+        }
+        return vaccineRepo.save(vac);
+
+    }
+
+    public Vaccine activeVaccie(int id){
+        Vaccine vac = vaccineRepo.findById(id).orElseThrow(() -> new AppException(ErrorCode.VACCINE_NOT_FOUND));
+        vac.setStatus(VaccineStatus.ACTIVE);
+        return vaccineRepo.save(vac);
+    }
+
+    public Vaccine deactiveVaccine(int id){
+        Vaccine vac = vaccineRepo.findById(id).orElseThrow(() -> new AppException(ErrorCode.VACCINE_NOT_FOUND));
+        vac.setStatus(VaccineStatus.INACTIVE);
+        return vaccineRepo.save(vac);
+    }
+
+    public VaccineCombo activeCombo(int id){
+        VaccineCombo combo = vaccineCombos.findById(id).orElseThrow(() -> new AppException(ErrorCode.VACCINE_NOT_FOUND));
+        combo.setStatus(ComboStatus.AVAILABLE);
+        return vaccineCombos.save(combo);
+    }
+
+    public VaccineCombo deactiveCombo(int id){
+        VaccineCombo combo = vaccineCombos.findById(id).orElseThrow(() -> new AppException(ErrorCode.VACCINE_NOT_FOUND));
+        combo.setStatus(ComboStatus.UNAVAILABLE);
+        return vaccineCombos.save(combo);
     }
 
 

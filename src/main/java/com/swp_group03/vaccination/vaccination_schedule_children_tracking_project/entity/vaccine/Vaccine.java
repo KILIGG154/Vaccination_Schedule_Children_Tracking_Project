@@ -107,9 +107,10 @@ public class Vaccine {
     @Column(name = "TotalDoses")
     private int totalDose;
 
-    @Size(max = 50)
+
     @Column(name = "Status", length = 50)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private VaccineStatus status = VaccineStatus.ACTIVE;
 
     @OneToMany(mappedBy = "vaccine", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
