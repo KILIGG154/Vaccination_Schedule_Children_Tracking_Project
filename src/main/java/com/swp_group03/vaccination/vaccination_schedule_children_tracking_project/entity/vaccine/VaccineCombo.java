@@ -1,6 +1,7 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.vaccine;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.ComboStatus;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.VaccineOrder;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
@@ -34,7 +35,8 @@ public class VaccineCombo {
     private double total;
 
     @Column(name = "Status")
-    private boolean status;
+    @Enumerated(EnumType.STRING)
+    private ComboStatus status = ComboStatus.AVAILABLE;
 
     @OneToMany(mappedBy = "combo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
@@ -45,7 +47,7 @@ public class VaccineCombo {
     @JsonIgnore
     private VaccineOrder vaccineOrder;
 
-    public VaccineCombo(String comboName, String description, boolean status) {
+    public VaccineCombo(String comboName, String description, ComboStatus status) {
         this.comboName = comboName;
         this.description = description;
         this.status = status;
