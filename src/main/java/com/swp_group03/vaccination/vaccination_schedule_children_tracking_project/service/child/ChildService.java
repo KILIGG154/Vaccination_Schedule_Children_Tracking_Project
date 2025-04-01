@@ -2,11 +2,14 @@ package com.swp_group03.vaccination.vaccination_schedule_children_tracking_proje
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Account;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Booking;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Child;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.ChildStatus;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.AppException;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.ErrorCode;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.mapper.ChildMapper;
 
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.child.ChildrenRequest;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.child.ChildDTO;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.child.ChildResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.BookingRepo;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.ChildRepo;
@@ -85,5 +88,26 @@ public class ChildService {
 //        return childRepo.findBy_AccountId(accountID);
 //    }
 
+    public ApiResponse activeChild(int id){
+        Child child = childRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Child not found"));
+        child.setChildStatus(ChildStatus.ACTIVE);
+        childRepo.save(child);
+        return ApiResponse.<ChildDTO>builder()
+                .code(200)
+                .message("Child is active")
+                .result(new ChildDTO(child))
+                .build();
+    }
+
+    public ApiResponse inActiveChild(int id){
+        Child child = childRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Child not found"));
+        child.setChildStatus(ChildStatus.INACTIVE);
+        childRepo.save(child);
+        return ApiResponse.<ChildDTO>builder()
+                .code(200)
+                .message("Child is active")
+                .result(new ChildDTO(child))
+                .build();
+    }
 
 }

@@ -3,6 +3,7 @@ package com.swp_group03.vaccination.vaccination_schedule_children_tracking_proje
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Account;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Child;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.ChildStatus;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Gender;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.account.AccountBasicInfo;
 import lombok.Getter;
@@ -21,6 +22,7 @@ public class ChildDTO {
     private String weight;
     private Gender gender;
     private String urlImage;
+    private ChildStatus status;
     private AccountBasicInfo account;
 
     public ChildDTO(Child child) {
@@ -31,7 +33,7 @@ public class ChildDTO {
         this.weight = child.getWeight();
         this.gender = child.getGender();
         this.urlImage = child.getUrlImage();
-        
+        this.status = child.getChildStatus();
         if (child.getAccount() != null) {
             this.account = new AccountBasicInfo(child.getAccount());
         }

@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Book;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -122,7 +123,8 @@ public class BookingService {
                     .orElseThrow(() -> new AppException(ErrorCode.WORK_DATE_NOT_FOUND));
 
             // 3. Tìm danh sách nhân viên làm việc vào ngày đó
-            List<WorkingSchedule> workingSchedules = workingScheduleRepo.findByDateId(workDate.getId());
+            List<WorkingSchedule> workingSchedules = workingScheduleRepo.findByDateId(workDate.getDateId());
+
 
             if (workingSchedules.isEmpty()) {
                 return ApiResponse.builder()
@@ -314,5 +316,13 @@ public class BookingService {
 
         return account.getRoles().stream()
                 .anyMatch(role -> role.getRoleName().equalsIgnoreCase(roleName));
+    }
+
+    public Booking updateBookingDate(int id, BookingRequest bookingRequest) {
+      Booking booking = bookingRepo.findById(id).orElseThrow(() -> new AppException(ErrorCode.BOOKING_NOT_FOUND));
+      if(bookingRequest.getAppointmentDate() != null) {
+        booking.setAppointmentDate(bookingRequest.getAppointmentDate());
+      }
+        return bookingRepo.save(booking);
     }
 }

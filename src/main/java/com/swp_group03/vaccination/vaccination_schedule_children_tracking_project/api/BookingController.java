@@ -1,5 +1,6 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.api;
 
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Booking;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.booking.BookingRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.booking.ReactionRequest;
@@ -77,6 +78,17 @@ public class BookingController {
             @PathVariable int bookingId,
             @RequestBody ReactionRequest request) {
         return bookingService.recordVaccinationReaction(bookingId, request.getReaction());
+    }
+
+    @PutMapping("/{bookingId}/appointment")
+    public ApiResponse updateAppointmentDate(
+            @PathVariable int bookingId,
+            @RequestBody BookingRequest request) {
+        Booking book = bookingService.updateBookingDate(bookingId, request);
+        return ApiResponse.builder()
+                .code(200)
+                .message("Successfully updated appointment date")
+                .build();
     }
 
 }

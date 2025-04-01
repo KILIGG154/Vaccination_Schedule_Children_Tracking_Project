@@ -46,6 +46,17 @@ public class ChildController {
                 .build();
     }
 
+    @PutMapping("/{child_id}/active")
+    public ApiResponse activateChild(@PathVariable int child_id){
+        return ApiResponse.builder().code(200).result(childService.activeChild(child_id)).build();
+    }
+
+    @PutMapping("/{child_id}/inactive")
+    public ApiResponse inActivateChild(@PathVariable int child_id){
+        return ApiResponse.builder().code(200).result(childService.inActiveChild(child_id)).build();
+    }
+
+
 //    @GetMapping("/{accountID}")
 //    public ResponseEntity<List<Child>> getChildByAccount(@PathVariable String accountID){
 //        List<Child> childList = childService.getChildByAccount(accountID);

@@ -38,6 +38,10 @@ public class Child{
     @JoinColumn(name = "Account_ID")
     private Account account;
 
+    @Column(name = "Child_Status")
+    @Enumerated(EnumType.STRING)
+    private ChildStatus childStatus = ChildStatus.ACTIVE;
+
     @OneToMany(mappedBy = "child", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Booking> bookings = new ArrayList<>();
@@ -46,7 +50,7 @@ public class Child{
     public Child() {
     }
 
-    public Child(String name, Date dob, String height, String weight, Gender gender, String urlImage, Account account, List<Booking> bookings) {
+    public Child(String name, Date dob, String height, String weight, Gender gender, String urlImage, Account account, ChildStatus childStatus, List<Booking> bookings) {
         this.name = name;
         this.dob = dob;
         this.height = height;
@@ -54,7 +58,16 @@ public class Child{
         this.gender = gender;
         this.urlImage = urlImage;
         this.account = account;
+        this.childStatus = childStatus;
         this.bookings = bookings;
+    }
+
+    public ChildStatus getChildStatus() {
+        return childStatus;
+    }
+
+    public void setChildStatus(ChildStatus childStatus) {
+        this.childStatus = childStatus;
     }
 
     public int getId() {

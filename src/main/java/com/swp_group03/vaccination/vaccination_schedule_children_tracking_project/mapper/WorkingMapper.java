@@ -26,13 +26,13 @@ public class WorkingMapper {
         return schedules.stream()
                 .map(schedule -> {
                     WorkingResponse response = new WorkingResponse();
-                    response.setDateId(schedule.getDateId());
-                    response.setAccountId(schedule.getAccountId());
+                    response.setDateId(schedule.getSchedule().getDateId());
+                    response.setAccountId(schedule.getAccount().getAccountId());
 
                     // Convert WorkDate to WorkDateDTO
                     WorkDateDTO dateDTO = new WorkDateDTO();
                     WorkDate workDate = schedule.getSchedule();
-                    dateDTO.setId(workDate.getId());
+                    dateDTO.setId(workDate.getDateId());
                     dateDTO.setDayWork(workDate.getDayWork());
                     dateDTO.setShiftType(workDate.getShiftType());
                     response.setDate(dateDTO);
