@@ -26,7 +26,7 @@ public class Payment {
 //    @JoinColumn(name = "OrderId")
 //    @JsonIgnore
 //    private VaccineOrder vaccineOrder;
-    @OneToOne (mappedBy = "payment")
+    @OneToOne (mappedBy = "payment", cascade = CascadeType.PERSIST)
     private VaccineOrder vaccineOrder;
 
     public Payment() {

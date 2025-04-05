@@ -13,9 +13,11 @@ import com.swp_group03.vaccination.vaccination_schedule_children_tracking_projec
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.UserRepo;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.VaccineProtocolDoseRepo;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.VaccineTherapyRecordRepo;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.booking.StaffAssignmentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -41,6 +43,9 @@ public class VaccinationService {
     @Autowired
     private VaccineTherapyRecordRepo therapyRecordRepo;
 
+    @Autowired
+    private StaffAssignmentService staffAssignmentService;
+
     @SuppressWarnings("rawtypes")
     public ApiResponse recordVaccineInjection(int bookingId, String nurseId, VaccineInjectionRequest request) {
         try {
@@ -51,7 +56,7 @@ public class VaccinationService {
             if (booking.getStatus() != BookingStatus.DIAGNOSED) {
                 return ApiResponse.builder()
                         .code(400)
-                        .message("Booking must be in DIAGNOSED status")
+                        .message("Booking must be in DIAGNOSED status to record injection")
                         .build();
             }
 
@@ -177,6 +182,44 @@ public class VaccinationService {
             return ApiResponse.builder()
                     .code(500)
                     .message("Error creating next schedules: " + e.getMessage())
+                    .build();
+        }
+    }
+
+    /**
+     * Ghi nhận tiêm vaccine và giải phóng nhân viên
+     *
+     * @param bookingId ID của booking
+     * @param nurseId ID của y tá
+     * @param request Thông tin tiêm vaccine
+     * @return ApiResponse
+     */
+    @Transactional
+    @SuppressWarnings("rawtypes")
+    public ApiResponse recordVaccineInjectionAndReleaseStaff(int bookingId, String nurseId, VaccineInjectionRequest request) {
+        try {
+            // Ghi nhận tiêm vaccine và cập nhật trạng thái booking
+            ApiResponse injectionResponse = recordVaccineInjection(bookingId, nurseId, request);
+            
+            if (injectionResponse.getCode() != 200) {
+                return injectionResponse;
+            }
+            
+            // Giải phóng nhân viên (y tá) sau khi hoàn thành tiêm
+            try {
+                staffAssignmentService.releaseStaffFromBooking(bookingId);
+                log.info("Released nurse after vaccination for booking: {}", bookingId);
+            } catch (Exception e) {
+                // Log lỗi nhưng vẫn trả về thành công vì việc tiêm đã được ghi nhận
+                log.warn("Could not release nurse after vaccination: {}", e.getMessage(), e);
+            }
+            
+            return injectionResponse;
+        } catch (Exception e) {
+            log.error("Error recording vaccination and releasing staff: ", e);
+            return ApiResponse.builder()
+                    .code(500)
+                    .message("Lỗi khi ghi nhận tiêm vaccine: " + e.getMessage())
                     .build();
         }
     }

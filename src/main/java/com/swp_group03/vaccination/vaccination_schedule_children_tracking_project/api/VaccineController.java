@@ -179,7 +179,7 @@ public class VaccineController {
     }
 
     @PutMapping("/{vaccID}/active")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    // @PreAuthorize("hasAnyRole('ADMIN')")
     public ApiResponse activeVaccine(@PathVariable int vaccID) {
         Vaccine vaccine = vaccineService.activeVaccie(vaccID);
        return ApiResponse.builder()
@@ -190,7 +190,7 @@ public class VaccineController {
     }
 
     @PutMapping("/{vaccineID}/deactive-vaccine")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    // @PreAuthorize("hasAnyRole('ADMIN')")
     public ApiResponse deActiveVaccine(@PathVariable int vaccineID) {
         Vaccine vaccine = vaccineService.deactiveVaccine(vaccineID);
       return  ApiResponse.builder()
@@ -201,7 +201,7 @@ public class VaccineController {
     }
 
     @PutMapping("/{comboID}/deactive-combo")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    // @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ApiResponse<VaccineCombo>> deActiveCombo(@PathVariable int comboID) {
         VaccineCombo vaccineCombo = vaccineService.deactiveCombo(comboID);
         ApiResponse<VaccineCombo> response = ApiResponse.<VaccineCombo>builder()
@@ -213,7 +213,7 @@ public class VaccineController {
     }
 
     @PutMapping("/{comboID}/active-combo")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    // @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ApiResponse<VaccineCombo>> activeCombo(@PathVariable int comboID) {
         VaccineCombo vaccineCombo = vaccineService.activeCombo(comboID);
         ApiResponse<VaccineCombo> response = ApiResponse.<VaccineCombo>builder()

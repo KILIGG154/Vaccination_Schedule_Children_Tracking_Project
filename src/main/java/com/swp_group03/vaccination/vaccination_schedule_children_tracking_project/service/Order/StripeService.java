@@ -14,15 +14,15 @@ import java.util.Map;
 @Service
 public class StripeService {
 
-    public Charge chargeCard(String token, double amount, String currency) throws StripeException {
-        Map<String, Object> chargeParams = new HashMap<>();
-        chargeParams.put("amount", (int)(amount * 100)); // Stripe requires amount in cents
-        chargeParams.put("currency", currency);
-        chargeParams.put("source", token);
-        chargeParams.put("description", "Thanh toán vắc-xin");
-
-        return Charge.create(chargeParams);
-    }
+//    public Charge chargeCard(String token, double amount, String currency) throws StripeException {
+//        Map<String, Object> chargeParams = new HashMap<>();
+//        chargeParams.put("amount", (int)(amount * 100)); // Stripe requires amount in cents
+//        chargeParams.put("currency", currency);
+//        chargeParams.put("source", token);
+//        chargeParams.put("description", "Thanh toán vắc-xin");
+//
+//        return Charge.create(chargeParams);
+//    }
 
     public PaymentIntent createPaymentIntent(double amount) throws StripeException {
         Map<String, Object> params = new HashMap<>();

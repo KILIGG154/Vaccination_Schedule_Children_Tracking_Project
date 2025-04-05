@@ -62,7 +62,6 @@ public class VaccineOrderService {
         VaccineOrder order = new VaccineOrder();
         order.setOrderDate(request.getOrderDate());
         booking.addVaccineOrder(order);
-//        order.setPayment();
         bookingRepo.save(booking);
         vaccineOrderRepo.save(order);
         return new VaccineOrderDTO(order);

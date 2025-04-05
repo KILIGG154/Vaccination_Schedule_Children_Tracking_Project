@@ -25,15 +25,24 @@ public class PaymentService {
     private VaccineOrderRepo vaccineOrderRepo;
 
 
-    public Payment createPayment(int orderID ,PaymentRequest request) {
+    public Payment createPayment(int orderID, PaymentRequest request) {
         VaccineOrder orders = vaccineOrderRepo.findById(orderID).orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
-
+    
         Payment payment = new Payment();
         payment.setPaymentMethod(request.getPaymentMethod());
         payment.setStatus(request.getStatus());
+        
+        // Save the payment first
+        payment = paymentRepo.save(payment);
+        
+        // Then set the relationship
+        orders.setPayment(payment);
         payment.setVaccineOrder(orders);
+        
+        // Save the order
         vaccineOrderRepo.save(orders);
-        return paymentRepo.save(payment);
+        
+        return payment;
     }
 
 

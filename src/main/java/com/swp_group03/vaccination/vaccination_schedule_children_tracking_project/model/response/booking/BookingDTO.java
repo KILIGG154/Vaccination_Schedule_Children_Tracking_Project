@@ -26,7 +26,6 @@ public class BookingDTO {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date appointmentDate;
     private ChildDTO child;
-
     private BookingStatus status;
 
     public BookingDTO(Booking booking) {

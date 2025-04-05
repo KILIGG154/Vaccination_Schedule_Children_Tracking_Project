@@ -9,6 +9,7 @@ public enum ErrorCode {
     UNCATEGORIZED_EXCEPTION(9999, "Uncategorized exception", HttpStatus.INTERNAL_SERVER_ERROR),
     INVALID_DATA_ACCESS_RESOURCE_USAGE(9998, "Invalid data access resource usage (SQL syntax, table not exist, etc)", HttpStatus.INTERNAL_SERVER_ERROR),
     TRANSIENT_OBJECT_EXCEPTION(9997, "A transient object was referenced. (Object saved in RAM but not in database)", HttpStatus.INTERNAL_SERVER_ERROR),
+    SYSTEM_ERROR(9996, "System ERROR, Please Wait!!", HttpStatus.INTERNAL_SERVER_ERROR),
 
     // User-related errors
     USER_NOT_FOUND(1001, "User not found", HttpStatus.NOT_FOUND),
@@ -27,7 +28,7 @@ public enum ErrorCode {
     INVALID_OTP(1019, "Mã OTP không hợp lệ", HttpStatus.BAD_REQUEST),
     OTP_EXPIRED(1020, "Mã OTP đã hết hạn", HttpStatus.BAD_REQUEST),
     EMAIL_SENDING_ERROR(1021, "Không thể gửi email", HttpStatus.BAD_REQUEST),
-
+    NO_AVAILABLE_STAFF(1022, "No Available Staff", HttpStatus.BAD_REQUEST),
     // Input validation errors
     INVALID_KEY(2000, "Invalid message key", HttpStatus.BAD_REQUEST),
     USERNAME_INVALID(2001, "Username must be between 3 and 16 characters", HttpStatus.BAD_REQUEST),

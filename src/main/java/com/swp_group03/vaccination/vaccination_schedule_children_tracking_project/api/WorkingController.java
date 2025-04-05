@@ -1,81 +1,79 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.api;
 
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.working.ScheduleRequest;
-//import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.working.WorkingDetailRequest;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.working.WorkingRequest;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.working.StaffScheduleRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.working.ScheduleResponse;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.working.WorkingResponse;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.user_auth.UserService;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.working.WorkingService;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.working.ScheduleDTO;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.working.StaffScheduleDTO;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.working.WorkDateDTO;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.working.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/working")
 public class WorkingController {
 
     @Autowired
-    private WorkingService workingService;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
     private ScheduleService scheduleService;
 
-    @PostMapping("add")
-    public ApiResponse addWorking(@RequestBody WorkingRequest request) {
-        return workingService.addWorking(request);
-    }
-
-    @PostMapping("/detail/{dateID}/{accountID}")
-//    public ApiResponse addWorkingDetail(@RequestBody WorkingDetailRequest request, @PathVariable int dateID, @PathVariable String accountID)
-    public ApiResponse addWorkingDetail(@PathVariable int dateID, @PathVariable String accountID)
-    {
-        if (dateID <= 0) {
-            return ApiResponse.builder()
-                    .code(400)
-                    .message("DateID không hợp lệ")
-                    .build();
-        }
-        if (accountID == null || accountID.trim().isEmpty()) {
-            return ApiResponse.builder()
-                    .code(400)
-                    .message("AccountID không hợp lệ")
-                    .build();
-        }
-        return workingService.addWorkingDetail(dateID, accountID);
-    }
-
-    @GetMapping("/allworkdate/{accountID}")
-    public ApiResponse<List<WorkingResponse>> getAllWorkDateByAccountID(@PathVariable String accountID) {
-        return workingService.getAllWorking(accountID);
+    /**
+     * API tạo lịch làm việc với danh sách nhân viên
+     */
+    @PostMapping("/api/schedules")
+    public ApiResponse<Map<String, Integer>> createScheduleWithStaff(@RequestBody ScheduleRequest request) {
+        return scheduleService.createScheduleWithStaff(request);
     }
 
     /**
-     * Tạo lịch làm việc mới
-     * @param request Thông tin lịch làm việc
-     * @return Danh sách các ngày làm việc đã được tạo
+     * API thêm nhân viên vào lịch làm việc hiện có
      */
+    @PostMapping("/api/schedules/add-staff")
+    public ApiResponse<Map<String, Integer>> addStaffToExistingSchedule(@RequestBody StaffScheduleRequest request) {
+        return scheduleService.addStaffToExistingSchedule(request);
+    }
 
-    @PostMapping("/schedule/create")
-    public ApiResponse<ScheduleResponse> createSchedule(@RequestBody ScheduleRequest request) {
-        try {
-            ScheduleResponse response = scheduleService.createSchedule(request);
-            return ApiResponse.<ScheduleResponse>builder()
-                    .code(200)
-                    .message("Tạo lịch làm việc thành công")
-                    .result(response)
-                    .build();
-        } catch (Exception e) {
-            return ApiResponse.<ScheduleResponse>builder()
-                    .code(500)
-                    .message("Lỗi khi tạo lịch làm việc: " + e.getMessage())
-                    .build();
-        }
+    /**
+     * API lấy danh sách lịch làm việc trong khoảng thời gian
+     */
+    @GetMapping("/api/schedules")
+    public ApiResponse<List<ScheduleDTO>> getSchedules(
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
+        return scheduleService.getSchedules(startDate, endDate);
+    }
+
+    /**
+     * API lấy danh sách ngày làm việc có sẵn trong khoảng thời gian
+     */
+    @GetMapping("/api/working-dates/available")
+    public ApiResponse<List<WorkDateDTO>> getAvailableWorkingDates(
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
+        return scheduleService.getAvailableWorkingDates(startDate, endDate);
+    }
+
+    /**
+     * API lấy lịch làm việc của một nhân viên trong khoảng thời gian
+     */
+    @GetMapping("/api/staff/{staffId}/schedule")
+    public ApiResponse<StaffScheduleDTO> getStaffSchedule(
+            @PathVariable String staffId,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
+        return scheduleService.getStaffSchedule(staffId, startDate, endDate);
+    }
+
+    /**
+     * API lấy tất cả các ngày làm việc (WorkDate) hiện có trong hệ thống
+     */
+    @GetMapping("/api/working-dates/all")
+    public ApiResponse<List<WorkDateDTO>> getAllWorkingDates() {
+        return scheduleService.getAllWorkingDates();
     }
 }

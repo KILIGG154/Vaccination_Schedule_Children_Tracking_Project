@@ -2,7 +2,6 @@ package com.swp_group03.vaccination.vaccination_schedule_children_tracking_proje
 
 
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 

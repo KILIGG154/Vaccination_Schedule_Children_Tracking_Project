@@ -14,12 +14,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ScheduleRequest {
-    private String scheduleName;
-    private String shiftType;
+public class StaffScheduleRequest {
+    private String staffId; // ID của nhân viên được chỉ định (used for single staff assignment)
     private Date startDate;
     private Date endDate;
     private boolean repeatPattern;
     private List<Integer> weekdays; // [1, 2, 3, 4, 5, 6, 7] where 1 = Monday, ..., 7 = Sunday
-    private List<String> staffIds; // IDs of staff to be assigned
+    private List<String> staffIds; // IDs of staff to be assigned (used for batch assignment)
 } 

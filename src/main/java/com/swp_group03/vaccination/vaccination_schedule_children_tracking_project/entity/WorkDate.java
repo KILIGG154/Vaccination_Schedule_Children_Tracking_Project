@@ -33,9 +33,9 @@ public class WorkDate {
 
     @Column(name = "ShiftType")
     private String shiftType;
-
-//    @Column(name = "EndTime")
-//    private String endTime;
+    
+    @Column(name = "ScheduleName")
+    private String scheduleName;
 
     @OneToMany(mappedBy = "schedule")
     @JsonIgnore
@@ -44,10 +44,10 @@ public class WorkDate {
     public WorkDate() {
     }
 
-    public WorkDate(Date dayWork, String shiftType, String endTime, Set<WorkingSchedule> workingSchedules) {
+    public WorkDate(Date dayWork, String shiftType, String scheduleName) {
         this.dayWork = dayWork;
         this.shiftType = shiftType;
-//        this.endTime = endTime;
-        this.workingSchedules = workingSchedules;
+        this.scheduleName = scheduleName;
+        this.workingSchedules = new HashSet<>();
     }
 }

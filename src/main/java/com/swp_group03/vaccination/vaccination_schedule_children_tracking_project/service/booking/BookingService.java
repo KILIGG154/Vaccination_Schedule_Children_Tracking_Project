@@ -1,8 +1,16 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.booking;
 
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.*;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Account;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Booking;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.BookingStatus;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Child;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Diagnosis;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.PaymentStatus;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.WorkDate;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.WorkingSchedule;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.AppException;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.ErrorCode;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.mapper.WorkScheduleMapper;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.booking.BookingRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.booking.BookingDTO;
@@ -21,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -41,6 +50,14 @@ public class BookingService {
     @Autowired
     private DiagnosisRepo diagnosisRepo;
 
+    @Autowired
+    private StaffAssignmentService staffAssignmentService;
+
+    @Autowired
+    private UserRepo userRepo;
+
+    @Autowired
+    private WorkScheduleMapper workScheduleMapper;
 
 //    public Booking createBookingRepo(int childID, BookingRequest bookingRequest) {
 //        Child child = childRepo.findById(childID).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
@@ -55,7 +72,8 @@ public class BookingService {
 
 @Transactional
     public BookingDTO createBookingRepo(int childID, BookingRequest bookingRequest) {
-        Child child = childRepo.findById(childID).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        Child child = childRepo.findById(childID)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         Booking booking = new Booking();
         booking.setAppointmentDate(bookingRequest.getAppointmentDate());
@@ -67,7 +85,8 @@ public class BookingService {
     }
 
     public BookingDTO getAllBooking(int bookingID){
-        Booking booking = bookingRepo.findById(bookingID).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        Booking booking = bookingRepo.findById(bookingID)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         return new BookingDTO(booking);
     }
 
@@ -319,10 +338,75 @@ public class BookingService {
     }
 
     public Booking updateBookingDate(int id, BookingRequest bookingRequest) {
-      Booking booking = bookingRepo.findById(id).orElseThrow(() -> new AppException(ErrorCode.BOOKING_NOT_FOUND));
+      Booking booking = bookingRepo.findById(id)
+              .orElseThrow(() -> new AppException(ErrorCode.BOOKING_NOT_FOUND));
       if(bookingRequest.getAppointmentDate() != null) {
         booking.setAppointmentDate(bookingRequest.getAppointmentDate());
       }
         return bookingRepo.save(booking);
+    }
+
+    /**
+     * Tìm và gán nhân viên thích hợp cho một booking
+     *
+     * @param bookingId ID của booking
+     * @param role Vai trò cần tìm (DOCTOR, NURSE)
+     * @param bookingDate Ngày của booking
+     * @return ApiResponse chứa thông tin staffScheduleDTO hoặc thông báo lỗi
+     */
+    @Transactional
+    public ApiResponse assignStaffToBooking(int bookingId, String role, Date bookingDate) {
+        try {
+            // Kiểm tra booking có tồn tại không
+            Booking booking = bookingRepo.findById(bookingId)
+                    .orElseThrow(() -> new AppException(ErrorCode.BOOKING_NOT_FOUND));
+            
+            if (booking.getStatus() != BookingStatus.CHECKED_IN) {
+                return ApiResponse.builder()
+                        .code(400)
+                        .message("Booking phải ở trạng thái CHECKED_IN để có thể gán nhân viên")
+                        .build();
+            }
+            
+            // Gọi StaffAssignmentService để gán nhân viên
+            WorkingSchedule workingSchedule = staffAssignmentService.assignStaffToBooking(bookingId, role, bookingDate);
+            
+            // Lấy thông tin của nhân viên được gán
+            Optional<Account> staffAccount = userRepo.findById(workingSchedule.getAccount().getAccountId());
+            if (staffAccount.isEmpty()) {
+                return ApiResponse.builder()
+                        .code(500)
+                        .message("Không thể tìm thấy thông tin nhân viên được gán")
+                        .build();
+            }
+            
+            // Chuyển đổi thành Map để trả về thay vì dùng StaffScheduleDTO
+            Map<String, Object> staffInfo = new HashMap<>();
+            staffInfo.put("staffId", staffAccount.get().getAccountId());
+            staffInfo.put("staffName", staffAccount.get().getFirstName() + " " + staffAccount.get().getLastName());
+            staffInfo.put("workDate", workingSchedule.getSchedule().getDayWork());
+            staffInfo.put("shiftType", workingSchedule.getSchedule().getShiftType());
+            
+            // Cập nhật trạng thái booking
+            booking.setStatus(BookingStatus.ASSIGNED);
+            bookingRepo.save(booking);
+            
+            return ApiResponse.builder()
+                    .code(200)
+                    .message("Đã gán nhân viên cho booking thành công")
+                    .result(staffInfo)
+                    .build();
+            
+        } catch (AppException e) {
+            return ApiResponse.builder()
+                    .code(e.getErrorCode().getCode())
+                    .message(e.getMessage())
+                    .build();
+        } catch (Exception e) {
+            return ApiResponse.builder()
+                    .code(500)
+                    .message("Lỗi khi gán nhân viên: " + e.getMessage())
+                    .build();
+        }
     }
 }
