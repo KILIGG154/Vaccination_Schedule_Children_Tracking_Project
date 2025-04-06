@@ -9,8 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -38,9 +38,9 @@ public class VaccineCombo {
     @Enumerated(EnumType.STRING)
     private ComboStatus status = ComboStatus.AVAILABLE;
 
-    @OneToMany(mappedBy = "combo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "combo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
-    private Set<VaccineComboDetail> vaccineComboDetails = new HashSet<>();
+    private List<VaccineComboDetail> vaccineComboDetails = new ArrayList<>();
 
     @OneToOne
     @JoinColumn(name = "VaccineOrderId")
@@ -52,5 +52,16 @@ public class VaccineCombo {
         this.description = description;
         this.status = status;
     }
-
+    
+    public void addComboDetail(VaccineComboDetail detail) {
+        vaccineComboDetails.add(detail);
+        detail.setCombo(this);
+        detail.setComboId(this.id);
+    }
+    
+    public void removeComboDetail(VaccineComboDetail detail) {
+        vaccineComboDetails.remove(detail);
+        detail.setCombo(null);
+        detail.setComboId(0);
+    }
 }

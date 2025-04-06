@@ -46,7 +46,7 @@ public class BookingController {
     // 3. Get a booking by ID
     @GetMapping("/{bookingId}")
     public ApiResponse getBookingById(@PathVariable int bookingId) {
-        BookingDTO booking = bookingService.getAllBooking(bookingId);
+        BookingResponse booking = bookingService.getBookingById(bookingId);
         return ApiResponse.builder()
         .code(200)
         .message("Booking retrieved successfully")

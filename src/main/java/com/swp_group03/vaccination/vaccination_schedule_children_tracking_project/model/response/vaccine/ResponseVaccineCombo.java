@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,4 +26,6 @@ public class ResponseVaccineCombo
     private double total;
 
     private ComboStatus status;
+    
+    private List<ResponseVaccineDetails> vaccineDetails;
 }

@@ -11,6 +11,7 @@ import lombok.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
@@ -25,12 +26,35 @@ public class BookingResponse {
     private List<VaccineOrderDTO> order;
     private BookingStatus status;
 
-    public BookingResponse(int bookingId, Date appointmentDate, Child child, List<VaccineOrderDTO> order, BookingStatus status) {
-        this.bookingId = bookingId;
-        this.appointmentDate = appointmentDate;
-        this.child = new ChildDTO(child);
-        this.order = order;
-        this.status = status;
+    // // Constructor nhận Child entity và chuyển đổi thành ChildDTO
+    // public BookingResponse(int bookingId, Date appointmentDate, Child child, List<VaccineOrderDTO> order, BookingStatus status) {
+    //     this.bookingId = bookingId;
+    //     this.appointmentDate = appointmentDate;
+    //     this.child = child != null ? new ChildDTO(child) : null;
+    //     this.order = order;
+    //     this.status = status;
+    // }
+    
+    // Thêm constructor nhận trực tiếp entity Booking
+    public BookingResponse(Booking booking) {
+        if (booking != null) {
+            this.bookingId = booking.getBookingId();
+            this.appointmentDate = booking.getAppointmentDate();
+            
+            // Chuyển đổi Child thành ChildDTO
+            if (booking.getChild() != null) {
+                this.child = new ChildDTO(booking.getChild());
+            }
+            
+            // Chuyển đổi VaccineOrders thành VaccineOrderDTO
+            if (booking.getVaccineOrders() != null) {
+                this.order = booking.getVaccineOrders().stream()
+                    .filter(order -> order != null)
+                    .map(VaccineOrderDTO::new)
+                    .collect(Collectors.toList());
+            }
+            
+            this.status = booking.getStatus();
+        }
     }
-
 }

@@ -18,7 +18,7 @@ public class VaccineOrderDTO {
     private int id;
     private int bookingId;
     private Date orderDate;
-    private Payment payment;
+    private PaymentDTO payment;
     private OrderStatus status;
     private List<VaccineOrderDetailDTO> orderDetail;
     
@@ -31,7 +31,7 @@ public class VaccineOrderDTO {
         this.orderDetail = vaccineOrder.getVaccineOrderDetails().stream()
                 .map(VaccineOrderDetailDTO::new)
                 .collect(Collectors.toList());
-        this.payment = vaccineOrder.getPayment();
+        this.payment = vaccineOrder.getPayment() != null ? new PaymentDTO(vaccineOrder.getPayment()) : null;
         this.status = vaccineOrder.getStatus();
     }
 

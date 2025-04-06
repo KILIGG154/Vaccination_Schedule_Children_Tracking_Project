@@ -84,35 +84,43 @@ public class BookingService {
         return new BookingDTO(booking);
     }
 
-    public BookingDTO getAllBooking(int bookingID){
-        Booking booking = bookingRepo.findById(bookingID)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-        return new BookingDTO(booking);
+    public BookingResponse getBookingById(int bookingID) {
+        try {
+            Booking booking = bookingRepo.findById(bookingID)
+                    .orElseThrow(() -> new AppException(ErrorCode.BOOKING_NOT_FOUND));
+            
+            log.info("Retrieved booking with ID: {}, status: {}", bookingID, booking.getStatus());
+            
+            // Sử dụng constructor mới của BookingResponse
+            return new BookingResponse(booking);
+        } catch (AppException e) {
+            log.error("Error finding booking with ID {}: {}", bookingID, e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            log.error("Unexpected error getting booking with ID {}: {}", bookingID, e.getMessage(), e);
+            throw new AppException(ErrorCode.SYSTEM_ERROR);
+        }
     }
 
     public List<BookingResponse> getBook() {
         List<Booking> bookings = bookingRepo.findAll();
+        // Ghi log số lượng booking đã tìm thấy để debug
+        log.info("Found {} bookings in database", bookings.size());
+        
         return bookings.stream()
             .map(booking -> {
                 try {
-                    // Đảm bảo child không null trước khi mapping
-                    Child child = booking.getChild();
-                    List<VaccineOrderDTO> orderDTOs = booking.getVaccineOrders() != null ? 
-                        booking.getVaccineOrders().stream()
-                            .map(VaccineOrderDTO::new)
-                            .collect(Collectors.toList()) : 
-                        null;
+                    // Kiểm tra booking không null trước khi chuyển đổi
+                    if (booking == null) {
+                        return null;
+                    }
                     
-                    return new BookingResponse(
-                        booking.getBookingId(),
-                        booking.getAppointmentDate(),
-                        child,
-                        orderDTOs,
-                        booking.getStatus()
-                    );
+                    // Sử dụng constructor mới của BookingResponse
+                    return new BookingResponse(booking);
                 } catch (Exception e) {
                     // Log lỗi và bỏ qua booking có vấn đề
-                    log.error("Error mapping booking with ID {}: {}", booking.getBookingId(), e.getMessage());
+                    log.error("Error mapping booking with ID {}: {}", 
+                        booking != null ? booking.getBookingId() : "unknown", e.getMessage(), e);
                     return null;
                 }
             })

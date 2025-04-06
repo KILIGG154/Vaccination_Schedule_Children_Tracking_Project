@@ -11,7 +11,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -62,11 +64,6 @@ public class Vaccine {
     @Nationalized
     private String interactions;
 
-//    @Lob
-//    @Column(name = "AdverseReactions")
-//    @Nationalized
-//    private String adverseReactions;
-
     @Lob
     @Column(name = "StorageConditions")
     @Nationalized
@@ -95,9 +92,6 @@ public class Vaccine {
     @Column(name = "Quantity")
     private Integer quantity;
 
-//    @Column(name = "ExpirationDate")
-//    private LocalDate expirationDate;
-
     @Column(name = "Price")
     private double unitPrice;
 
@@ -112,9 +106,9 @@ public class Vaccine {
     @Enumerated(EnumType.STRING)
     private VaccineStatus status = VaccineStatus.ACTIVE;
 
-    @OneToMany(mappedBy = "vaccine", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "vaccine", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
-    private Set<VaccineComboDetail> vaccineComboDetails = new HashSet<>();
+    private List<VaccineComboDetail> vaccineComboDetails = new ArrayList<>();
 
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -135,5 +129,16 @@ public class Vaccine {
         vaccineOrderDetail.setVaccine(null);
     }
 
+    public void addVaccineComboDetail(VaccineComboDetail detail) {
+        vaccineComboDetails.add(detail);
+        detail.setVaccine(this);
+        detail.setVaccineId(this.id);
+    }
+
+    public void removeVaccineComboDetail(VaccineComboDetail detail) {
+        vaccineComboDetails.remove(detail);
+        detail.setVaccine(null);
+        detail.setVaccineId(0);
+    }
 
 }

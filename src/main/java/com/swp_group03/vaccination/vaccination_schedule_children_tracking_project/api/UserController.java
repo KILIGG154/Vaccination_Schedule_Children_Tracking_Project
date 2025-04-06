@@ -123,7 +123,7 @@ public class  UserController {
 
         ApiResponse<AccountResponse> apiResponse = new ApiResponse<>();
         apiResponse.setResult(userService.getAccountById(accountId));
-        apiResponse.setCode(1);
+        apiResponse.setCode(101);
         apiResponse.setMessage("Success");
         return apiResponse;
     }
@@ -133,7 +133,7 @@ public class  UserController {
     public ApiResponse<AccountResponse> getMyInfo(){
         ApiResponse<AccountResponse> apiResponse = new ApiResponse<>();
         apiResponse.setResult(userService.getMyInfo());
-        apiResponse.setCode(1);
+        apiResponse.setCode(101);
         apiResponse.setMessage("Success");
         return apiResponse;
     }

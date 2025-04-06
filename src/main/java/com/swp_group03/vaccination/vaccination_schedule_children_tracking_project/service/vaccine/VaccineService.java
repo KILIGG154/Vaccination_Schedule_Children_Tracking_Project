@@ -71,7 +71,14 @@ public class VaccineService {
 //        List<ResponseVaccine> vaccines = vaccineMapper.toResponseVaccine(vaccineRepo.findAll());
         return vaccineMapper.toResponseVaccineList(vaccineRepo.findAll());
     }
+    
+    public ResponseVaccine getVaccineById(int id) {
+        Vaccine vaccine = vaccineRepo.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.VACCINE_NOT_FOUND));
+        return vaccineMapper.toResponseVaccine(vaccine);
+    }
 
+    
     public List<ResponseVaccine> searchByName(String vaccineName) {
         List<Vaccine> vaccine = vaccineRepo.findByNameContainingIgnoreCase(vaccineName);
         return vaccineMapper.toResponseVaccineList(vaccine);
@@ -124,7 +131,18 @@ public class VaccineService {
     }
 
     public List<ResponseVaccineCombo> getVaccineCombos(){
-        return vaccineMapper.toResponseVaccineCombo(vaccineCombos.findAll());
+        return vaccineMapper.toResponseVaccineComboList(vaccineCombos.findAll());
+    }
+
+    public ResponseVaccineCombo getVaccineComboById(int id) {
+        VaccineCombo vaccineCombo = vaccineCombos.findById(id)
+                .orElseThrow(() -> new RuntimeException("Vaccine Combo not found with id: " + id));
+        
+        // Đảm bảo chi tiết combo được tải đầy đủ (vaccineComboDetail đã được khai báo ở trên)
+        List<VaccineComboDetail> details = vaccineComboDetail.findByComboId(id);
+        vaccineCombo.setVaccineComboDetails(details);
+        
+        return vaccineMapper.toResponseVaccineCombo(vaccineCombo);
     }
 
 
@@ -141,7 +159,7 @@ protected double getTotalPriceCombo(int id) {
             .orElseThrow(() -> new RuntimeException("Vaccine Combo not found with id: " + id));
 
     double totalP = Optional.ofNullable(vaccineCombo.getVaccineComboDetails())
-            .orElse(Collections.emptySet()) // Tránh NullPointerException
+            .orElse(Collections.emptyList()) // Tránh NullPointerException
             .stream()
             .mapToDouble(detail -> detail.getVaccine().getSalePrice() * detail.getDose())
             .sum();

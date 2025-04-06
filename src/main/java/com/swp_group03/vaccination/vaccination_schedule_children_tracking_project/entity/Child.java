@@ -46,8 +46,8 @@ public class Child{
     private ChildStatus childStatus = ChildStatus.ACTIVE;
 
     @OneToMany(mappedBy = "child", fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<Booking> bookings = new ArrayList<>();
+    @JsonBackReference
+    private List<Booking> bookings;
 
 
     public Child() {

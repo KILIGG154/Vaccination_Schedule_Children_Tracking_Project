@@ -30,7 +30,16 @@ public interface VaccineMapper {
 
     List<ResponseVaccine> toResponseVaccineList(List<Vaccine> vaccines);
 
-    List<ResponseVaccineCombo> toResponseVaccineCombo(List<VaccineCombo> vaccineCombos);
+    List<ResponseVaccineCombo> toResponseVaccineComboList(List<VaccineCombo> vaccineCombos);
+
+    // Chuyển đổi VaccineCombo thành ResponseVaccineCombo
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "comboName", source = "comboName")
+    @Mapping(target = "description", source = "description")
+    @Mapping(target = "total", source = "total")
+    @Mapping(target = "status", source = "status")
+    @Mapping(target = "vaccineDetails", expression = "java(toResponseVaccineDetails(vaccineCombo.getVaccineComboDetails()))")
+    ResponseVaccineCombo toResponseVaccineCombo(VaccineCombo vaccineCombo);
 
     // Ánh xạ VaccineComboDetail -> ResponseVaccineDetails
     @Mapping(target = "comboName", source = "combo", qualifiedByName = "mapComboName")

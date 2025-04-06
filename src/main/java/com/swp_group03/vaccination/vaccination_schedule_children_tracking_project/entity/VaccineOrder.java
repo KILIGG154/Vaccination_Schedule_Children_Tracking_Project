@@ -1,6 +1,7 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.vaccine.VaccineCombo;
 import jakarta.persistence.*;
 
@@ -24,7 +25,7 @@ public class VaccineOrder {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Booking")
-    @JsonIgnore
+    @JsonManagedReference
     private Booking booking;
 
     @OneToOne(mappedBy = "vaccineOrder", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

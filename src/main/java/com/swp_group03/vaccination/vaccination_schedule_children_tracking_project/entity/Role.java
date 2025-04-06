@@ -6,6 +6,8 @@ import jakarta.persistence.CascadeType;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "Roles")
 public class Role {
@@ -17,6 +19,7 @@ public class Role {
     private String roleName;
 
     @ManyToMany(mappedBy = "roles", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @JsonIgnore
     private Set<Account> accounts = new HashSet<>();
 
 

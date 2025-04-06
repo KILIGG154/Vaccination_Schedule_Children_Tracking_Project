@@ -1,0 +1,273 @@
+package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.mapper;
+
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.dto.working.ScheduleDTO;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.dto.working.StaffDTO;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.dto.working.StaffScheduleDTO;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.dto.working.WorkDateDTO;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.dto.working.WorkingScheduleDTO;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Account;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Role;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.WorkDate;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.WorkScheduleStatus;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.WorkingSchedule;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.working.ScheduleRequest;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.working.StaffScheduleRequest;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.working.WorkingRequest;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.working.ScheduleResponse;
+import org.springframework.stereotype.Component;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+@Component
+public class WorkingMapper {
+
+    private static final String[] DAYS_OF_WEEK = {"", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+
+    public WorkDate createWorkDate(WorkingRequest request) {
+        WorkDate workDate = new WorkDate();
+        workDate.setDayWork(request.getDayWork());
+        workDate.setShiftType(request.getShiftType());
+        return workDate;
+    }
+
+    public WorkDate scheduleRequestToWorkDate(ScheduleRequest request) {
+        WorkDate workDate = new WorkDate();
+        workDate.setDayWork(request.getStartDate());
+        workDate.setShiftType(request.getShiftType());
+        workDate.setScheduleName(request.getScheduleName());
+        // WorkDate constructor already initializes createdAt with current date
+        return workDate;
+    }
+    
+    public ScheduleResponse toScheduleResponse(String scheduleName, String shiftType, List<WorkDate> workDates) {
+        ScheduleResponse response = new ScheduleResponse();
+        response.setScheduleName(scheduleName);
+        response.setShiftType(shiftType);
+        response.setWorkDates(workDates);
+        return response;
+    }
+
+    // Chuyển đổi WorkingSchedule thành ScheduleDTO
+    public ScheduleDTO toScheduleDTO(WorkingSchedule schedule) {
+        return ScheduleDTO.builder()
+                .scheduleId(schedule.getScheduleId())
+                .dateId(schedule.getSchedule().getDateId())
+                .dayWork(schedule.getSchedule().getDayWork())
+                .shiftType(schedule.getSchedule().getShiftType())
+                .scheduleName(schedule.getSchedule().getScheduleName())
+                .status(schedule.isStatus())
+                .workStatus(schedule.getWorkStatus())
+                .build();
+    }
+    
+    // Chuyển đổi WorkDate và danh sách WorkingSchedule và dữ liệu nhân viên thành ScheduleDTO
+    public ScheduleDTO toScheduleDTO(WorkDate workDate, List<WorkingSchedule> schedules, Map<String, Account> staffMap) {
+        if (workDate == null || schedules == null || schedules.isEmpty()) {
+            return null;
+        }
+        
+        return ScheduleDTO.builder()
+                .dateId(workDate.getDateId())
+                .dayWork(workDate.getDayWork())
+                .scheduleName(workDate.getScheduleName())
+                .shiftType(workDate.getShiftType())
+                .staffCount(schedules.size())
+                .build();
+    }
+
+    // Chuyển đổi WorkingSchedule và Account thành StaffScheduleDTO
+    public StaffScheduleDTO toStaffScheduleDTO(WorkingSchedule schedule, Account account) {
+        // Lấy tên vai trò từ set roles
+        String roleName = "";
+        Set<Role> roles = account.getRoles();
+        if (roles != null && !roles.isEmpty()) {
+            Role firstRole = roles.iterator().next();
+            roleName = firstRole.getRoleName();
+        }
+        
+        return StaffScheduleDTO.builder()
+                .scheduleId(schedule.getScheduleId())
+                .accountId(account.getAccountId())
+                .fullName(account.getFirstName() + " " + account.getLastName())
+                .email(account.getEmail())
+                .phoneNumber(account.getPhoneNumber())
+                .roleName(roleName)
+                .dayWork(schedule.getSchedule().getDayWork())
+                .shiftType(schedule.getSchedule().getShiftType())
+                .scheduleName(schedule.getSchedule().getScheduleName())
+                .status(schedule.isStatus())
+                .workStatus(schedule.getWorkStatus())
+                .build();
+    }
+
+    // Chuyển đổi Account và danh sách WorkingSchedule thành StaffScheduleDTO
+    public StaffScheduleDTO toStaffScheduleDTO(Account account, List<WorkingSchedule> schedules) {
+        if (account == null || schedules == null || schedules.isEmpty()) {
+            return null;
+        }
+        
+        WorkingSchedule firstSchedule = schedules.get(0);
+        
+        // Lấy tên vai trò từ set roles
+        String roleName = "";
+        Set<Role> roles = account.getRoles();
+        if (roles != null && !roles.isEmpty()) {
+            Role firstRole = roles.iterator().next();
+            roleName = firstRole.getRoleName();
+        }
+        
+        return StaffScheduleDTO.builder()
+                .scheduleId(firstSchedule.getScheduleId())
+                .accountId(account.getAccountId())
+                .fullName(account.getFirstName() + " " + account.getLastName())
+                .email(account.getEmail())
+                .phoneNumber(account.getPhoneNumber())
+                .roleName(roleName)
+                .dayWork(firstSchedule.getSchedule().getDayWork())
+                .shiftType(firstSchedule.getSchedule().getShiftType())
+                .scheduleName(firstSchedule.getSchedule().getScheduleName())
+                .status(firstSchedule.isStatus())
+                .workStatus(firstSchedule.getWorkStatus())
+                .schedulesCount(schedules.size())
+                .build();
+    }
+    
+    // Chuyển đổi danh sách WorkingSchedule thành danh sách WorkingScheduleDTO
+    public List<WorkingScheduleDTO> toGetAllWorking(List<WorkingSchedule> schedules) {
+        return schedules.stream()
+                .map(schedule -> {
+                    WorkDateDTO workDateDTO = new WorkDateDTO(
+                            schedule.getSchedule().getDateId(),
+                            schedule.getSchedule().getDayWork(),
+                            schedule.getSchedule().getShiftType(),
+                            schedule.getSchedule().getScheduleName()
+                    );
+                    
+                    Account account = schedule.getAccount();
+                    StaffDTO staffDTO = new StaffDTO(
+                            account.getAccountId(),
+                            account.getFirstName() + " " + account.getLastName(),
+                            account.getEmail(),
+                            account.getPhoneNumber()
+                    );
+                    
+                    return WorkingScheduleDTO.builder()
+                            .scheduleId(schedule.getScheduleId())
+                            .workDate(workDateDTO)
+                            .staff(staffDTO)
+                            .status(schedule.isStatus())
+                            .workStatus(schedule.getWorkStatus())
+                            .build();
+                })
+                .collect(Collectors.toList());
+    }
+
+    // Tạo danh sách WorkDate từ ScheduleRequest
+    public List<WorkDate> createWorkDatesFromRequest(ScheduleRequest request) {
+        List<WorkDate> workDates;
+        
+        // Nếu có mẫu lặp lại và ngày trong tuần được chỉ định
+        if (request.isRepeatPattern() && request.getWeekdays() != null && !request.getWeekdays().isEmpty()) {
+            workDates = createWorkDatesWithRepeatPattern(
+                request.getStartDate(), 
+                request.getEndDate(), 
+                request.getWeekdays(), 
+                request.getShiftType(),
+                request.getScheduleName()
+            );
+        } else {
+            // Tạo ngày làm việc cho tất cả các ngày trong phạm vi
+            workDates = createWorkDatesForDateRange(
+                request.getStartDate(), 
+                request.getEndDate(), 
+                request.getShiftType(),
+                request.getScheduleName()
+            );
+        }
+        
+        return workDates;
+    }
+
+    // Tạo WorkingSchedule từ StaffScheduleRequest
+    public WorkingSchedule toWorkingSchedule(StaffScheduleRequest request, WorkDate workDate) {
+        WorkingSchedule schedule = new WorkingSchedule();
+        schedule.setDateId(workDate.getDateId());
+        schedule.setAccountId(request.getStaffId());
+        schedule.setSchedule(workDate);
+        schedule.setStatus(true);
+        schedule.setWorkStatus(WorkScheduleStatus.AVAILABLE);
+        // WorkingSchedule constructor already initializes createdAt and updatedAt with current date
+        return schedule;
+    }
+
+    private List<WorkDate> createWorkDatesWithRepeatPattern(
+            Date startDate, 
+            Date endDate, 
+            List<Integer> weekdays, 
+            String shiftType,
+            String scheduleName) {
+        
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startDate);
+        
+        return createDatesBetween(startDate, endDate).stream()
+                .filter(date -> {
+                    calendar.setTime(date);
+                    int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+                    // Convert from Calendar.DAY_OF_WEEK (Sunday = 1) to our format (Monday = 1)
+                    int ourDayOfWeek = dayOfWeek == Calendar.SUNDAY ? 7 : dayOfWeek - 1;
+                    return weekdays.contains(ourDayOfWeek);
+                })
+                .map(date -> {
+                    WorkDate workDate = new WorkDate(date, shiftType, scheduleName);
+                    return workDate;
+                })
+                .collect(Collectors.toList());
+    }
+
+    private List<WorkDate> createWorkDatesForDateRange(
+            Date startDate, 
+            Date endDate, 
+            String shiftType,
+            String scheduleName) {
+        
+        return createDatesBetween(startDate, endDate).stream()
+                .map(date -> {
+                    WorkDate workDate = new WorkDate(date, shiftType, scheduleName);
+                    return workDate;
+                })
+                .collect(Collectors.toList());
+    }
+
+    private List<Date> createDatesBetween(Date startDate, Date endDate) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startDate);
+        
+        List<Date> dates = new java.util.ArrayList<>();
+        
+        Calendar endCalendar = Calendar.getInstance();
+        endCalendar.setTime(endDate);
+        endCalendar.add(Calendar.DATE, 1); // Add one day to include the end date
+        
+        while (calendar.getTime().before(endCalendar.getTime())) {
+            dates.add(calendar.getTime());
+            calendar.add(Calendar.DATE, 1);
+        }
+        
+        return dates;
+    }
+
+    private String getDayOfWeekString(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        // Convert from Calendar.DAY_OF_WEEK (Sunday = 1) to our format (Monday = 1)
+        int ourDayOfWeek = dayOfWeek == Calendar.SUNDAY ? 7 : dayOfWeek - 1;
+        return DAYS_OF_WEEK[ourDayOfWeek];
+    }
+}

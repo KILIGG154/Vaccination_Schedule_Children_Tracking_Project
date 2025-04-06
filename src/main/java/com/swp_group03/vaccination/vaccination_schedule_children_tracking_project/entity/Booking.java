@@ -1,5 +1,6 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
@@ -9,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "Booking")
@@ -26,7 +28,7 @@ public class Booking {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "childId")
-    @JsonIgnore
+    @JsonManagedReference
     private Child child;
 
 //
@@ -45,7 +47,7 @@ public class Booking {
 
     @OneToMany(mappedBy = "booking",fetch = FetchType.LAZY)
     @Column(name = "Vaccine_Order")
-    @JsonIgnore
+    @JsonBackReference
     private List<VaccineOrder> vaccineOrders;
 
     public void addVaccineOrder(VaccineOrder vaccineOrder) {

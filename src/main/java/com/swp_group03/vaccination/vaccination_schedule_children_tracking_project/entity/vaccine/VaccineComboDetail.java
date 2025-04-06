@@ -8,25 +8,27 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "Vaccine_Combo_Detail")
-@IdClass(VaccineComboDetailId.class) // Thêm annotation này
 @Getter
 @Setter
 public class VaccineComboDetail {
 
-    @Id // Thay thế @EmbeddedId bằng @Id cho từng trường
-    @Column(name = "vaccineId")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "DetailId")
+    private int detailId;
+
+    @Column(name = "VaccineId")
     private int vaccineId;
 
-    @Id // Thêm @Id cho trường thứ hai
-    @Column(name = "comboId")
+    @Column(name = "ComboId")
     private int comboId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vaccineId", insertable = false, updatable = false) // Thêm insertable=false, updatable=false
+    @JoinColumn(name = "vaccineId", insertable = false, updatable = false)
     private Vaccine vaccine;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "comboId", insertable = false, updatable = false) // Thêm insertable=false, updatable=false
+    @JoinColumn(name = "comboId", insertable = false, updatable = false)
     private VaccineCombo combo;
 
     @Column(name = "Dose")
@@ -46,15 +48,20 @@ public class VaccineComboDetail {
     public VaccineComboDetail() {
     }
 
-    public VaccineComboDetail(int vaccineId, int comboId, Vaccine vaccine, VaccineCombo combo, int dose, String comboCategory, double saleOff, double totalCombo) {
-        this.vaccineId = vaccineId;
-        this.comboId = comboId;
+    public VaccineComboDetail(Vaccine vaccine, VaccineCombo combo, int dose, String comboCategory, double saleOff, double totalCombo) {
         this.vaccine = vaccine;
         this.combo = combo;
         this.dose = dose;
         this.comboCategory = comboCategory;
         this.saleOff = saleOff;
-//        this.totalCombo = totalCombo;
+    }
+
+    public int getDetailId() {
+        return detailId;
+    }
+
+    public void setDetailId(int detailId) {
+        this.detailId = detailId;
     }
 
     public int getVaccineId() {
@@ -79,6 +86,9 @@ public class VaccineComboDetail {
 
     public void setVaccine(Vaccine vaccine) {
         this.vaccine = vaccine;
+        if (vaccine != null) {
+            this.vaccineId = vaccine.getId();
+        }
     }
 
     public VaccineCombo getCombo() {
@@ -87,6 +97,9 @@ public class VaccineComboDetail {
 
     public void setCombo(VaccineCombo combo) {
         this.combo = combo;
+        if (combo != null) {
+            this.comboId = combo.getId();
+        }
     }
 
     public int getDose() {

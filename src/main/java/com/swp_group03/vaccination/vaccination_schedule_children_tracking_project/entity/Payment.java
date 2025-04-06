@@ -27,6 +27,7 @@ public class Payment {
 //    @JsonIgnore
 //    private VaccineOrder vaccineOrder;
     @OneToOne (mappedBy = "payment", cascade = CascadeType.PERSIST)
+    
     private VaccineOrder vaccineOrder;
 
     public Payment() {
