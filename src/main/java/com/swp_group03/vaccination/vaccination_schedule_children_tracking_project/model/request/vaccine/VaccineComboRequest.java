@@ -10,9 +10,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class VaccineComboRequest {
 
+
     private String comboName;
 
-
+    private String comboCategory;
+    private double saleOff;
+    private int dose;
     private String description;
 
 

@@ -38,6 +38,17 @@ public class VaccineCombo {
     @Enumerated(EnumType.STRING)
     private ComboStatus status = ComboStatus.AVAILABLE;
 
+    @Size(max = 100)
+    @Column(name = "ComboCategory", length = 100)
+    private String comboCategory;
+
+    @Column(name = "SaleOff")
+    private double saleOff;
+
+    @Column(name = "Dose")
+    private int dose;
+
+
     @OneToMany(mappedBy = "combo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<VaccineComboDetail> vaccineComboDetails = new ArrayList<>();

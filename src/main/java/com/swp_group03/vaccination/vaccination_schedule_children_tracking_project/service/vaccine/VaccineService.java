@@ -89,6 +89,9 @@ public class VaccineService {
         VaccineCombo vaccineCombo = new VaccineCombo();
         vaccineCombo.setComboName(request.getComboName());
         vaccineCombo.setDescription(request.getDescription());
+        vaccineCombo.setComboCategory(request.getComboCategory());
+        vaccineCombo.setSaleOff(request.getSaleOff());
+        vaccineCombo.setDose(request.getDose());
         vaccineCombo.setStatus(ComboStatus.AVAILABLE);
         return vaccineCombos.save(vaccineCombo);
     }
@@ -112,9 +115,9 @@ public class VaccineService {
         detail.setComboId(comboId);      // Đặt ID trực tiếp thay vì thông qua đối tượng key
         detail.setVaccine(vaccine);
         detail.setCombo(vaccineCombo);
-        detail.setDose(request.getDose());
-        detail.setComboCategory(request.getComboCategory());
-        detail.setSaleOff(request.getSaleOff());
+//        detail.setDose(request.getDose());
+//        detail.setComboCategory(request.getComboCategory());
+//        detail.setSaleOff(request.getSaleOff());
 
         //Phải lưu thằng Detail này trước, gọi method() tính tổng giá tiền mới được nha!!!
         vaccineComboDetail.save(detail);
@@ -134,15 +137,32 @@ public class VaccineService {
         return vaccineMapper.toResponseVaccineComboList(vaccineCombos.findAll());
     }
 
-    public ResponseVaccineCombo getVaccineComboById(int id) {
-        VaccineCombo vaccineCombo = vaccineCombos.findById(id)
-                .orElseThrow(() -> new RuntimeException("Vaccine Combo not found with id: " + id));
+    //Tim vaccine combo theo id
+    public ComboDTO getVaccineComboById(int id) {
+        log.info("Bắt đầu tìm vaccine combo với id: {}", id);
         
-        // Đảm bảo chi tiết combo được tải đầy đủ (vaccineComboDetail đã được khai báo ở trên)
-        List<VaccineComboDetail> details = vaccineComboDetail.findByComboId(id);
-        vaccineCombo.setVaccineComboDetails(details);
-        
-        return vaccineMapper.toResponseVaccineCombo(vaccineCombo);
+        try {
+            VaccineCombo vaccineCombo = vaccineCombos.findById(id)
+                    .orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
+            log.info("Đã tìm thấy vaccine combo: {}", vaccineCombo);
+            
+            List<VaccineComboDetail> details = vaccineComboDetail.findByComboId(id);
+            log.info("Số lượng chi tiết combo tìm thấy: {}", details != null ? details.size() : 0);
+            
+            if (details == null || details.isEmpty()) {
+                log.warn("Không tìm thấy chi tiết nào cho combo id: {}", id);
+                details = new ArrayList<>();
+            }
+            
+            vaccineCombo.setVaccineComboDetails(details);
+            
+            ComboDTO result = new ComboDTO(vaccineCombo);
+            log.info("Đã tạo ComboDTO thành công: {}", result);
+            return result;
+        } catch (Exception e) {
+            log.error("Lỗi khi tìm vaccine combo với id {}: {}", id, e.getMessage(), e);
+            throw new AppException(ErrorCode.INVALID_KEY);
+        }
     }
 
 
@@ -161,7 +181,7 @@ protected double getTotalPriceCombo(int id) {
     double totalP = Optional.ofNullable(vaccineCombo.getVaccineComboDetails())
             .orElse(Collections.emptyList()) // Tránh NullPointerException
             .stream()
-            .mapToDouble(detail -> detail.getVaccine().getSalePrice() * detail.getDose())
+            .mapToDouble(detail -> detail.getVaccine().getSalePrice() * vaccineCombo.getDose() * (1 - vaccineCombo.getSaleOff() / 100))
             .sum();
 
     return totalP;
@@ -271,7 +291,6 @@ protected double getTotalPriceCombo(int id) {
             VaccineProtocolDose dose = new VaccineProtocolDose();
             dose.setVaccine(vaccine);
             dose.setProtocolDetail(detail);
-            
             VaccineProtocolDose savedDose = vProtocolRepo.save(dose);
             doses.add(savedDose);
         }

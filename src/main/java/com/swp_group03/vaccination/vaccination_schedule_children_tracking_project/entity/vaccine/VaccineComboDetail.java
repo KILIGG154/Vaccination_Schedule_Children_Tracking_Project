@@ -31,15 +31,7 @@ public class VaccineComboDetail {
     @JoinColumn(name = "comboId", insertable = false, updatable = false)
     private VaccineCombo combo;
 
-    @Column(name = "Dose")
-    private int dose;
 
-    @Size(max = 100)
-    @Column(name = "ComboCategory", length = 100)
-    private String comboCategory;
-
-    @Column(name = "SaleOff")
-    private double saleOff;
 
 //    @Column(name = "Total_Of_Combo")
 //    private double totalCombo;
@@ -48,12 +40,12 @@ public class VaccineComboDetail {
     public VaccineComboDetail() {
     }
 
-    public VaccineComboDetail(Vaccine vaccine, VaccineCombo combo, int dose, String comboCategory, double saleOff, double totalCombo) {
+    public VaccineComboDetail(int detailId, int vaccineId, int comboId, Vaccine vaccine, VaccineCombo combo) {
+        this.detailId = detailId;
+        this.vaccineId = vaccineId;
+        this.comboId = comboId;
         this.vaccine = vaccine;
         this.combo = combo;
-        this.dose = dose;
-        this.comboCategory = comboCategory;
-        this.saleOff = saleOff;
     }
 
     public int getDetailId() {
@@ -102,29 +94,7 @@ public class VaccineComboDetail {
         }
     }
 
-    public int getDose() {
-        return dose;
-    }
 
-    public void setDose(int dose) {
-        this.dose = dose;
-    }
-
-    public String getComboCategory() {
-        return comboCategory;
-    }
-
-    public void setComboCategory(String comboCategory) {
-        this.comboCategory = comboCategory;
-    }
-
-    public double getSaleOff() {
-        return saleOff;
-    }
-
-    public void setSaleOff(double saleOff) {
-        this.saleOff = saleOff;
-    }
 
 //    public double getTotal() {
 //        return totalCombo;

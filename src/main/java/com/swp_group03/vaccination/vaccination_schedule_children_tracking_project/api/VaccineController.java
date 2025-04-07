@@ -173,12 +173,11 @@ public class VaccineController {
     }
 
     @GetMapping("/combo/{id}")
-    public  ApiResponse<ResponseVaccineCombo> getVaccineComboById(@PathVariable int id) {
-        ResponseVaccineCombo combo = vaccineService.getVaccineComboById(id);
-        return ApiResponse.<ResponseVaccineCombo>builder()
+    public  ApiResponse<ComboDTO> getVaccineComboById(@PathVariable int id) {
+        return ApiResponse.<ComboDTO>builder()
                 .code(200)
                 .message("Vaccine combo retrieved successfully")
-                .result(combo)
+                .result(vaccineService.getVaccineComboById(id))
                 .build();
     }
 

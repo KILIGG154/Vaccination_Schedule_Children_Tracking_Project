@@ -119,6 +119,10 @@ public class Vaccine {
     @JsonIgnore
     private Set<VaccineOrderDetail> vaccineOrderDetails = new HashSet<>();
 
+    @OneToMany(mappedBy = "vaccine", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<VaccineProtocolDose> vaccineProtocol = new ArrayList<>();
+
     public void addVaccineOrderDetail(VaccineOrderDetail vaccineOrderDetail) {
         vaccineOrderDetails.add(vaccineOrderDetail);
         vaccineOrderDetail.setVaccine(this);
@@ -140,5 +144,14 @@ public class Vaccine {
         detail.setVaccine(null);
         detail.setVaccineId(0);
     }
+    public void addVaccineProtocol(VaccineProtocolDose vaccineProtocolDose) {
+        vaccineProtocol.add(vaccineProtocolDose);
+        vaccineProtocolDose.setVaccine(this);
+    }
+    public void removeVaccineProtocol(VaccineProtocolDose vaccineProtocolDose) {
+        vaccineProtocol.remove(vaccineProtocolDose);
+        vaccineProtocolDose.setVaccine(null);
+    }
+
 
 }
