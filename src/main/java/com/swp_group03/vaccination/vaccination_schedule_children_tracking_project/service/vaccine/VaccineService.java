@@ -181,7 +181,8 @@ protected double getTotalPriceCombo(int id) {
     double totalP = Optional.ofNullable(vaccineCombo.getVaccineComboDetails())
             .orElse(Collections.emptyList()) // Tránh NullPointerException
             .stream()
-            .mapToDouble(detail -> detail.getVaccine().getSalePrice() * vaccineCombo.getDose() * (1 - vaccineCombo.getSaleOff() / 100))
+            .mapToDouble(detail -> detail.getVaccine().getSalePrice() *
+             detail.getVaccine().getTotalDose() * (1 - vaccineCombo.getSaleOff()))
             .sum();
 
     return totalP;
@@ -358,6 +359,17 @@ protected double getTotalPriceCombo(int id) {
         VaccineCombo combo = vaccineCombos.findById(id).orElseThrow(() -> new AppException(ErrorCode.VACCINE_NOT_FOUND));
         combo.setStatus(ComboStatus.UNAVAILABLE);
         return vaccineCombos.save(combo);
+    }
+
+    public List<ComboDTO> findByCateCombo(String name){
+        List<VaccineCombo> combo = vaccineCombos.findVaccineComboByComboCategoryContaining(name);
+        if(combo.isEmpty()){
+            throw new AppException(ErrorCode.VACCINE_NOT_FOUND);
+        }
+        List<ComboDTO> comboDTOs = combo.stream()
+                .map(ComboDTO::new)
+                .collect(Collectors.toList());
+        return comboDTOs;
     }
 
 

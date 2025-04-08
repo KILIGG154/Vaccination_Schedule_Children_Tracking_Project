@@ -12,7 +12,7 @@ public class ComboDetailDTO {
     private int comboId;
     private String vaccineName;
     private String manafacture;
-//    private int totalDose;
+    private int totalDose;
 
     public ComboDetailDTO(VaccineComboDetail vaccineComboDetail) {
         this.id = vaccineComboDetail.getDetailId();
@@ -20,6 +20,8 @@ public class ComboDetailDTO {
         this.comboId = vaccineComboDetail.getCombo().getId();
         this.vaccineName = vaccineComboDetail.getVaccine().getName();
         this.manafacture = vaccineComboDetail.getVaccine().getManufacturer();
+        this.totalDose = vaccineComboDetail.getVaccine().getTotalDose();
+
     }
 
     @Override

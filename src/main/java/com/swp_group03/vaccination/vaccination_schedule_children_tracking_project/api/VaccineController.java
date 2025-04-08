@@ -228,5 +228,16 @@ public class VaccineController {
                 .build();
     }
 
+    @GetMapping("/search/{comboCate}")
+    public ApiResponse<List<ComboDTO>> getVaccineCombosByCategory(@PathVariable String comboCate) {
+        List<ComboDTO> combos = vaccineService.findByCateCombo(comboCate);
+        return ApiResponse.<List<ComboDTO>>builder()
+                .code(200)
+                .message("Vaccine combos retrieved successfully")
+                .result(combos)
+                .build();
+
+    }
+
 
 }
