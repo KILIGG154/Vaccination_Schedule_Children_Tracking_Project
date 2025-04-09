@@ -4,14 +4,13 @@ import com.swp_group03.vaccination.vaccination_schedule_children_tracking_projec
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.working.StaffScheduleRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.working.ScheduleDTO;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.working.ScheduleResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.working.StaffScheduleDTO;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.working.WorkDateDTO;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.working.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +30,8 @@ public class WorkingController {
     }
 
     /**
-     * API thêm nhân viên vào lịch làm việc hiện có
+     * API thêm nhân viên vào các ngày làm việc hiện có trong khoảng thời gian
+     * API này chỉ thêm nhân viên vào các ngày làm việc đã tồn tại, không tạo mới ngày làm việc
      */
     @PostMapping("/api/schedules/add-staff")
     public ApiResponse<Map<String, Integer>> addStaffToExistingSchedule(@RequestBody StaffScheduleRequest request) {
@@ -39,34 +39,28 @@ public class WorkingController {
     }
 
     /**
-     * API lấy danh sách lịch làm việc trong khoảng thời gian
+     * API lấy danh sách tất cả lịch làm việc trong hệ thống
      */
-    @GetMapping("/api/schedules")
-    public ApiResponse<List<ScheduleDTO>> getSchedules(
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
-        return scheduleService.getSchedules(startDate, endDate);
+    @GetMapping("/api/schedules/all")
+    public ApiResponse<List<ScheduleDTO>> getSchedules() {
+        return scheduleService.getSchedules();
+    }
+    
+    /**
+     * API lấy danh sách lịch làm việc được nhóm theo tên lịch và ca làm việc
+     */
+    @GetMapping("/api/schedules/grouped")
+    public ApiResponse<List<ScheduleResponse>> getSchedulesGrouped() {
+        return scheduleService.getSchedulesGrouped();
     }
 
     /**
-     * API lấy danh sách ngày làm việc có sẵn trong khoảng thời gian
-     */
-    @GetMapping("/api/working-dates/available")
-    public ApiResponse<List<WorkDateDTO>> getAvailableWorkingDates(
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
-        return scheduleService.getAvailableWorkingDates(startDate, endDate);
-    }
-
-    /**
-     * API lấy lịch làm việc của một nhân viên trong khoảng thời gian
+     * API lấy lịch làm việc của một nhân viên
      */
     @GetMapping("/api/staff/{staffId}/schedule")
     public ApiResponse<StaffScheduleDTO> getStaffSchedule(
-            @PathVariable String staffId,
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
-        return scheduleService.getStaffSchedule(staffId, startDate, endDate);
+            @PathVariable String staffId) {
+        return scheduleService.getStaffSchedule(staffId);
     }
 
     /**

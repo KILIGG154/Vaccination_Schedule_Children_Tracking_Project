@@ -7,7 +7,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -28,31 +29,28 @@ public class VaccineTherapyRecord {
     @JoinColumn(name = "dose_id")
     private VaccineProtocolDose dose;
 
-    @Temporal(TemporalType.DATE) // Chỉ lưu ngày, không có giờ
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "scheduled_date")
-    private Date therapyDate;
+    private LocalDate therapyDate;
 
     @Enumerated(EnumType.STRING) // Use STRING to store the enum as a string in the database
     @Column(name = "status")
     private VaccineTherapyStatus status;
 
 
-    @Temporal(TemporalType.DATE) // Chỉ lưu ngày, không có giờ
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "create_at")
-    private Date createAt;
+    private LocalDateTime createAt;
 
-    @Temporal(TemporalType.DATE) // Chỉ lưu ngày, không có giờ
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "update_at")
-    private Date updateAt;
+    private LocalDateTime updateAt;
 
 
     public VaccineTherapyRecord() {
     }
 
-    public VaccineTherapyRecord(Booking booking, VaccineProtocolDose dose, Date therapyDate, VaccineTherapyStatus status, Date createAt, Date updateAt) {
+    public VaccineTherapyRecord(Booking booking, VaccineProtocolDose dose, LocalDate therapyDate, VaccineTherapyStatus status, LocalDateTime createAt, LocalDateTime updateAt) {
         this.booking = booking;
         this.dose = dose;
         this.therapyDate = therapyDate;

@@ -89,7 +89,7 @@ public class StripePaymentService {
                 // return paymentService.createPayment(orderID, request);
 
                 request.setPaymentMethod("Credit Card");
-                Payment failedPayment = paymentService.createPayment(orderID, request);
+                // Payment failedPayment = paymentService.createPayment(orderID, request);
                 throw new AppException(ErrorCode.PAYMENT_FAIL);
             }
         } catch (StripeException e) {

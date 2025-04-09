@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -32,10 +32,9 @@ public class ScheduleVaccineRecord {
     @JoinColumn(name = "account_id")
     private Account account; //Đây là Nurse
 
-    @Temporal(TemporalType.DATE) // Chỉ lưu ngày, không có giờ
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "scheduled_date")
-    private Date injectionDate;
+    private LocalDate injectionDate;
 
     @Column(name = "status")
     private boolean status; //"đã tiêm" " chưa tiêm"
@@ -43,7 +42,7 @@ public class ScheduleVaccineRecord {
     public ScheduleVaccineRecord() {
     }
 
-    public ScheduleVaccineRecord(Booking booking, VaccineProtocolDose dose, Account account, Date injectionDate, boolean status) {
+    public ScheduleVaccineRecord(Booking booking, VaccineProtocolDose dose, Account account, LocalDate injectionDate, boolean status) {
         this.booking = booking;
         this.dose = dose;
         this.account = account;

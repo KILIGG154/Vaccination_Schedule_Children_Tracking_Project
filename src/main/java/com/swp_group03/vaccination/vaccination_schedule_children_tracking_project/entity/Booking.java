@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -22,9 +22,8 @@ public class Booking {
     private int bookingId;
 
     @Column(name = "Appointment_Date")
-    @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date appointmentDate;
+    private LocalDate appointmentDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "childId")
@@ -70,7 +69,7 @@ public class Booking {
 
     }
 
-    public Booking(Date appointmentDate, Child child, BookingStatus status, List<VaccineOrder> vaccineOrders, String reaction) {
+    public Booking(LocalDate appointmentDate, Child child, BookingStatus status, List<VaccineOrder> vaccineOrders, String reaction) {
         this.appointmentDate = appointmentDate;
         this.child = child;
         this.status = status;
@@ -86,11 +85,11 @@ public class Booking {
         this.bookingId = bookingId;
     }
 
-    public Date getAppointmentDate() {
+    public LocalDate getAppointmentDate() {
         return appointmentDate;
     }
 
-    public void setAppointmentDate(Date appointmentDate) {
+    public void setAppointmentDate(LocalDate appointmentDate) {
         this.appointmentDate = appointmentDate;
     }
 

@@ -10,8 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -54,7 +54,7 @@ public class StaffAssignmentService {
      * @throws AppException nếu không tìm thấy nhân viên hoặc workdate phù hợp
      */
     @Transactional
-    public WorkingSchedule assignStaffToBooking(int bookingId, String role, Date bookingDate) {
+    public WorkingSchedule assignStaffToBooking(int bookingId, String role, LocalDate bookingDate) {
         // 1. Tìm booking
         Booking booking = bookingRepo.findById(bookingId)
                 .orElseThrow(() -> new AppException(ErrorCode.BOOKING_NOT_FOUND));
@@ -108,7 +108,7 @@ public class StaffAssignmentService {
                 vaccineRecord.setBooking(booking);
                 vaccineRecord.setAccount(selectedStaff);
                 vaccineRecord.setDose(protocolDose.get());
-                vaccineRecord.setInjectionDate(new Date());  // Ngày hiện tại
+                vaccineRecord.setInjectionDate(LocalDate.now());  // Ngày hiện tại
                 vaccineRecord.setStatus(false);  // Chưa tiêm
                 vaccineRecordRepo.save(vaccineRecord);
                 log.info("Đã tạo bản ghi ScheduleVaccineRecord cho y tá {} và booking {}", 
@@ -118,7 +118,7 @@ public class StaffAssignmentService {
                 ScheduleVaccineRecord vaccineRecord = new ScheduleVaccineRecord();
                 vaccineRecord.setBooking(booking);
                 vaccineRecord.setAccount(selectedStaff);
-                vaccineRecord.setInjectionDate(new Date());  // Ngày hiện tại
+                vaccineRecord.setInjectionDate(LocalDate.now());  // Ngày hiện tại
                 vaccineRecord.setStatus(false);  // Chưa tiêm
                 vaccineRecordRepo.save(vaccineRecord);
                 log.info("Đã tạo bản ghi ScheduleVaccineRecord cho y tá {} và booking {} (không có liều vaccine)", 

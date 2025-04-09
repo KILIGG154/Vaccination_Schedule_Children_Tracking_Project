@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -15,10 +15,9 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class StaffScheduleRequest {
-    private String staffId; // ID của nhân viên được chỉ định (used for single staff assignment)
-    private Date startDate;
-    private Date endDate;
-    private boolean repeatPattern;
+    private LocalDate startDate; // Ngày bắt đầu khoảng thời gian tìm kiếm ngày làm việc
+    private LocalDate endDate;   // Ngày kết thúc khoảng thời gian tìm kiếm ngày làm việc
+    private boolean repeatPattern; // Có áp dụng mẫu lặp lại không (ví dụ: chỉ thêm vào các ngày thứ 2,4,6)
     private List<Integer> weekdays; // [1, 2, 3, 4, 5, 6, 7] where 1 = Monday, ..., 7 = Sunday
-    private List<String> staffIds; // IDs of staff to be assigned (used for batch assignment)
+    private List<String> staffIds; // Danh sách ID nhân viên cần thêm vào các ngày làm việc
 } 

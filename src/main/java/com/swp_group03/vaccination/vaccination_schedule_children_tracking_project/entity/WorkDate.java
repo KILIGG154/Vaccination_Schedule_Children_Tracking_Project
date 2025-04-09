@@ -10,7 +10,6 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -27,9 +26,8 @@ public class WorkDate {
     private int dateId;
 
     @Column(name = "DayWork", unique = true)
-    @Temporal(TemporalType.DATE) // Chỉ lưu ngày, không có giờ
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date dayWork;
+    private LocalDate dayWork;
 
     @Column(name = "ShiftType")
     private String shiftType;
@@ -44,7 +42,7 @@ public class WorkDate {
     public WorkDate() {
     }
 
-    public WorkDate(Date dayWork, String shiftType, String scheduleName) {
+    public WorkDate(LocalDate dayWork, String shiftType, String scheduleName) {
         this.dayWork = dayWork;
         this.shiftType = shiftType;
         this.scheduleName = scheduleName;

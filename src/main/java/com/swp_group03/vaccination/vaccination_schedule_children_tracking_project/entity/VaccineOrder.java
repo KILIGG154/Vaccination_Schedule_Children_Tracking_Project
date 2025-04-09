@@ -1,11 +1,12 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.vaccine.VaccineCombo;
 import jakarta.persistence.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,8 +20,8 @@ public class VaccineOrder {
     private int id;
 
     @Column(name = "OrderDate")
-    @Temporal(TemporalType.DATE)
-    private Date orderDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate orderDate;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -58,7 +59,7 @@ public class VaccineOrder {
     public VaccineOrder() {
     }
 
-    public VaccineOrder(Date orderDate, Booking booking, VaccineCombo vaccineCombo, Payment payment, Set<VaccineOrderDetail> vaccineOrderDetails) {
+    public VaccineOrder(LocalDate orderDate, Booking booking, VaccineCombo vaccineCombo, Payment payment, Set<VaccineOrderDetail> vaccineOrderDetails) {
         this.orderDate = orderDate;
         this.booking = booking;
         this.vaccineCombo = vaccineCombo;
@@ -74,11 +75,11 @@ public class VaccineOrder {
         this.id = id;
     }
 
-    public Date getOrderDate() {
+    public LocalDate getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(Date orderDate) {
+    public void setOrderDate(LocalDate orderDate) {
         this.orderDate = orderDate;
     }
 

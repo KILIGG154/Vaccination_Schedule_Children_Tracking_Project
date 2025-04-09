@@ -6,7 +6,7 @@ import com.swp_group03.vaccination.vaccination_schedule_children_tracking_projec
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.payment.PaymentDTO;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class VaccineOrderDTO {
     private int id;
     private int bookingId;
-    private Date orderDate;
+    private LocalDate orderDate;
     private PaymentDTO payment;
     private OrderStatus status;
     private List<VaccineOrderDetailDTO> orderDetail;

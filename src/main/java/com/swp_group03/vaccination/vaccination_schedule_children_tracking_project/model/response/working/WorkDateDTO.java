@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -16,6 +15,6 @@ import java.util.Date;
 @Builder
 public class WorkDateDTO {
     private int id;
-    private Date dayWork;
+    private LocalDate dayWork;
     private String shiftType;
 }

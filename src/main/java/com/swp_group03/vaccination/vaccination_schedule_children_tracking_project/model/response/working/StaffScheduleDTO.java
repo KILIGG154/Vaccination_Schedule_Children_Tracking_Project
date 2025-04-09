@@ -8,13 +8,17 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * DTO chứa thông tin về lịch làm việc của một nhân viên
+ * Bao gồm thông tin cơ bản về nhân viên và danh sách các ngày làm việc
+ */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class StaffScheduleDTO {
-    private String staffId;
-    private String staffName;
+public class StaffScheduleDTO implements StaffInfo {
+    private String id;
+    private String name;
     private List<WorkDateDTO> schedules;
 } 

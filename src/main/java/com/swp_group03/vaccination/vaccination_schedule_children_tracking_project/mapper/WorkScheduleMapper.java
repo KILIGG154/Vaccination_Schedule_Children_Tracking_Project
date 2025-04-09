@@ -7,18 +7,18 @@ import com.swp_group03.vaccination.vaccination_schedule_children_tracking_projec
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.working.StaffScheduleRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.working.WorkingRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.working.ScheduleDTO;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.working.ScheduleResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.working.StaffDTO;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.working.StaffScheduleDTO;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.working.WorkDateDTO;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.working.WorkingResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.TextStyle;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -45,8 +45,8 @@ public interface WorkScheduleMapper {
     ScheduleDTO toScheduleDTO(WorkDate workDate, List<WorkingSchedule> schedules, Map<String, Account> staffMap);
     
     // Phương thức chuyển đổi từ WorkingSchedule và Account sang StaffScheduleDTO
-    @Mapping(target = "staffId", source = "account.accountId")
-    @Mapping(target = "staffName", expression = "java(account.getFirstName() + \" \" + account.getLastName())")
+    @Mapping(target = "id", source = "account.accountId")
+    @Mapping(target = "name", expression = "java(account.getFirstName() + \" \" + account.getLastName())")
     @Mapping(target = "schedules", ignore = true)
     StaffScheduleDTO toStaffScheduleDTO(Account account, List<WorkingSchedule> schedules);
     
@@ -85,28 +85,55 @@ public interface WorkScheduleMapper {
     // Chuyển đổi StaffScheduleRequest thành WorkingSchedule
     @Mapping(target = "scheduleId", ignore = true)
     @Mapping(target = "dateId", source = "workDate.dateId")
-    @Mapping(target = "accountId", source = "request.staffId")
+    @Mapping(target = "accountId", ignore = true)
     @Mapping(target = "schedule", source = "workDate")
     @Mapping(target = "status", constant = "true")
     @Mapping(target = "workStatus", expression = "java(com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.WorkScheduleStatus.OFF_DUTY)")
     WorkingSchedule toWorkingSchedule(StaffScheduleRequest request, WorkDate workDate);
     
-    // Tạo ScheduleResponse
-    @Mapping(target = "scheduleName", source = "scheduleName")
-    @Mapping(target = "shiftType", source = "shiftType")
-    @Mapping(target = "workDates", source = "workDates")
-    ScheduleResponse toScheduleResponse(String scheduleName, String shiftType, List<WorkDate> workDates);
+    @Named("getFirstStaffId")
+    default String getFirstStaffId(List<String> staffIds) {
+        if (staffIds == null || staffIds.isEmpty()) {
+            return null;
+        }
+        return staffIds.get(0);
+    }
     
-    // Phương thức trợ giúp để lấy tên ngày trong tuần
-    default String getDayOfWeekString(Date date) {
-        String[] DAYS_OF_WEEK = {"", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+    // Ánh xạ từ WorkDate sang WorkDateDTO
+    @Mapping(target = "id", source = "dateId")
+    @Mapping(target = "dayWork", source = "dayWork")
+    @Mapping(target = "shiftType", source = "shiftType")
+    WorkDateDTO toWorkDateDTO(WorkDate workDate);
+
+    // Chuyển đổi danh sách WorkingSchedule sang danh sách StaffScheduleDTO
+    default List<StaffScheduleDTO> toStaffScheduleDTOs(List<WorkingSchedule> schedules) {
+        if (schedules == null) {
+            return List.of();
+        }
         
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-        // Convert from Calendar.DAY_OF_WEEK (Sunday = 1) to our format (Monday = 1)
-        int ourDayOfWeek = dayOfWeek == Calendar.SUNDAY ? 7 : dayOfWeek - 1;
-        return DAYS_OF_WEEK[ourDayOfWeek];
+        return schedules.stream()
+            .map(schedule -> {
+                if (schedule.getSchedule() == null || schedule.getAccount() == null) {
+                    return null;
+                }
+                
+                return StaffScheduleDTO.builder()
+                    .id(schedule.getAccount().getAccountId())
+                    .name(schedule.getAccount().getFirstName() + " " + schedule.getAccount().getLastName())
+                    .schedules(List.of(WorkDateDTO.builder()
+                        .id(schedule.getSchedule().getDateId())
+                        .dayWork(schedule.getSchedule().getDayWork())
+                        .shiftType(schedule.getSchedule().getShiftType())
+                        .build()))
+                    .build();
+            })
+            .filter(dto -> dto != null)
+            .collect(Collectors.toList());
+    }
+
+    // Phương thức trợ giúp để lấy tên ngày trong tuần
+    default String getDayOfWeekString(LocalDate date) {
+        return date.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
     }
     
     // Phương thức để tạo danh sách WorkDate từ ScheduleRequest
@@ -130,86 +157,29 @@ public interface WorkScheduleMapper {
     }
     
     default List<WorkDate> createWorkDatesWithRepeatPattern(
-            Date startDate, 
-            Date endDate, 
+            LocalDate startDate, 
+            LocalDate endDate, 
             List<Integer> weekdays, 
             String shiftType,
             String scheduleName) {
         
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(startDate);
-        
-        return createDatesBetween(startDate, endDate).stream()
+        return startDate.datesUntil(endDate.plusDays(1))
                 .filter(date -> {
-                    calendar.setTime(date);
-                    int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-                    // Convert from Calendar.DAY_OF_WEEK (Sunday = 1) to our format (Monday = 1)
-                    int ourDayOfWeek = dayOfWeek == Calendar.SUNDAY ? 7 : dayOfWeek - 1;
-                    return weekdays.contains(ourDayOfWeek);
+                    int dayOfWeek = date.getDayOfWeek().getValue();
+                    return weekdays.contains(dayOfWeek);
                 })
                 .map(date -> new WorkDate(date, shiftType, scheduleName))
                 .collect(Collectors.toList());
     }
 
     default List<WorkDate> createWorkDatesForDateRange(
-            Date startDate, 
-            Date endDate, 
+            LocalDate startDate, 
+            LocalDate endDate, 
             String shiftType,
             String scheduleName) {
         
-        return createDatesBetween(startDate, endDate).stream()
+        return startDate.datesUntil(endDate.plusDays(1))
                 .map(date -> new WorkDate(date, shiftType, scheduleName))
                 .collect(Collectors.toList());
-    }
-
-    default List<Date> createDatesBetween(Date startDate, Date endDate) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(startDate);
-        
-        List<Date> dates = new java.util.ArrayList<>();
-        
-        Calendar endCalendar = Calendar.getInstance();
-        endCalendar.setTime(endDate);
-        endCalendar.add(Calendar.DATE, 1); // Add one day to include the end date
-        
-        while (calendar.getTime().before(endCalendar.getTime())) {
-            dates.add(calendar.getTime());
-            calendar.add(Calendar.DATE, 1);
-        }
-        
-        return dates;
-    }
-
-    // Ánh xạ từ WorkDate sang WorkDateDTO
-    @Mapping(target = "id", source = "dateId")
-    @Mapping(target = "dayWork", source = "dayWork")
-    @Mapping(target = "shiftType", source = "shiftType")
-    WorkDateDTO toWorkDateDTO(WorkDate workDate);
-
-    // Chuyển đổi danh sách WorkingSchedule sang danh sách WorkingResponse
-    default List<WorkingResponse> toGetAllWorking(List<WorkingSchedule> schedules) {
-        if (schedules == null) {
-            return List.of();
-        }
-        
-        return schedules.stream()
-            .map(schedule -> {
-                if (schedule.getSchedule() == null || schedule.getAccount() == null) {
-                    return null;
-                }
-                
-                return WorkingResponse.builder()
-                    .dateId(schedule.getSchedule().getDateId())
-                    .accountId(schedule.getAccount().getAccountId())
-                    .date(WorkDateDTO.builder()
-                        .id(schedule.getSchedule().getDateId())
-                        .dayWork(schedule.getSchedule().getDayWork())
-                        .shiftType(schedule.getSchedule().getShiftType())
-                        .build())
-                    .status(schedule.isStatus() ? "Active" : "Inactive")
-                    .build();
-            })
-            .filter(response -> response != null)
-            .collect(Collectors.toList());
     }
 } 

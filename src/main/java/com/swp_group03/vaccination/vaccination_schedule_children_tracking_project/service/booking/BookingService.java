@@ -15,6 +15,7 @@ import com.swp_group03.vaccination.vaccination_schedule_children_tracking_projec
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.booking.BookingDTO;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.booking.BookingResponse;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.booking.StaffAssignmentDTO;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.order.VaccineOrderDTO;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.*;
 import jakarta.persistence.EntityManager;
@@ -24,7 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.awt.print.Book;
-import java.util.Date;
+// import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,8 +58,8 @@ public class BookingService {
     @Autowired
     private UserRepo userRepo;
 
-    @Autowired
-    private WorkScheduleMapper workScheduleMapper;
+    // @Autowired
+    // private WorkScheduleMapper workScheduleMapper;
 
 //    public Booking createBookingRepo(int childID, BookingRequest bookingRequest) {
 //        Child child = childRepo.findById(childID).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
@@ -143,7 +145,7 @@ public class BookingService {
             }
 
             // 1. Lấy ngày hẹn từ booking
-            Date appointmentDate = booking.getAppointmentDate();
+            LocalDate appointmentDate = booking.getAppointmentDate();
 
             // 2. Tìm WorkDate tương ứng với ngày hẹn
             WorkDate workDate = workingDateRepo.findByDayWork(appointmentDate)
@@ -363,7 +365,7 @@ public class BookingService {
      * @return ApiResponse chứa thông tin staffScheduleDTO hoặc thông báo lỗi
      */
     @Transactional
-    public ApiResponse assignStaffToBooking(int bookingId, String role, Date bookingDate) {
+    public ApiResponse assignStaffToBooking(int bookingId, String role, LocalDate bookingDate) {
         try {
             // Kiểm tra booking có tồn tại không
             Booking booking = bookingRepo.findById(bookingId)
@@ -388,12 +390,14 @@ public class BookingService {
                         .build();
             }
             
-            // Chuyển đổi thành Map để trả về thay vì dùng StaffScheduleDTO
-            Map<String, Object> staffInfo = new HashMap<>();
-            staffInfo.put("staffId", staffAccount.get().getAccountId());
-            staffInfo.put("staffName", staffAccount.get().getFirstName() + " " + staffAccount.get().getLastName());
-            staffInfo.put("workDate", workingSchedule.getSchedule().getDayWork());
-            staffInfo.put("shiftType", workingSchedule.getSchedule().getShiftType());
+            // Sử dụng StaffAssignmentDTO thay vì Map
+            StaffAssignmentDTO staffAssignmentDTO = StaffAssignmentDTO.builder()
+                    .staffId(staffAccount.get().getAccountId())
+                    .staffName(staffAccount.get().getFirstName() + " " + staffAccount.get().getLastName())
+                    .workDate(workingSchedule.getSchedule().getDayWork())
+                    .shiftType(workingSchedule.getSchedule().getShiftType())
+                    .role(role)
+                    .build();
             
             // Cập nhật trạng thái booking
             booking.setStatus(BookingStatus.ASSIGNED);
@@ -402,7 +406,7 @@ public class BookingService {
             return ApiResponse.builder()
                     .code(200)
                     .message("Đã gán nhân viên cho booking thành công")
-                    .result(staffInfo)
+                    .result(staffAssignmentDTO)
                     .build();
             
         } catch (AppException e) {

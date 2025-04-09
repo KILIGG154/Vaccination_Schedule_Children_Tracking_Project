@@ -1,10 +1,8 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.api;
 
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.WorkingSchedule;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.vaccination.DiagnosisRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.vaccination.VaccineInjectionRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.booking.StaffAssignmentService;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.vaccination.DiagnosisService;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.vaccination.VaccinationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +18,6 @@ public class VaccinationController {
     @Autowired
     private VaccinationService vaccinationService;
     
-    @Autowired
-    private StaffAssignmentService staffAssignmentService;
 
     // 1. Record doctor's diagnosis
     @PostMapping("/diagnosis/{bookingId}/{doctorId}")

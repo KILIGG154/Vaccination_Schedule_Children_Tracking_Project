@@ -11,7 +11,6 @@ import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -20,7 +19,7 @@ import java.util.Date;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class WorkingRequest {
 
-    Date dayWork;
+    LocalDate dayWork;
 
     String shiftType;
 

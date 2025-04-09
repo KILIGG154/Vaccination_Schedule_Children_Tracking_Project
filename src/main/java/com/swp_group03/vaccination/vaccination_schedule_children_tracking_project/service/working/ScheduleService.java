@@ -9,9 +9,9 @@ import com.swp_group03.vaccination.vaccination_schedule_children_tracking_projec
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.working.StaffScheduleRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.working.ScheduleDTO;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.working.ScheduleResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.working.StaffScheduleDTO;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.working.WorkDateDTO;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.working.ScheduleResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.UserRepo;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.WorkingDateRepo;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.WorkingScheduleRepo;
@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -47,7 +48,7 @@ public class ScheduleService {
         try {
             // Validate request
         if (request.getStartDate() == null || request.getEndDate() == null ||
-            request.getStartDate().after(request.getEndDate())) {
+            request.getStartDate().isAfter(request.getEndDate())) {
                 return ApiResponse.<Map<String, Integer>>builder()
                         .code(400)
                         .message("Ngày bắt đầu và ngày kết thúc không hợp lệ")
@@ -65,7 +66,7 @@ public class ScheduleService {
             List<WorkDate> workDates = workScheduleMapper.createWorkDatesFromRequest(request);
             
             // Lưu các ngày làm việc vào database
-            Map<Date, WorkDate> savedWorkDates = saveWorkDates(workDates);
+            Map<LocalDate, WorkDate> savedWorkDates = saveWorkDates(workDates);
             
             // Lấy danh sách nhân viên
             List<Account> staffList = userRepo.findAllById(request.getStaffIds());
@@ -99,7 +100,8 @@ public class ScheduleService {
     }
 
     /**
-     * Thêm nhân viên vào các ngày làm việc hiện có
+     * Thêm nhân viên vào các ngày làm việc hiện có trong khoảng thời gian
+     * Phương thức này chỉ thêm nhân viên vào các ngày làm việc đã tồn tại, không tạo mới ngày làm việc
      * @param request Thông tin về khoảng thời gian, mẫu lặp lại và danh sách nhân viên
      * @return ApiResponse chứa thông tin về số lượng phân công đã được tạo
      */
@@ -108,7 +110,7 @@ public class ScheduleService {
         try {
             // Validate request
             if (request.getStartDate() == null || request.getEndDate() == null || 
-                request.getStartDate().after(request.getEndDate())) {
+                request.getStartDate().isAfter(request.getEndDate())) {
                 return ApiResponse.<Map<String, Integer>>builder()
                         .code(400)
                         .message("Ngày bắt đầu và ngày kết thúc không hợp lệ")
@@ -135,14 +137,10 @@ public class ScheduleService {
             
             // Lọc theo mẫu lặp lại nếu có
             if (request.isRepeatPattern() && request.getWeekdays() != null && !request.getWeekdays().isEmpty()) {
-                Calendar calendar = Calendar.getInstance();
                 existingWorkDates = existingWorkDates.stream()
                         .filter(workDate -> {
-                            calendar.setTime(workDate.getDayWork());
-                            int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-                            // Convert from Calendar.DAY_OF_WEEK (Sunday = 1) to our format (Monday = 1)
-                            int ourDayOfWeek = dayOfWeek == Calendar.SUNDAY ? 7 : dayOfWeek - 1;
-                            return request.getWeekdays().contains(ourDayOfWeek);
+                            int dayOfWeek = workDate.getDayWork().getDayOfWeek().getValue();
+                            return request.getWeekdays().contains(dayOfWeek);
                         })
                         .collect(Collectors.toList());
             }
@@ -187,37 +185,23 @@ public class ScheduleService {
     }
 
     /**
-     * Lấy danh sách lịch làm việc trong khoảng thời gian
-     * @param startDate Ngày bắt đầu
-     * @param endDate Ngày kết thúc
+     * Lấy danh sách tất cả lịch làm việc trong hệ thống
      * @return ApiResponse chứa danh sách lịch làm việc
      */
-    public ApiResponse<List<ScheduleDTO>> getSchedules(Date startDate, Date endDate) {
+    public ApiResponse<List<ScheduleDTO>> getSchedules() {
         try {
-            // Tìm các ngày làm việc trong khoảng thời gian
-            List<WorkDate> workDates = workDateRepository.findByDayWorkBetween(startDate, endDate);
+            // Lấy tất cả các ngày làm việc
+            List<WorkDate> workDates = workDateRepository.findAll();
             
             if (workDates.isEmpty()) {
                 return ApiResponse.<List<ScheduleDTO>>builder()
                         .code(404)
-                        .message("Không tìm thấy lịch làm việc nào trong khoảng thời gian đã chọn")
+                        .message("Không tìm thấy lịch làm việc nào trong hệ thống")
                         .build();
             }
             
-            // Lấy tất cả các phân công làm việc của các ngày này
-            List<Integer> dateIds = workDates.stream().map(WorkDate::getDateId).collect(Collectors.toList());
-            List<WorkingSchedule> workingSchedules = new ArrayList<>();
-            
-            // Lấy từng batch để tránh query quá lớn
-            int batchSize = 100;
-            for (int i = 0; i < dateIds.size(); i += batchSize) {
-                int end = Math.min(i + batchSize, dateIds.size());
-                List<Integer> batch = dateIds.subList(i, end);
-                
-                for (Integer dateId : batch) {
-                    workingSchedules.addAll(workingScheduleRepo.findByDateId(dateId));
-                }
-            }
+            // Lấy tất cả các phân công làm việc
+            List<WorkingSchedule> workingSchedules = workingScheduleRepo.findAll();
             
             // Lấy danh sách tất cả các account IDs từ workingSchedules
             Set<String> accountIds = workingSchedules.stream()
@@ -253,7 +237,7 @@ public class ScheduleService {
      * @param endDate Ngày kết thúc
      * @return ApiResponse chứa danh sách ngày làm việc
      */
-    public ApiResponse<List<WorkDateDTO>> getAvailableWorkingDates(Date startDate, Date endDate) {
+    public ApiResponse<List<WorkDateDTO>> getAvailableWorkingDates(LocalDate startDate, LocalDate endDate) {
         try {
             // Tìm các ngày làm việc trong khoảng thời gian
             List<WorkDate> workDates = workDateRepository.findByDayWorkBetween(startDate, endDate);
@@ -284,13 +268,11 @@ public class ScheduleService {
     }
 
     /**
-     * Lấy lịch làm việc của một nhân viên trong khoảng thời gian
+     * Lấy lịch làm việc của một nhân viên
      * @param staffId ID của nhân viên
-     * @param startDate Ngày bắt đầu
-     * @param endDate Ngày kết thúc
      * @return ApiResponse chứa lịch làm việc của nhân viên
      */
-    public ApiResponse<StaffScheduleDTO> getStaffSchedule(String staffId, Date startDate, Date endDate) {
+    public ApiResponse<StaffScheduleDTO> getStaffSchedule(String staffId) {
         try {
             // Kiểm tra nhân viên tồn tại
             Account staff = userRepo.findById(staffId).orElse(null);
@@ -299,35 +281,20 @@ public class ScheduleService {
                         .code(404)
                         .message("Không tìm thấy nhân viên với ID: " + staffId)
                         .build();
-            }
-            
-            // Tìm các ngày làm việc trong khoảng thời gian
-            List<WorkDate> workDates = workDateRepository.findByDayWorkBetween(startDate, endDate);
-            if (workDates.isEmpty()) {
-                return ApiResponse.<StaffScheduleDTO>builder()
-                        .code(404)
-                        .message("Không tìm thấy ngày làm việc nào trong khoảng thời gian đã chọn")
-                        .build();
-            }
+            }  
             
             // Lấy tất cả các phân công làm việc của nhân viên này
             List<WorkingSchedule> staffSchedules = workingScheduleRepo.findByAccountId(staffId);
             
-            // Lọc các phân công làm việc theo ngày
-            Set<Integer> workDateIds = workDates.stream().map(WorkDate::getDateId).collect(Collectors.toSet());
-            List<WorkingSchedule> filteredSchedules = staffSchedules.stream()
-                    .filter(schedule -> workDateIds.contains(schedule.getDateId()))
-                    .collect(Collectors.toList());
-            
-            if (filteredSchedules.isEmpty()) {
+            if (staffSchedules.isEmpty()) {
                 return ApiResponse.<StaffScheduleDTO>builder()
                         .code(404)
-                        .message("Không tìm thấy lịch làm việc nào cho nhân viên này trong khoảng thời gian đã chọn")
+                        .message("Không tìm thấy lịch làm việc nào cho nhân viên này")
                         .build();
             }
             
             // Chuyển đổi dữ liệu sang DTO
-            StaffScheduleDTO dto = workScheduleMapper.toStaffScheduleDTO(staff, filteredSchedules);
+            StaffScheduleDTO dto = workScheduleMapper.toStaffScheduleDTO(staff, staffSchedules);
             
             return ApiResponse.<StaffScheduleDTO>builder()
                     .code(200)
@@ -348,13 +315,8 @@ public class ScheduleService {
      */
     @Transactional
     public void updateTodaySchedulesToAvailable() {
-        // Lấy ngày hiện tại (chỉ phần ngày, không có giờ)
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        Date today = cal.getTime();
+        // Lấy ngày hiện tại
+        LocalDate today = LocalDate.now();
         
         // Tìm WorkDate cho ngày hôm nay
         Optional<WorkDate> todayWorkDate = workDateRepository.findByDayWork(today);
@@ -413,6 +375,63 @@ public class ScheduleService {
         }
     }
 
+    /**
+     * Lấy danh sách lịch làm việc được nhóm theo tên lịch và ca làm việc
+     * @return ApiResponse chứa danh sách lịch làm việc được nhóm
+     */
+    public ApiResponse<List<ScheduleResponse>> getSchedulesGrouped() {
+        try {
+            // Lấy tất cả các ngày làm việc
+            List<WorkDate> workDates = workDateRepository.findAll();
+            
+            if (workDates.isEmpty()) {
+                return ApiResponse.<List<ScheduleResponse>>builder()
+                        .code(404)
+                        .message("Không tìm thấy lịch làm việc nào trong hệ thống")
+                        .build();
+            }
+            
+            // Nhóm các ngày làm việc theo tên lịch và ca làm việc
+            Map<String, Map<String, List<WorkDate>>> groupedWorkDates = workDates.stream()
+                    .collect(Collectors.groupingBy(
+                            WorkDate::getScheduleName,
+                            Collectors.groupingBy(WorkDate::getShiftType)
+                    ));
+            
+            // Chuyển đổi dữ liệu sang ScheduleResponse
+            List<ScheduleResponse> scheduleResponses = new ArrayList<>();
+            
+            groupedWorkDates.forEach((scheduleName, shiftTypeMap) -> {
+                shiftTypeMap.forEach((shiftType, dates) -> {
+                    // Chuyển đổi các WorkDate thành WorkDateDTO
+                    List<WorkDateDTO> workDateDTOs = dates.stream()
+                            .map(workDate -> workScheduleMapper.toWorkDateDTO(workDate))
+                            .collect(Collectors.toList());
+                    
+                    // Tạo ScheduleResponse mới
+                    ScheduleResponse response = ScheduleResponse.builder()
+                            .scheduleName(scheduleName)
+                            .shiftType(shiftType)
+                            .workDates(workDateDTOs)
+                            .build();
+                    
+                    scheduleResponses.add(response);
+                });
+            });
+            
+            return ApiResponse.<List<ScheduleResponse>>builder()
+                    .code(200)
+                    .message("Lấy danh sách lịch làm việc được nhóm thành công")
+                    .result(scheduleResponses)
+                    .build();
+        } catch (Exception e) {
+            return ApiResponse.<List<ScheduleResponse>>builder()
+                    .code(500)
+                    .message("Lỗi khi lấy danh sách lịch làm việc: " + e.getMessage())
+                    .build();
+        }
+    }
+
     // Helper methods
 
     /**
@@ -420,8 +439,8 @@ public class ScheduleService {
      * @param workDates Danh sách ngày làm việc cần lưu
      * @return Map chứa các ngày làm việc đã lưu với key là ngày làm việc
      */
-    private Map<Date, WorkDate> saveWorkDates(List<WorkDate> workDates) {
-        Map<Date, WorkDate> savedWorkDates = new HashMap<>();
+    private Map<LocalDate, WorkDate> saveWorkDates(List<WorkDate> workDates) {
+        Map<LocalDate, WorkDate> savedWorkDates = new HashMap<>();
         
         for (WorkDate workDate : workDates) {
             // Kiểm tra xem ngày làm việc này đã tồn tại chưa

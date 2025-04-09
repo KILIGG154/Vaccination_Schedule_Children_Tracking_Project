@@ -2,7 +2,6 @@ package com.swp_group03.vaccination.vaccination_schedule_children_tracking_proje
 
 import com.stripe.exception.StripeException;
 import com.stripe.exception.ApiConnectionException;
-import com.stripe.model.Charge;
 import com.stripe.model.PaymentIntent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

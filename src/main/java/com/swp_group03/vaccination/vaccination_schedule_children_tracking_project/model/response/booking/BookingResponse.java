@@ -9,7 +9,7 @@ import com.swp_group03.vaccination.vaccination_schedule_children_tracking_projec
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.order.VaccineOrderDTO;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,7 +21,7 @@ public class BookingResponse {
     private int bookingId;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date appointmentDate;
+    private LocalDate appointmentDate;
     private ChildDTO child;
     private List<VaccineOrderDTO> order;
     private BookingStatus status;

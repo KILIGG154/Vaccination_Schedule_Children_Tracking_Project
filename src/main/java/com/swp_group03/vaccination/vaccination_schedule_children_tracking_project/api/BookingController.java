@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -85,7 +85,7 @@ public class BookingController {
     public ApiResponse assignStaffToBooking(
             @PathVariable int bookingId,
             @PathVariable String role,
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date bookingDate) {
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate bookingDate) {
         return bookingService.assignStaffToBooking(bookingId, role, bookingDate);
     }
 

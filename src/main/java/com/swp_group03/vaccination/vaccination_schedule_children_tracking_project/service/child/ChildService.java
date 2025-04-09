@@ -1,6 +1,5 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.child;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Account;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Booking;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Child;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.ChildStatus;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.AppException;
@@ -11,7 +10,6 @@ import com.swp_group03.vaccination.vaccination_schedule_children_tracking_projec
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.child.ChildDTO;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.child.ChildResponse;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.BookingRepo;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.ChildRepo;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.UserRepo;
 import jakarta.persistence.EntityNotFoundException;

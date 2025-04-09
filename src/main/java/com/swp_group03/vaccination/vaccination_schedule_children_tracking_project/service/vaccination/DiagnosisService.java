@@ -1,8 +1,6 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.vaccination;
 
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.*;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.AppException;
-import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.ErrorCode;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.vaccination.DiagnosisRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.BookingRepo;

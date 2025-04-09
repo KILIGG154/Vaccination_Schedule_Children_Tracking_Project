@@ -1,6 +1,5 @@
 package com.swp_group03.vaccination.vaccination_schedule_children_tracking_project;
 
-import jakarta.annotation.PostConstruct;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;

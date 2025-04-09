@@ -19,9 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -73,7 +73,7 @@ public class VaccinationService {
             record.setBooking(booking);
             record.setDose(dose);
             record.setAccount(nurse);
-            record.setInjectionDate(new Date());
+            record.setInjectionDate(LocalDate.now());
             record.setStatus(true); // Đã tiêm
 
             vaccineRecordRepo.save(record);
@@ -147,10 +147,8 @@ public class VaccinationService {
                     ProtocolDetail protocolDetail = nextDose.getProtocolDetail();
 
                     // Tính ngày tiêm tiếp theo
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTime(record.getInjectionDate());
-                    calendar.add(Calendar.DAY_OF_MONTH, protocolDetail.getIntervalDays());
-                    Date nextDate = calendar.getTime();
+                    LocalDate injectionDate = record.getInjectionDate();
+                    LocalDate nextDate = injectionDate.plusDays(protocolDetail.getIntervalDays());
 
                     // Tạo therapy record mới (lịch dự kiến)
                     VaccineTherapyRecord therapy = new VaccineTherapyRecord();
@@ -158,8 +156,8 @@ public class VaccinationService {
                     therapy.setDose(nextDose);
                     therapy.setTherapyDate(nextDate);
                     therapy.setStatus(VaccineTherapyStatus.SCHEDULED);
-                    therapy.setCreateAt(new Date());
-                    therapy.setUpdateAt(new Date());
+                    therapy.setCreateAt(LocalDateTime.now());
+                    therapy.setUpdateAt(LocalDateTime.now());
 
                     therapy = therapyRecordRepo.save(therapy);
                     nextSchedules.add(therapy);
