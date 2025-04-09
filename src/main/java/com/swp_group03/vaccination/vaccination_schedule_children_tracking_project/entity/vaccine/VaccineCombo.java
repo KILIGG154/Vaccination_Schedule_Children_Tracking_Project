@@ -49,12 +49,15 @@ public class VaccineCombo {
     private int dose;
 
 
+    @Column(name = "Quantity")
+    private int quantity = 1;
+
     @OneToMany(mappedBy = "combo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<VaccineComboDetail> vaccineComboDetails = new ArrayList<>();
 
-    @OneToOne
-    @JoinColumn(name = "VaccineOrderId")
+    @OneToOne(mappedBy = "vaccineCombo")
+//    @JoinColumn(name = "VaccineOrderId")
     @JsonIgnore
     private VaccineOrder vaccineOrder;
 

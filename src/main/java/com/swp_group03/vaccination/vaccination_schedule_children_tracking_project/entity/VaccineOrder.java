@@ -29,7 +29,8 @@ public class VaccineOrder {
     @JsonManagedReference
     private Booking booking;
 
-    @OneToOne(mappedBy = "vaccineOrder", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne
+    @JoinColumn(name = "VaccineComboID")
     @JsonIgnore
     private VaccineCombo vaccineCombo;
 

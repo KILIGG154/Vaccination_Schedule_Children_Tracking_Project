@@ -15,7 +15,6 @@ public class VaccinationScheduleChildrenTrackingProjectApplication {
 
     }
 
-    // Đú đớn, bằng bạn bằng bè !!! Tự mở Swagger sau khi start
     @EventListener(ApplicationReadyEvent.class)
     public void openSwaggerUi() {
         String url = "http://localhost:8080/swagger-ui/index.html";

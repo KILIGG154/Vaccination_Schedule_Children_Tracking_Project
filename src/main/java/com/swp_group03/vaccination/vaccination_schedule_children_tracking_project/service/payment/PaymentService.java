@@ -5,10 +5,13 @@ import com.swp_group03.vaccination.vaccination_schedule_children_tracking_projec
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.VaccineOrder;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.VaccineOrderDetail;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.vaccine.Vaccine;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.vaccine.VaccineCombo;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.vaccine.VaccineComboDetail;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.AppException;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.exception.ErrorCode;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.payment.PaymentRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.PaymentRepo;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.VaccineComboRepo;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.VaccineOrderRepo;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.repository.VaccineRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +35,9 @@ public class PaymentService {
     @Autowired
     private VaccineRepo vaccineRepo;
 
+    @Autowired
+    private VaccineComboRepo vaccineComboRepo;
+
 
     public Payment createPayment(int orderID, PaymentRequest request) {
         VaccineOrder orders = vaccineOrderRepo.findById(orderID).orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
@@ -45,6 +51,21 @@ public class PaymentService {
         orders.setStatus(OrderStatus.DONE);
 
         if(orders.getStatus() == OrderStatus.DONE) {
+            if(orders.getVaccineCombo() != null){
+                List<VaccineComboDetail> comboDetails = orders.getVaccineCombo().getVaccineComboDetails();
+                for (VaccineComboDetail comboDetail : comboDetails) {
+//                    VaccineCombo vaccineCombo = comboDetail.getCombo();
+                    Vaccine vaccine = comboDetail.getVaccine();
+                    int stockQuantity = vaccine.getQuantity();
+                    int curr = comboDetail.getCombo().getQuantity();
+                    if(curr > stockQuantity){
+                        throw new AppException(ErrorCode.INVALID_KEY);
+                    }
+                    vaccine.setQuantity(stockQuantity - curr);
+                    vaccineRepo.save(vaccine);
+                }
+
+            }
             Set<VaccineOrderDetail> details = orders.getVaccineOrderDetails();
             for (VaccineOrderDetail detail : details) {
                 Vaccine vaccine = detail.getVaccine();
