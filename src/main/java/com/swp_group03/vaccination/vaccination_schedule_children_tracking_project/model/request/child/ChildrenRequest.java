@@ -33,7 +33,6 @@ public class ChildrenRequest {
     private String weight;
     private Gender gender;
     private String urlImage;
-    private Booking booking;
 
 
 }

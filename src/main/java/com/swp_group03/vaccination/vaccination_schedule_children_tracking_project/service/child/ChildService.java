@@ -43,7 +43,7 @@ public class ChildService {
 //        child.setAccount_Id(childrenRequest.getAccount_Id());
 //        return childRepo.save(child);
 //    }
-    public Child createChildren(String accountID, ChildrenRequest childrenRequest){
+    public ChildDTO createChildren(String accountID, ChildrenRequest childrenRequest){
         Account account = userRepo.findById(accountID).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
 
@@ -53,12 +53,13 @@ public class ChildService {
         child.setHeight(childrenRequest.getHeight());
         child.setWeight(childrenRequest.getWeight());
         child.setGender(childrenRequest.getGender());
-        child.setGender(childrenRequest.getGender());
+//        child.setGender(childrenRequest.getGender());
         child.setUrlImage(childrenRequest.getUrlImage());
 //        child.setBookings(childrenRequest.getBooking());
         child.setAccount(account);
         userRepo.save(account);
-        return childRepo.save(child);
+        childRepo.save(child);
+        return new ChildDTO(child);
     }
 
     public Child updateChildren(ChildrenRequest request, int Id){

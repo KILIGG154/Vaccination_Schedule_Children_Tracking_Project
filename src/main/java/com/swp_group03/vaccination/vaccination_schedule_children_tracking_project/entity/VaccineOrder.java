@@ -35,11 +35,12 @@ public class VaccineOrder {
 
     @OneToOne
     @JoinColumn(name = "PaymentID")
+    @JsonIgnore
     private Payment payment;
 
     @Column(name = "Status")
     @Enumerated(EnumType.STRING)
-    private OrderStatus status = OrderStatus.DONE;
+    private OrderStatus status = OrderStatus.REJECTED;
 
     @OneToMany(mappedBy = "vaccineOrder", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore

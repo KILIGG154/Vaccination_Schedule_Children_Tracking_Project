@@ -77,7 +77,7 @@ public class VaccineOrderService {
         detail.setTotalPrice(vaccine.getSalePrice() * request.getQuantity());
         detail.setVaccine(vaccine);
         order.addVaccineOrderDetail(detail);
-        vaccineOrderRepo.save(order);
+           vaccineOrderRepo.save(order);
         return detail;
     }
 
@@ -101,4 +101,6 @@ public class VaccineOrderService {
         order.setStatus(OrderStatus.REJECTED);
         return vaccineOrderRepo.save(order);
     }
+
+
 }

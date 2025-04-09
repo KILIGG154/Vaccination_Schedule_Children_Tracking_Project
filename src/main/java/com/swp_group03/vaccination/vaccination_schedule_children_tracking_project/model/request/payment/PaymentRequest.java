@@ -6,7 +6,6 @@ import com.swp_group03.vaccination.vaccination_schedule_children_tracking_projec
 
 public class PaymentRequest {
 
-    private String token;
 
     private double amount;
 
@@ -14,17 +13,13 @@ public class PaymentRequest {
 
     private String paymentMethod;
 
-    private VaccineOrder vaccineOrder;
-
     public PaymentRequest() {
     }
 
-    public PaymentRequest(String token, double amount, PaymentStatus status, String paymentMethod, VaccineOrder vaccineOrder) {
-        this.token = token;
+    public PaymentRequest(double amount, PaymentStatus status, String paymentMethod) {
         this.amount = amount;
         this.status = status;
         this.paymentMethod = paymentMethod;
-        this.vaccineOrder = vaccineOrder;
     }
 
     public PaymentStatus getStatus() {
@@ -41,22 +36,6 @@ public class PaymentRequest {
 
     public void setPaymentMethod(String paymentMethod) {
         this.paymentMethod = paymentMethod;
-    }
-
-    public VaccineOrder getVaccineOrder() {
-        return vaccineOrder;
-    }
-
-    public void setVaccineOrder(VaccineOrder vaccineOrder) {
-        this.vaccineOrder = vaccineOrder;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 
     public double getAmount() {

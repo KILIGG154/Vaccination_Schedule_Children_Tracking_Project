@@ -3,9 +3,9 @@ package com.swp_group03.vaccination.vaccination_schedule_children_tracking_proje
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.entity.Child;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.request.child.ChildrenRequest;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.ApiResponse;
+import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.child.ChildDTO;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.model.response.child.ChildResponse;
 
-//import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.ChildService;
 import com.swp_group03.vaccination.vaccination_schedule_children_tracking_project.service.child.ChildService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +22,11 @@ public class ChildController {
     private ChildService childService;
 
     @PostMapping("/{accountID}/create")
-    public ResponseEntity createChild(@PathVariable String accountID,@RequestBody ChildrenRequest child) {
-        Child newChild = childService.createChildren(accountID,child);
-        return ResponseEntity.ok(newChild);
+    public ApiResponse<ChildDTO> createChild(@PathVariable String accountID, @RequestBody ChildrenRequest child) {
+        ChildDTO newChild = childService.createChildren(accountID,child);
+        return ApiResponse.<ChildDTO>builder().code(200)
+                .result(newChild)
+                .build();
     }
 
     @PatchMapping("/{child_id}")
